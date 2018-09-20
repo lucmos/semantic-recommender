@@ -1,5 +1,8 @@
 package constants;
 
+/**
+ * This enum gathers the relative paths of the datasets
+ */
 public enum DatasetConstants {
     WIKIMID_FRIEND_BASED_DATASET("EN/friend-based_dataset.tsv"),
     WIKIMID_FRIEND_BASED_INTEREST_INFO("EN/friend-based_interest_info.tsv"),
@@ -17,6 +20,11 @@ public enum DatasetConstants {
         this.path = path;
     }
 
+    /**
+     * Return the path of a given object
+     *
+     * @return the path
+     */
     public String getPath() {
         return this.path;
     }
