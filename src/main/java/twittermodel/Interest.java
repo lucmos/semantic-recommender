@@ -17,8 +17,8 @@ public class Interest extends TwitterObjectModel {
 
     private static OneToOneHash<Integer, String> idMap = new OneToOneHash<>();
 
-    public Interest(int id, PlatformType platform, WikiPage wikiPage) {
-        super(id);
+    public Interest(String idString, PlatformType platform, WikiPage wikiPage) {
+        super(idString);
         this.setPlatform(platform);
         this.setWikiPage(wikiPage);
     }
