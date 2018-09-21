@@ -4,17 +4,33 @@ import utils.OneToOneHash;
 
 import java.io.Serializable;
 
+/**
+ * Models an "interest"
+ */
 public class Interest extends TwitterObjectModel {
 
+    /**
+     * Describes the possible types of platforms
+     */
     public enum PlatformType implements Serializable {
         GOOD_READS,
         IMDB,
         SPOTIFY
     }
 
+    /**
+     * The platform where the interested originated
+     */
     private PlatformType platform;
+
+    /**
+     * A wikiPage that describes the interest
+     */
     private WikiPage wikiPage;
 
+    /**
+     * A mapping between an integer identifier and a string one
+     */
     private static OneToOneHash<Integer, String> idMap = new OneToOneHash<>();
 
     public Interest(String idString, PlatformType platform, WikiPage wikiPage) {

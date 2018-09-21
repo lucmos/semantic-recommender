@@ -2,15 +2,25 @@ package twittermodel;
 
 import utils.OneToOneHash;
 
+/**
+ * Model a wikipedia page
+ */
 public class WikiPage extends TwitterObjectModel {
     private static final int NAME_COMPONENTS_NUMBER = 3;
 
+    /**
+     * A mapping between an integer identifier and a string one
+     */
     private static OneToOneHash<Integer, String> idMap = new OneToOneHash<>();
 
     public WikiPage(String name) {
         super(name);
     }
 
+    /**
+     * Rebuilds the url from the name
+     * @return the unique url of this page
+     */
     public String getURL() {
         String[] parts = this.getIdString().split(":");
         assert parts.length == WikiPage.NAME_COMPONENTS_NUMBER;
