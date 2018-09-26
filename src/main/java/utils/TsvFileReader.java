@@ -1,3 +1,5 @@
+package utils;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -21,13 +23,10 @@ public class TsvFileReader
             File f = new File(path);
             BufferedReader bReader = new BufferedReader(new FileReader(f));
             String readLine = "";
-//            System.out.println("Reading file using Buffered Reader");
 
             while ((readLine = bReader.readLine()) != null)
             {
-//                System.out.println(readLine);
                 lines.add(readLine);
-//                System.out.println(lines);
             }
             return lines;
         }

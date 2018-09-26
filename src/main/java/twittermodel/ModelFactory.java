@@ -1,7 +1,5 @@
 package twittermodel;
 
-import utils.OneToOneHash;
-
 import java.util.HashMap;
 
 /**
@@ -15,8 +13,8 @@ public class ModelFactory {
 
     private static HashMap<Integer, UserModel> users = new HashMap<>();
     private static HashMap<Integer, TweetModel> tweets = new HashMap<>();
-    private static HashMap<String, WikiPage> wikiPages = new HashMap<>();
-    private static HashMap<String, Interest> interests = new HashMap<>();
+    private static HashMap<String, WikiPageModel> wikiPages = new HashMap<>();
+    private static HashMap<String, InterestModel> interests = new HashMap<>();
 
     /**
      * Returns a UserModel with the given id
@@ -35,7 +33,7 @@ public class ModelFactory {
      * @param id the id of the tweet
      * @return the specified TweetModel
      */
-    public static TweetModel getTweet(int id, Interest interest, String interestSourceUrl) {
+    public static TweetModel getTweet(int id, InterestModel interest, String interestSourceUrl) {
         if (!ModelFactory.tweets.containsKey(id)) {
             ModelFactory.tweets.put(id, new TweetModel(id, interest, interestSourceUrl));
         }
@@ -43,26 +41,55 @@ public class ModelFactory {
     }
 
     /**
-     * Returns a Interest with the given id
-     * @param id the id of the interest
-     * @return the specified Interest
+     * Returns a TweetModel that already exists with the given id
+     * @param id the id of the tweet
+     * @return the specified TweetModel
      */
-    public static Interest getInterest(String id, Interest.PlatformType platform, WikiPage wikiPage) {
+    public static  TweetModel getTweet(int id){
+        try
+        {
+            return ModelFactory.tweets.get(id);
+        }
+        catch (NullPointerException e) {
+        throw new RuntimeException("This tweet id doesn't exist!", e);        }
+    }
+
+    /**
+     * Returns a InterestModel with the given id
+     * @param id the id of the interest
+     * @return the specified InterestModel
+     */
+    public static InterestModel getInterest(String id, InterestModel.PlatformType platform, WikiPageModel wikiPage) {
         if (!ModelFactory.interests.containsKey(id)) {
-            ModelFactory.interests.put(id, new Interest(id, platform, wikiPage));
+            ModelFactory.interests.put(id, new InterestModel(id, platform, wikiPage));
         }
         return ModelFactory.interests.get(id);
     }
 
     /**
-     * Returns a WikiPage with the given name
-     * @param name the name of the wikipedia page (not the url)
-     * @return the specified WikiPage
+     * Returns a InterestModel that already exists with the given id
+     * @param id the id of the interest
+     * @return the specified InterestModel
      */
-    public static WikiPage getWikiPage(String name) {
-        if (!ModelFactory.wikiPages.containsKey(name)) {
-            ModelFactory.wikiPages.put(name, new WikiPage(name));
+    public static InterestModel getInterest(String id) {
+        try {
+            return ModelFactory.interests.get(id);
+        } catch (NullPointerException e) {
+            throw new RuntimeException("This interest id doesn't exist!", e);
+        }
+    }
+
+    /**
+     * Returns a WikiPageModel with the given name
+     * @param name the name of the wikipedia page (not the url)
+     * @return the specified WikiPageModel
+     */
+    public static WikiPageModel getWikiPage(String name)
+        {
+        if (!ModelFactory.wikiPages.containsKey(name))
+        {
+            ModelFactory.wikiPages.put(name, new WikiPageModel(name));
         }
         return ModelFactory.wikiPages.get(name);
-    }
+        }
 }

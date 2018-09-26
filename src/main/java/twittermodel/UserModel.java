@@ -25,7 +25,7 @@ public class UserModel extends TwitterObjectModel
      * The list of wikiPages associated to this user
      * (taken from the dataset)
      */
-    private ArrayList<WikiPage> wikiPages;
+    private ArrayList<WikiPageModel> wikiPages;
 
     public UserModel(int id) {
         super(id);
@@ -36,17 +36,29 @@ public class UserModel extends TwitterObjectModel
     }
 
     /**
-     * Adds a user to the list of the following.
-     * This user will have its list of followIn automatically updated.
+     * Adds a user to the list of the follower, called followIn.
+     * This user will have its list of followOut automatically updated.
      * @param userID the user to follow
      */
     public void addFollowOut(UserModel userID) {
-        this.followOut.add(userID);
-        if (!userID.getFollowIn().contains(this)) {
+        if (!userID.getFollowIn().contains(this))
+        {
             userID.followIn.add(this);
+            this.followOut.add(userID);
         }
     }
-
+//
+//    /**
+//     * Adds a user to the list of the follower,
+//     * This user will have its list of followIn automatically updated.
+//     * @param userID the user to follow
+//     */
+//    public void addFollower(UserModel userID) {
+//        this.followOut.add(userID);
+//        if (!userID.getFollowIn().contains(this)) {
+//            userID.followIn.add(this);
+//        }
+//    }
     /**
      * Adds a tweet to the list of the tweets posted by this user
      * @param tweetID the tweet to add
@@ -60,7 +72,7 @@ public class UserModel extends TwitterObjectModel
      * Adds a wikiPage to the list of wikipedia pages related to this user
      * @param wikiPage the wikipedia page to add
      */
-    public void addWikiPage(WikiPage wikiPage) {
+    public void addWikiPage(WikiPageModel wikiPage) {
         this.wikiPages.add(wikiPage);
     }
 
@@ -75,7 +87,7 @@ public class UserModel extends TwitterObjectModel
         return tweets;
     }
 
-    public ArrayList<WikiPage> getWikiPages() {
+    public ArrayList<WikiPageModel> getWikiPages() {
         return wikiPages;
     }
 
