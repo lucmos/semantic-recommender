@@ -84,4 +84,9 @@ public class InterestModel extends TwitterObjectModel {
     public WikiPageModel getWikiPage() {
         return wikiPage;
     }
+
+    @Override
+    public String toString(){
+        return "Interest " + idMap +", platform type: "+ platform + ", wikipage: " + wikiPage;
+    }
 }

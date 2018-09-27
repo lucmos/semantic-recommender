@@ -56,7 +56,7 @@ public class DatasetReader
         assert userWikiPage.size()==2;
         UserModel user = ModelFactory.getUser(Integer.parseInt(userWikiPage.get(0)));
         WikiPageModel wikiPage = ModelFactory.getWikiPage(userWikiPage.get(1));
-        user.addWikiPage(wikiPage);
+        user.addWikiPageAbout(wikiPage);
         dataset.addPage(wikiPage);
         dataset.addUser(user);
     }
@@ -76,7 +76,7 @@ public class DatasetReader
         TweetModel tweet = ModelFactory.getTweet(Integer.parseInt(userTweetInterestURL.get(1)), interest, userTweetInterestURL.get(3));
 
         user.addTweet(tweet);
-        user.addWikiPage(interest.getWikiPage());
+        user.addWikiPageAbout(interest.getWikiPage());
 
         dataset.addUser(user);
         dataset.addInterest(interest);
@@ -119,7 +119,7 @@ public class DatasetReader
         UserModel user = ModelFactory.getUser(Integer.parseInt(userWikipage.get(0)));
         WikiPageModel wikiPage = ModelFactory.getWikiPage(userWikipage.get(1));
 
-
+        user.addWikiPageLiked(wikiPage);
         dataset.addUser(user);
         dataset.addPage(wikiPage);
     }

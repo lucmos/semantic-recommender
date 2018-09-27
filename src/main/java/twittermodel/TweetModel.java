@@ -57,4 +57,9 @@ public class TweetModel extends TwitterObjectModel {
     public OneToOneHash<Integer, String> getIdMapping() {
         throw new UnsupportedOperationException();
     }
+
+    @Override
+    public String toString(){
+        return "Tweet, with interest: " + interest + " , interest source: "+ interestSource+ ", \nauthor: " + author.toString();
+    }
 }

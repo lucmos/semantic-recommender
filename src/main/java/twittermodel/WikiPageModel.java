@@ -31,4 +31,9 @@ public class WikiPageModel extends TwitterObjectModel {
     public OneToOneHash<Integer, String> getIdMapping() {
         return WikiPageModel.idMap;
     }
+
+    @Override
+    public String toString(){
+        return "Wikipedia page "+ idMap +" with URL: "+ getURL();
+    }
 }
