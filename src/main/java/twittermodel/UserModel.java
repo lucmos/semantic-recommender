@@ -22,30 +22,34 @@ public class UserModel extends TwitterObjectModel
     private ArrayList<TweetModel> tweets;
 
     /**
-     * The list of wikiPages associated to this user
+     * The list of wikiPagesAboutUser associated to this user
      * (taken from the dataset)
      */
-    private ArrayList<WikiPage> wikiPages;
+    private ArrayList<WikiPageModel> wikiPagesAboutUser;
+    private ArrayList<WikiPageModel> wikiPageLiked;
 
     public UserModel(int id) {
         super(id);
         this.followOut = new ArrayList<>();
         this.followIn = new ArrayList<>();
         this.tweets = new ArrayList<>();
-        this.wikiPages = new ArrayList<>();
+        this.wikiPagesAboutUser = new ArrayList<>();
+        this.wikiPageLiked = new ArrayList<>();
     }
 
     /**
-     * Adds a user to the list of the following.
-     * This user will have its list of followIn automatically updated.
+     * Adds a user to the list of the follower, called followIn.
+     * This user will have its list of followOut automatically updated.
      * @param userID the user to follow
      */
     public void addFollowOut(UserModel userID) {
-        this.followOut.add(userID);
-        if (!userID.getFollowIn().contains(this)) {
+        if (!userID.getFollowIn().contains(this))
+        {
             userID.followIn.add(this);
+            this.followOut.add(userID);
         }
     }
+
 
     /**
      * Adds a tweet to the list of the tweets posted by this user
@@ -60,9 +64,11 @@ public class UserModel extends TwitterObjectModel
      * Adds a wikiPage to the list of wikipedia pages related to this user
      * @param wikiPage the wikipedia page to add
      */
-    public void addWikiPage(WikiPage wikiPage) {
-        this.wikiPages.add(wikiPage);
+    public void addWikiPageAbout(WikiPageModel wikiPage) {
+        this.wikiPagesAboutUser.add(wikiPage);
     }
+
+    public void addWikiPageLiked(WikiPageModel wikiPageModel){this.wikiPageLiked.add(wikiPageModel);}
 
     public ArrayList<UserModel> getFollowOut() {
         return followOut;
@@ -75,12 +81,20 @@ public class UserModel extends TwitterObjectModel
         return tweets;
     }
 
-    public ArrayList<WikiPage> getWikiPages() {
-        return wikiPages;
+    public ArrayList<WikiPageModel> getWikiPagesAboutUser() {
+        return wikiPagesAboutUser;
     }
+
+    public ArrayList<WikiPageModel> getWikiPageLiked(){return wikiPageLiked;}
 
     @Override
     public OneToOneHash<Integer, String> getIdMapping() {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public String toString(){
+        return "User " + getId() +" that has " + followIn + " follower, \n"+"follows "+followOut + " and has done " + tweets +" tweets.\n"
+                +"Gli piacciono le pagine wikipedia" + wikiPageLiked +"\n"+"Parlano di lui " + wikiPagesAboutUser +" pagine di wikipedia";
     }
 }

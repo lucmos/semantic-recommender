@@ -1,3 +1,7 @@
+package utils;
+
+import constants.DatasetConstants;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -21,13 +25,10 @@ public class TsvFileReader
             File f = new File(path);
             BufferedReader bReader = new BufferedReader(new FileReader(f));
             String readLine = "";
-//            System.out.println("Reading file using Buffered Reader");
 
             while ((readLine = bReader.readLine()) != null)
             {
-//                System.out.println(readLine);
                 lines.add(readLine);
-//                System.out.println(lines);
             }
             return lines;
         }
@@ -35,6 +36,7 @@ public class TsvFileReader
             e.printStackTrace();}
             return lines;
     }
+
 
     /**
      * Methods that split the lines of a file text by a specified character (the default is tab)
@@ -73,5 +75,6 @@ public class TsvFileReader
         System.out.println(splittedLines.size());
 
     }
+
 
 }

@@ -16,14 +16,14 @@ public class TweetModel extends TwitterObjectModel {
     /**
      * The interested this tweet is talking about
      */
-    private Interest interest;
+    private InterestModel interest;
 
     /**
      * The source from which the interest has been found
      */
     private String interestSource;
 
-    public TweetModel(int id, Interest interest, String interestSourceUrl) {
+    public TweetModel(int id, InterestModel interest, String interestSourceUrl) {
         super(id);
         this.setInterest(interest);
         this.setInterestSource(interestSourceUrl);
@@ -37,7 +37,7 @@ public class TweetModel extends TwitterObjectModel {
         this.interestSource = interestSource;
     }
 
-    public void setInterest(Interest interest) {
+    public void setInterest(InterestModel interest) {
         this.interest = interest;
     }
 
@@ -49,12 +49,17 @@ public class TweetModel extends TwitterObjectModel {
         return interestSource;
     }
 
-    public Interest getInterest() {
+    public InterestModel getInterest() {
         return interest;
     }
 
     @Override
     public OneToOneHash<Integer, String> getIdMapping() {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public String toString(){
+        return "Tweet, with interest: " + interest + " , interest source: "+ interestSource+ ", \nauthor: " + author.toString();
     }
 }
