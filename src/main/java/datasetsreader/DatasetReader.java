@@ -36,7 +36,7 @@ public class DatasetReader
      * @param userFriend the couple that should be added to the dataset, where the user follows the friend
      * @param dataset the object that stores all the informations
      */
-    public void addUserFollowed(ArrayList<String> userFriend, Dataset dataset)
+    private void addUserFollowed(ArrayList<String> userFriend, Dataset dataset)
     {
         assert userFriend.size()==2;
         UserModel user = ModelFactory.getUser(Integer.parseInt(userFriend.get(0)));
@@ -51,7 +51,7 @@ public class DatasetReader
      * @param userWikiPage the couple of a user and the wikipedia page which represents it
      * @param dataset the object that stores all the informations
      */
-    public void addUserCorrespondingInterest(ArrayList<String> userWikiPage, Dataset dataset)
+    private void addUserCorrespondingInterest(ArrayList<String> userWikiPage, Dataset dataset)
     {
         assert userWikiPage.size()==2;
         UserModel user = ModelFactory.getUser(Integer.parseInt(userWikiPage.get(0)));
@@ -68,7 +68,7 @@ public class DatasetReader
      *                             the url of the tweet
      * @param dataset the object that stores all the informations
      */
-    public void addUserTweetInterestURL(ArrayList<String> userTweetInterestURL, Dataset dataset)
+    private void addUserTweetInterestURL(ArrayList<String> userTweetInterestURL, Dataset dataset)
     {
         assert userTweetInterestURL.size()==4;
         UserModel user = ModelFactory.getUser(Integer.parseInt(userTweetInterestURL.get(0)));
@@ -89,7 +89,7 @@ public class DatasetReader
      *                             wikipedia page id
      * @param dataset  the object that stores all the informations
      */
-    public void  addInterestPlatformPage(ArrayList<String> interestPlatformPage, Dataset dataset)
+    private void  addInterestPlatformPage(ArrayList<String> interestPlatformPage, Dataset dataset)
     {
         assert interestPlatformPage.size()==3;
         WikiPageModel page = ModelFactory.getWikiPage(interestPlatformPage.get(2));
@@ -103,7 +103,7 @@ public class DatasetReader
      * @param user the id of the user to add
      * @param dataset the object that stores all the informations
      */
-    public void addUser (ArrayList<String> user, Dataset dataset){
+    private void addUser (ArrayList<String> user, Dataset dataset){
         assert user.size()==1;
         UserModel u = new UserModel(Integer.parseInt(user.get(0)));
         dataset.addUser(u);
@@ -114,7 +114,7 @@ public class DatasetReader
      * @param userWikipage the couple of the user id and of the wikipedia page id
      * @param dataset the object that stores all the informations
      */
-    public void addUserFollowedPage(ArrayList<String> userWikipage, Dataset dataset){
+    private void addUserFollowedPage(ArrayList<String> userWikipage, Dataset dataset){
         assert userWikipage.size()==2;
         UserModel user = ModelFactory.getUser(Integer.parseInt(userWikipage.get(0)));
         WikiPageModel wikiPage = ModelFactory.getWikiPage(userWikipage.get(1));
