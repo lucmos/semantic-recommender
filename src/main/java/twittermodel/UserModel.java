@@ -57,6 +57,7 @@ public class UserModel extends TwitterObjectModel
      */
     public void addTweet(TweetModel tweetID) {
         tweetID.setAuthor(this);
+        addWikiPageLiked(tweetID.getInterest().getWikiPage());
         this.tweets.add(tweetID);
     }
 
