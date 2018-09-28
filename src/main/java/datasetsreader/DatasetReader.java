@@ -76,7 +76,6 @@ public class DatasetReader
         TweetModel tweet = ModelFactory.getTweet(Integer.parseInt(userTweetInterestURL.get(1)), interest, userTweetInterestURL.get(3));
 
         user.addTweet(tweet);
-        user.addWikiPageAbout(interest.getWikiPage());
 
         dataset.addUser(user);
         dataset.addInterest(interest);
