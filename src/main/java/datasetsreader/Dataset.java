@@ -27,6 +27,11 @@ public class Dataset
         pages = new HashSet<WikiPageModel>();
     }
 
+    @Override
+    public String toString(){
+        return "Name: "+name;
+    }
+
 
     public Set<InterestModel> getInterests() {
         return interests;

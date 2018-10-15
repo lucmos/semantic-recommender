@@ -16,7 +16,7 @@ public class DatasetReader
     public ArrayList<ArrayList<String>> readDataset(String path)
     {
         TsvFileReader fileReader = new TsvFileReader();
-        ArrayList<String> datasetLines = fileReader.readText(path);
+        ArrayList<String> datasetLines = fileReader.readText(path, 100000);
         ArrayList<ArrayList<String>> datasetValues = fileReader.splitByChar(datasetLines);
         return datasetValues;
     }
