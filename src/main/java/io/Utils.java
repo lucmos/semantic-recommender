@@ -1,6 +1,7 @@
-package utils;
+package io;
 
 import constants.PathConstants;
+import utils.IndexedSerializable;
 
 import java.io.*;
 

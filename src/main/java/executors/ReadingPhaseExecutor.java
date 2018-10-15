@@ -3,7 +3,7 @@ package executors;
 import constants.DatasetConstants;
 import datasetsreader.Dataset;
 import datasetsreader.DatasetReader;
-import utils.TsvFileReader;
+import io.TsvFileReader;
 
 import java.util.ArrayList;
 
@@ -17,7 +17,7 @@ public class ReadingPhaseExecutor
         TsvFileReader tsvReader = new TsvFileReader();
         System.out.println(tsvReader.toString());
         System.out.println(DatasetConstants.WIKIMID_FRIEND_BASED_DATASET.getPath());
-        ArrayList<String> lines = tsvReader.readText(DatasetConstants.WIKIMID_FRIEND_BASED_DATASET.getPath(), 4000000);
+        ArrayList<String> lines = tsvReader.readText(DatasetConstants.WIKIMID_FRIEND_BASED_DATASET.getPath(), 400000000);
 //        ArrayList<String> lines = tsvReader.readText("prova_friend_based_dataset.txt", 10);
         System.out.println(lines.size());
         System.out.println(lines.get(0));

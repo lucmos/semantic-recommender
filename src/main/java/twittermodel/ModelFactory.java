@@ -58,7 +58,8 @@ public class ModelFactory {
             return ModelFactory.tweets.get(id);
         }
         catch (NullPointerException e) {
-        throw new RuntimeException("This tweet id doesn't exist!", e);        }
+        throw new RuntimeException("This tweet id doesn't exist!", e);
+        }
     }
 
     /**

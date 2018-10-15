@@ -1,6 +1,4 @@
-package utils;
-
-import constants.DatasetConstants;
+package io;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -18,13 +16,13 @@ public class TsvFileReader
      * @return an ArrayList of string, where each String is a line of the read file
      */
     public ArrayList<String> readText(String path,int  c)
-    {
+    { // TODO: 15/10/18 togli c 
         ArrayList<String> lines = new ArrayList<String>();
         try
         {
             File f = new File(path);
             BufferedReader bReader = new BufferedReader(new FileReader(f));
-            String readLine = "";
+            String readLine;
 
             while (((readLine = bReader.readLine()) != null)&& c>0)
             {
@@ -55,7 +53,7 @@ public class TsvFileReader
             ArrayList<String>  splitSent = new ArrayList<String>(Arrays.asList(splittedSentences));
             res.add(splitSent);
         }
-        System.out.println(res);
+//        System.out.println(res);
         return res;
     }
 
@@ -64,7 +62,7 @@ public class TsvFileReader
         ArrayList<ArrayList<String>>res = this.splitByChar(lines, '\t');
         return res;
     }
-
+    // TODO: 15/10/18 cancella main
 
     public static void main(String[] args)
     {
