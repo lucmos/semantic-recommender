@@ -49,9 +49,7 @@ public class Dataset
         return pages;
     }
 
-    public void addInterest(InterestModel interest){
-        interests.add(interest);
-    }
+    public void addInterest(InterestModel interest){interests.add(interest);}
     public void addTweet(TweetModel tw){tweets.add(tw);}
     public void addUser(UserModel usr){users.add(usr);}
     public void addPage(WikiPageModel pg){pages.add(pg);}

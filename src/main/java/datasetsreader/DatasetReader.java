@@ -1,6 +1,6 @@
 package datasetsreader;
 import twittermodel.*;
-import utils.TsvFileReader;
+import io.TsvFileReader;
 
 import java.util.ArrayList;
 
@@ -16,9 +16,9 @@ public class DatasetReader
     public ArrayList<ArrayList<String>> readDataset(String path)
     {
         TsvFileReader fileReader = new TsvFileReader();
+//        todo: remove magic number
         ArrayList<String> datasetLines = fileReader.readText(path, 100000);
-        ArrayList<ArrayList<String>> datasetValues = fileReader.splitByChar(datasetLines);
-        return datasetValues;
+        return fileReader.splitByChar(datasetLines);
     }
 
     public enum DatasetType
