@@ -28,11 +28,18 @@
             <artifactId>twitter4j-core</artifactId>
             <version>[2.2,)</version>
         </dependency>
+
         <dependency>
             <groupId>org.twitter4j</groupId>
             <artifactId>twitter4j-stream</artifactId>
             <version>[2.2,)</version>
         </dependency>
 
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>

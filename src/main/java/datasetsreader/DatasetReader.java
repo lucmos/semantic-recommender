@@ -1,4 +1,5 @@
 package datasetsreader;
+import constants.DatasetConstants;
 import twittermodel.*;
 import io.TsvFileReader;
 
@@ -10,14 +11,14 @@ import java.util.ArrayList;
 public class DatasetReader
 {
     /**Reads datas from a dataset file using a TsvFileReader
-     * @param path the path of the file
+     * @param dataset the dataset to read
      * @return the readed data
      */
-    public ArrayList<ArrayList<String>> readDataset(String path)
+    public static ArrayList<ArrayList<String>> readDataset(DatasetConstants dataset)
     {
         TsvFileReader fileReader = new TsvFileReader();
 //        todo: remove magic number
-        ArrayList<String> datasetLines = fileReader.readText(path, 100000);
+        ArrayList<String> datasetLines = fileReader.readText(dataset.getPath(), 100000);
         return fileReader.splitByChar(datasetLines);
     }
 
@@ -36,12 +37,12 @@ public class DatasetReader
      * @param userFriend the couple that should be added to the dataset, where the user follows the friend
      * @param dataset the object that stores all the informations
      */
-    private void addUserFollowed(ArrayList<String> userFriend, Dataset dataset)
+    static void addUserFollowed(ArrayList<String> userFriend, Dataset dataset)
     {
         assert userFriend.size()==2;
         UserModel user = ModelFactory.getUser(Integer.parseInt(userFriend.get(0)));
         UserModel followed = ModelFactory.getUser(Integer.parseInt(userFriend.get(1)));
-        followed.addFollowOut(user);
+        user.addFollowOut(followed); // TODO: 16/10/18 non dovrebbe essere al contrario? cambiato, check it
         dataset.addUser(user);
         dataset.addUser(followed);
     }
@@ -51,7 +52,7 @@ public class DatasetReader
      * @param userWikiPage the couple of a user and the wikipedia page which represents it
      * @param dataset the object that stores all the informations
      */
-    private void addUserCorrespondingInterest(ArrayList<String> userWikiPage, Dataset dataset)
+    public static void addUserCorrespondingInterest(ArrayList<String> userWikiPage, Dataset dataset)
     {
         assert userWikiPage.size()==2;
         UserModel user = ModelFactory.getUser(Integer.parseInt(userWikiPage.get(0)));
@@ -68,7 +69,7 @@ public class DatasetReader
      *                             the url of the tweet
      * @param dataset the object that stores all the informations
      */
-    private void addUserTweetInterestURL(ArrayList<String> userTweetInterestURL, Dataset dataset)
+    public static void addUserTweetInterestURL(ArrayList<String> userTweetInterestURL, Dataset dataset)
     {
         assert userTweetInterestURL.size()==4;
         UserModel user = ModelFactory.getUser(Integer.parseInt(userTweetInterestURL.get(0)));
@@ -88,7 +89,7 @@ public class DatasetReader
      *                             wikipedia page id
      * @param dataset  the object that stores all the informations
      */
-    private void  addInterestPlatformPage(ArrayList<String> interestPlatformPage, Dataset dataset)
+    public static void  addInterestPlatformPage(ArrayList<String> interestPlatformPage, Dataset dataset)
     {
         assert interestPlatformPage.size()==3;
         WikiPageModel page = ModelFactory.getWikiPage(interestPlatformPage.get(2));
@@ -102,7 +103,7 @@ public class DatasetReader
      * @param user the id of the user to add
      * @param dataset the object that stores all the informations
      */
-    private void addUser (ArrayList<String> user, Dataset dataset){
+    public static void addUser (ArrayList<String> user, Dataset dataset){
         assert user.size()==1;
         UserModel u = new UserModel(Integer.parseInt(user.get(0)));
         dataset.addUser(u);
@@ -113,7 +114,7 @@ public class DatasetReader
      * @param userWikipage the couple of the user id and of the wikipedia page id
      * @param dataset the object that stores all the informations
      */
-    private void addUserFollowedPage(ArrayList<String> userWikipage, Dataset dataset){
+    public static void addUserFollowedPage(ArrayList<String> userWikipage, Dataset dataset){
         assert userWikipage.size()==2;
         UserModel user = ModelFactory.getUser(Integer.parseInt(userWikipage.get(0)));
         WikiPageModel wikiPage = ModelFactory.getWikiPage(userWikipage.get(1));
