@@ -56,45 +56,33 @@ public class InterestModel extends TwitterObjectModel {
      */
     private WikiPageModel wikiPage;
 
-    /**
-     * A mapping between an integer identifier and a string one
-     */
-    private static OneToOneHash<Integer, String> idMap = new OneToOneHash<>();
 
-    public InterestModel(String idString, PlatformType platform, WikiPageModel wikiPage) {
+    public InterestModel(String idString) {
         super(idString);
-        this.setPlatform(platform);
-        this.setWikiPage(wikiPage);
     }
 
-    private void setPlatform(PlatformType platform) {
+    public void setPlatform(PlatformType platform) {
         assert platform != null;
 
         this.platform = platform;
     }
 
-    private void setWikiPage(WikiPageModel wikiPage)
+    public void setWikiPage(WikiPageModel wikiPage)
     {
         assert wikiPage != null;
 
         this.wikiPage = wikiPage;
     }
 
-    private PlatformType getPlatform() {
+    public PlatformType getPlatform() {
         assert platform != null;
 
         return platform;
     }
 
-    @Override
-    public OneToOneHash<Integer, String> getIdMapping() {
-        assert InterestModel.idMap != null;
-
-        return InterestModel.idMap;
-    }
-
     public WikiPageModel getWikiPage() {
-        assert wikiPage != null;
+        // TODO: 16/10/18 4 interest hanno wikiPage null 
+//        assert wikiPage != null;
 
         return wikiPage;
     }

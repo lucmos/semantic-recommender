@@ -1,17 +1,24 @@
 package executors;
 
-import constants.DatasetConstants;
+import constants.DatasetInfo;
+import constants.DatasetName;
 import datasetsreader.Dataset;
 import datasetsreader.DatasetReader;
-import io.TsvFileReader;
+import io.CacheManager;
 
-import java.util.ArrayList;
+import javax.xml.crypto.Data;
 
 public class ReadingPhaseExecutor
 {
     public static void main(String[] args) {
-        Dataset d = DatasetReader.readDataset(DatasetConstants.WIKIMID_MESSAGE_BASED_DATASET);
+        DatasetName name = DatasetName.WIKIMID;
+
+        CacheManager.writeToCache(name);
+
+        Dataset d = CacheManager.readFromCache(name);
         System.out.println(d.getUsers().size());
+
+//        Dataset d = DatasetReader.readDataset(DatasetName.S23);
 //        Dataset wikimid = new Dataset("wikimid");
 //        System.out.println(wikimid.toString());
 //
@@ -20,9 +27,9 @@ public class ReadingPhaseExecutor
 //
 //        TsvFileReader tsvReader = new TsvFileReader();
 //        System.out.println(tsvReader.toString());
-//        System.out.println(DatasetConstants.WIKIMID_FRIEND_BASED_DATASET.getPath());
+//        System.out.println(DatasetInfo.WIKIMID_FRIEND_BASED_DATASET.getPath());
 //
-//        ArrayList<String> lines = tsvReader.readText(DatasetConstants.WIKIMID_FRIEND_BASED_DATASET.getPath(), 400000000);
+//        ArrayList<String> lines = tsvReader.readText(DatasetInfo.WIKIMID_FRIEND_BASED_DATASET.getPath(), 400000000);
         //        ArrayList<String> lines = tsvReader.readText("prova_friend_based_dataset.txt", 10);
 //        System.out.println(lines.size());
 //        System.out.println(lines.get(0));

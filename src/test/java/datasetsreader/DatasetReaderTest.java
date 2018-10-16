@@ -16,7 +16,7 @@ public class DatasetReaderTest {
 
     @Test
     public void addUserFollowed() {
-        Dataset d = new Dataset("test");
+        Dataset d = new Dataset(null);
         String id1 = "1";
         String id2 = "2";
 
@@ -24,11 +24,11 @@ public class DatasetReaderTest {
         couple1.add(id1);
         couple1.add(id2);
 
-        DatasetReader.addUserFollowed(couple1, d);
+        DatasetReader.addRow_friendBased_dataset(couple1, d);
         assertEquals(2, d.getUsers().size());
 
-        UserModel u1 = ModelFactory.getUser(Integer.parseInt(id1));
-        UserModel u2 = ModelFactory.getUser(Integer.parseInt(id2));
+        UserModel u1 = ModelFactory.getUser(id1);
+        UserModel u2 = ModelFactory.getUser(id2);
 
         assertEquals(1, u1.getFollowOut().size());
         assertTrue(u1.getFollowOut().contains(u2));
@@ -37,11 +37,11 @@ public class DatasetReaderTest {
         assertTrue(u2.getFollowIn().contains(u1));
         assertTrue(u2.getFollowOut().isEmpty());
 
-        DatasetReader.addUserFollowed(couple1, d);
+        DatasetReader.addRow_friendBased_dataset(couple1, d);
         assertEquals(2, d.getUsers().size());
 
-        UserModel u11 = ModelFactory.getUser(Integer.parseInt(id1));
-        UserModel u22 = ModelFactory.getUser(Integer.parseInt(id2));
+        UserModel u11 = ModelFactory.getUser(id1);
+        UserModel u22 = ModelFactory.getUser(id2);
 
         assertEquals(1, u11.getFollowOut().size());
         assertTrue(u11.getFollowOut().contains(u2));

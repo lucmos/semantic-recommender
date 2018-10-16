@@ -10,13 +10,17 @@ import java.util.List;
 
 public class TsvFileReader
 {
+    private TsvFileReader() {
+
+    }
+
     /**
      * Methods that read a file text and returns it into an array which represents each line
      * with a string.
      * @param path the file path
      * @return an ArrayList of string, where each String is a line of the read file
      */
-    public ArrayList<String> readText(String path,int  c)
+    public static ArrayList<String> readText(String path,int  c)
     { // TODO: 15/10/18 togli c 
         ArrayList<String> lines = new ArrayList<String>();
         try
@@ -43,7 +47,7 @@ public class TsvFileReader
      * @param lines
      * @return
      */
-    public ArrayList<ArrayList<String>> splitByChar(ArrayList<String> lines, char specialChar)
+    public static ArrayList<ArrayList<String>> splitByChar(ArrayList<String> lines, char specialChar)
     {
         ArrayList<ArrayList<String>>res = new ArrayList<>();
 
@@ -58,21 +62,19 @@ public class TsvFileReader
         return res;
     }
 
-    public ArrayList<ArrayList<String>> splitByChar(ArrayList<String> lines)
+    public static ArrayList<ArrayList<String>> splitByChar(ArrayList<String> lines)
     {
-        return this.splitByChar(lines, '\t');
+        return TsvFileReader.splitByChar(lines, '\t');
     }
-    // TODO: 15/10/18 cancella main
 
+    // TODO: 15/10/18 cancella main
     public static void main(String[] args)
     {
-        TsvFileReader tsvFReader = new TsvFileReader();
-        ArrayList<String> lines = tsvFReader.readText("D://università//cache//SocialExtraction//WSIEProject/provaTesto.txt", 10);
+        ArrayList<String> lines = readText("D://università//cache//SocialExtraction//WSIEProject/provaTesto.txt", 10);
 //        System.out.println(lines.size());
-        ArrayList<ArrayList<String>> splittedLines = tsvFReader.splitByChar(lines);
+        ArrayList<ArrayList<String>> splittedLines = splitByChar(lines);
         System.out.println(splittedLines);
         System.out.println(splittedLines.size());
-
     }
 
 

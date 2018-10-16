@@ -11,18 +11,20 @@ import java.io.Serializable;
  */
 public abstract class TwitterObjectModel implements Serializable {
     /**
-     * The integer identifier. It is unique inside the same class
+     * The integer identifier. It is globally unique inside the same class
+     * and automatically generated.
      */
-    private long id;
+    private long seqId;
 
     /**
      * The literal identifier. If present, it is unique.
      */
     private String idString;
 
-    TwitterObjectModel(long id) {
-        this.setId(id);
-    }
+    /**
+     * A mapping between an integer identifier and a string one
+     */
+    private static OneToOneHash<Integer, String> idMap = new OneToOneHash<>();
 
     TwitterObjectModel(String idString) {
         this.setId(getNextId(idString));
@@ -31,20 +33,25 @@ public abstract class TwitterObjectModel implements Serializable {
 
     /**
      * Defines the mapping between the given literal identifier and the generated integer identifier
+     *
      * @return the mapping, local to each class
      */
-    abstract OneToOneHash<Integer, String> getIdMapping();
+    private OneToOneHash<Integer, String> getIdMapping() {
+        assert idMap != null;
 
-    private void setId(long id) {
-        assert id >= 0;
+        return idMap;
+    }
 
-        this.id = id;
+    private void setId(long seqId) {
+        assert seqId >= 0;
+
+        this.seqId = seqId;
     }
 
     public long getId() {
-        assert id >= 0;
+        assert seqId >= 0;
 
-        return id;
+        return seqId;
     }
 
     public String getIdString() {

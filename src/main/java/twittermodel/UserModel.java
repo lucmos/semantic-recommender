@@ -26,9 +26,16 @@ public class UserModel extends TwitterObjectModel {
      * (taken from the dataset)
      */
     private ArrayList<WikiPageModel> wikiPagesAboutUser;
+
+
+    /**
+     * The list of wikiPages that appear in his tweets
+     */
     private ArrayList<WikiPageModel> wikiPageLiked;
 
-    public UserModel(long id) {
+
+
+    public UserModel(String id) {
         super(id);
         this.followOut = new ArrayList<>();
         this.followIn = new ArrayList<>();
@@ -71,14 +78,15 @@ public class UserModel extends TwitterObjectModel {
      *
      * @param wikiPage the wikipedia page to add
      */
-    public void addWikiPageAbout(WikiPageModel wikiPage) {
+    public void addWikiPageAboutUser(WikiPageModel wikiPage) {
         assert wikiPage != null;
 
         this.wikiPagesAboutUser.add(wikiPage);
     }
 
     public void addWikiPageLiked(WikiPageModel wikiPage) {
-        assert wikiPage != null;
+        // TODO: 16/10/18 4 interest hanno wikiPage null
+//        assert wikiPage != null;
 
         this.wikiPageLiked.add(wikiPage);
     }
@@ -111,11 +119,6 @@ public class UserModel extends TwitterObjectModel {
         assert wikiPageLiked != null;
 
         return wikiPageLiked;
-    }
-
-    @Override
-    public OneToOneHash<Integer, String> getIdMapping() {
-        throw new UnsupportedOperationException();
     }
 
     @Override

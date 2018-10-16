@@ -1,7 +1,5 @@
 package twittermodel;
 
-import utils.OneToOneHash;
-
 /**
  * Models a "tweet"
  */
@@ -21,13 +19,10 @@ public class TweetModel extends TwitterObjectModel {
     /**
      * The source from which the interest has been found
      */
-    private String interestSource;
+    private String interestUrl;
 
-    public TweetModel(long id, InterestModel interest, String interestSourceUrl) {
+    public TweetModel(String id) {
         super(id);
-
-        this.setInterest(interest);
-        this.setInterestSource(interestSourceUrl);
     }
 
     public void setAuthor(UserModel author) {
@@ -36,10 +31,10 @@ public class TweetModel extends TwitterObjectModel {
         this.author = author;
     }
 
-    public void setInterestSource(String interestSource) {
+    public void setInterestUrl(String interestSource) {
         assert interestSource != null && !interestSource.equals("");
 
-        this.interestSource = interestSource;
+        this.interestUrl = interestSource;
     }
 
     public void setInterest(InterestModel interest) {
@@ -54,10 +49,10 @@ public class TweetModel extends TwitterObjectModel {
         return author;
     }
 
-    public String getInterestSource() {
-        assert interestSource != null;
+    public String getInterestUrl() {
+        assert interestUrl != null;
 
-        return interestSource;
+        return interestUrl;
     }
 
     public InterestModel getInterest() {
@@ -67,13 +62,8 @@ public class TweetModel extends TwitterObjectModel {
     }
 
     @Override
-    public OneToOneHash<Integer, String> getIdMapping() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public String toString(){
-//        return "Tweet, with interest: " + interest + " , interest source: "+ interestSource+ ", \nauthor: " + author.toString();
-        return String.format("(tweet: %d {interest: %s, interestSource: %s})", getId(), interest, interestSource);
+//        return "Tweet, with interest: " + interest + " , interest source: "+ interestUrl+ ", \nauthor: " + author.toString();
+        return String.format("(tweet: %d {interest: %s, interestUrl: %s})", getId(), interest, interestUrl);
     }
 }

@@ -19,8 +19,8 @@ public final class Utils {
      * @param path the path in which the obj must be saved
      * @param <E> the type of the object
      */
-    public static <E extends IndexedSerializable> void save(E obj, PathConstants path) {
-        try( FileOutputStream fileOutput = new FileOutputStream(path.getPath());
+    public static <E extends IndexedSerializable> void save(E obj, String path) {
+        try( FileOutputStream fileOutput = new FileOutputStream(path);
              ObjectOutputStream objOutput = new ObjectOutputStream(fileOutput)) {
             objOutput.writeObject(obj);
         } catch (IOException e) {
@@ -37,8 +37,8 @@ public final class Utils {
      * @return the restored object
      */
     @SuppressWarnings("unchecked")
-    public static <E extends IndexedSerializable> E restore(PathConstants path) {
-        try (FileInputStream fileInput = new FileInputStream(path.getPath());
+    public static <E extends IndexedSerializable> E restore(String path) {
+        try (FileInputStream fileInput = new FileInputStream(path);
              ObjectInputStream objInput = new ObjectInputStream(fileInput)) {
             return (E) objInput.readObject();
         } catch (IOException | ClassNotFoundException e) {

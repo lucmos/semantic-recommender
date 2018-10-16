@@ -1,7 +1,10 @@
 package datasetsreader;
 
 //import twittermodel.;
+import constants.DatasetName;
+import sun.security.x509.DNSName;
 import twittermodel.*;
+import utils.IndexedSerializable;
 
 import javax.print.attribute.standard.PagesPerMinute;
 import java.util.ArrayList;
@@ -9,22 +12,22 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Dataset
+public class Dataset implements IndexedSerializable
 {
-    private String name;
+    private DatasetName name;
 
     private Set<InterestModel> interests;
     private Set<TweetModel> tweets;
     private Set<UserModel> users;
     private Set<WikiPageModel> pages;
 
-    public Dataset(String name)
+    public Dataset(DatasetName name)
     {
-        this.name=name;
-        interests = new HashSet<InterestModel>();
-        tweets = new HashSet<TweetModel>();
-        users = new HashSet<UserModel>();
-        pages = new HashSet<WikiPageModel>();
+        this.name = name;
+        interests = new HashSet<>();
+        tweets = new HashSet<>();
+        users = new HashSet<>();
+        pages = new HashSet<>();
     }
 
     @Override
