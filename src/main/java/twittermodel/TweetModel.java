@@ -49,14 +49,20 @@ public class TweetModel extends TwitterObjectModel {
     }
 
     public UserModel getAuthor() {
+        assert author != null;
+
         return author;
     }
 
     public String getInterestSource() {
+        assert interestSource != null;
+
         return interestSource;
     }
 
     public InterestModel getInterest() {
+        assert interest != null;
+
         return interest;
     }
 
@@ -67,6 +73,7 @@ public class TweetModel extends TwitterObjectModel {
 
     @Override
     public String toString(){
-        return "Tweet, with interest: " + interest + " , interest source: "+ interestSource+ ", \nauthor: " + author.toString();
+//        return "Tweet, with interest: " + interest + " , interest source: "+ interestSource+ ", \nauthor: " + author.toString();
+        return String.format("(tweet: %d {interest: %s, interestSource: %s})", getId(), interest, interestSource);
     }
 }

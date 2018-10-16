@@ -35,7 +35,10 @@ public class ModelFactory {
         if (!ModelFactory.users.containsKey(id)) {
             ModelFactory.users.put(id, new UserModel(id));
         }
-        return ModelFactory.users.get(id);
+        UserModel res = ModelFactory.users.get(id);
+
+        assert res != null;
+        return res;
     }
 
     /**
@@ -52,7 +55,10 @@ public class ModelFactory {
         if (!ModelFactory.tweets.containsKey(id)) {
             ModelFactory.tweets.put(id, new TweetModel(id, interest, interestSourceUrl));
         }
-        return ModelFactory.tweets.get(id);
+        TweetModel res = ModelFactory.tweets.get(id);
+
+        assert res != null;
+        return res;
     }
 
     /**
@@ -64,11 +70,15 @@ public class ModelFactory {
     public static TweetModel getTweet(long id) {
         assert id > 0;
 
+        TweetModel res;
         try {
-            return ModelFactory.tweets.get(id);
+            res = ModelFactory.tweets.get(id);
         } catch (NullPointerException e) {
             throw new RuntimeException("This tweet id doesn't exist!", e);
         }
+
+        assert res != null;
+        return res;
     }
 
     /**
@@ -85,7 +95,10 @@ public class ModelFactory {
         if (!ModelFactory.interests.containsKey(id)) {
             ModelFactory.interests.put(id, new InterestModel(id, platform, wikiPage));
         }
-        return ModelFactory.interests.get(id);
+        InterestModel res = ModelFactory.interests.get(id);
+
+        assert res != null;
+        return res;
     }
 
     /**
@@ -96,12 +109,17 @@ public class ModelFactory {
      */
     public static InterestModel getInterest(String id) {
         assert id != null && !id.equals("");
+        assert ModelFactory.interests.containsKey(id);
 
+        InterestModel res;
         try {
-            return ModelFactory.interests.get(id);
+            res = ModelFactory.interests.get(id);
         } catch (NullPointerException e) {
             throw new RuntimeException("This interest id doesn't exist!", e);
         }
+
+        assert res != null;
+        return res;
     }
 
     /**
@@ -116,6 +134,9 @@ public class ModelFactory {
         if (!ModelFactory.wikiPages.containsKey(name)) {
             ModelFactory.wikiPages.put(name, new WikiPageModel(name));
         }
-        return ModelFactory.wikiPages.get(name);
+        WikiPageModel res = ModelFactory.wikiPages.get(name);
+
+        assert res != null;
+        return res;
     }
 }

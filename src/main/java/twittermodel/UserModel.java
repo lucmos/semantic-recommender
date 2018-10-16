@@ -1,5 +1,6 @@
 package twittermodel;
 
+import com.sun.org.apache.xpath.internal.functions.FuncFalse;
 import utils.OneToOneHash;
 
 import java.util.ArrayList;
@@ -83,22 +84,32 @@ public class UserModel extends TwitterObjectModel {
     }
 
     public ArrayList<UserModel> getFollowOut() {
+        assert followOut != null;
+
         return followOut;
     }
 
     public ArrayList<UserModel> getFollowIn() {
+        assert followIn != null;
+
         return followIn;
     }
 
     public ArrayList<TweetModel> getTweets() {
+        assert tweets != null;
+
         return tweets;
     }
 
     public ArrayList<WikiPageModel> getWikiPagesAboutUser() {
+        assert wikiPagesAboutUser != null;
+
         return wikiPagesAboutUser;
     }
 
     public ArrayList<WikiPageModel> getWikiPageLiked() {
+        assert wikiPageLiked != null;
+
         return wikiPageLiked;
     }
 
@@ -109,7 +120,8 @@ public class UserModel extends TwitterObjectModel {
 
     @Override
     public String toString() {
-        return "User " + getId() + " that has " + followIn + " follower, \n" + "follows " + followOut + " and has done " + tweets + " tweets.\n"
-                + "Gli piacciono le pagine wikipedia" + wikiPageLiked + "\n" + "Parlano di lui " + wikiPagesAboutUser + " pagine di wikipedia";
+//        return "User " + getId() + " that has " + followIn + " follower, \n" + "follows " + followOut + " and has done " + tweets + " tweets.\n"
+//                + "Gli piacciono le pagine wikipedia" + wikiPageLiked + "\n" + "Parlano di lui " + wikiPagesAboutUser + " pagine di wikipedia";
+        return String.format("(user: %d)", getId());
     }
 }

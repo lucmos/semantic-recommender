@@ -72,7 +72,9 @@ public class DatasetReader
         UserModel user = ModelFactory.getUser(Long.parseLong(userTweetInterestURL.get(0)));
         InterestModel interest = ModelFactory.getInterest(userTweetInterestURL.get(2));
         TweetModel tweet = ModelFactory.getTweet(Long.parseLong(userTweetInterestURL.get(1)), interest, userTweetInterestURL.get(3));
-
+        System.out.println(user);
+        System.out.println(interest);
+        System.out.println(tweet);
         user.addTweet(tweet);
 
         dataset.addUser(user);

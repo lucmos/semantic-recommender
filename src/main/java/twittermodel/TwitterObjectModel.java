@@ -36,16 +36,20 @@ public abstract class TwitterObjectModel implements Serializable {
     abstract OneToOneHash<Integer, String> getIdMapping();
 
     private void setId(long id) {
-        assert id > 0;
+        assert id >= 0;
 
         this.id = id;
     }
 
     public long getId() {
+        assert id >= 0;
+
         return id;
     }
 
     public String getIdString() {
+        assert idString != null && !idString.equals("");
+
         return idString;
     }
 

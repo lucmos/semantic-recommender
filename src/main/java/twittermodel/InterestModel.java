@@ -81,20 +81,27 @@ public class InterestModel extends TwitterObjectModel {
     }
 
     private PlatformType getPlatform() {
+        assert platform != null;
+
         return platform;
     }
 
     @Override
     public OneToOneHash<Integer, String> getIdMapping() {
+        assert InterestModel.idMap != null;
+
         return InterestModel.idMap;
     }
 
     public WikiPageModel getWikiPage() {
+        assert wikiPage != null;
+
         return wikiPage;
     }
 
     @Override
     public String toString(){
-        return "Interest " + idMap +", platform type: "+ platform + ", wikipage: " + wikiPage;
+//        return "Interest " + idMap +", platform type: "+ platform + ", wikipage: " + wikiPage;
+        return String.format("(interest: %s", getId());
     }
 }

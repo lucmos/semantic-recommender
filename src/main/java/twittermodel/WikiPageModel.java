@@ -29,11 +29,15 @@ public class WikiPageModel extends TwitterObjectModel {
 
     @Override
     public OneToOneHash<Integer, String> getIdMapping() {
+        assert WikiPageModel.idMap != null;
+
         return WikiPageModel.idMap;
     }
 
     @Override
     public String toString(){
-        return "Wikipedia page "+ idMap +" with URL: "+ getURL();
+
+//        return "Wikipedia page "+ idMap +" with URL: "+ getURL();
+        return String.format("(wikiPage: %s)", getId());
     }
 }
