@@ -22,15 +22,7 @@ public class DatasetReader
         return fileReader.splitByChar(datasetLines);
     }
 
-    public enum DatasetType
-    {
-        WIKI_MID_FRIENDBASED_DATASET,
-        WIKI_MID_FRIENDBASED_INTEREST,
-        WIKI_MID_MESSAGEBASED_DATASET,
-        WIKI_MID_MESSAGEBASED_INTEREST,
-        S21,
-        S22_S23;
-    }
+
 
     /**
      * From a couple userId-fFriendId creates two users and add them in the dataset object
@@ -129,30 +121,30 @@ public class DatasetReader
      * Stores a list of object taken from
      * @param dataset
      * @param readedData
-     * @param dType
+     * @param datasetConstants the datasetConstant to work upon
      */
-    public void addDataInDataset(Dataset dataset, ArrayList<ArrayList<String>> readedData, DatasetType dType)
+    public void addDataInDataset(Dataset dataset, ArrayList<ArrayList<String>> readedData, DatasetConstants datasetConstants)
     {
-        switch(dType){
-            case WIKI_MID_FRIENDBASED_DATASET:
+        switch(datasetConstants.getType()){
+            case FRIENDBASED_DATASET:
                 for (ArrayList<String> userFriend : readedData)
                 {
                     addUserFollowed(userFriend, dataset);
                 }
                 break;
-            case WIKI_MID_FRIENDBASED_INTEREST:
+            case FRIENDBASED_INTEREST:
                 for (ArrayList<String> frienWikiPage : readedData)
                 {
                     addUserCorrespondingInterest(frienWikiPage, dataset);
                 }
                 break;
-            case WIKI_MID_MESSAGEBASED_DATASET:
+            case MESSAGEBASED_DATASET:
                 for (ArrayList<String> userTweetIntURL : readedData)
                 {
                     addUserTweetInterestURL(userTweetIntURL, dataset);
                 }
                 break;
-            case WIKI_MID_MESSAGEBASED_INTEREST:
+            case MESSAGEBASED_INTEREST:
                 for (ArrayList<String> intPlatPage : readedData)
                 {
                     addInterestPlatformPage(intPlatPage, dataset);
