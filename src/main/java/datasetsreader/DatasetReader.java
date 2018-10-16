@@ -4,6 +4,7 @@ import twittermodel.*;
 import io.TsvFileReader;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class use a TsvFileReader to read a dataset and describes it building and managing a Dataset object
@@ -11,15 +12,19 @@ import java.util.ArrayList;
 public class DatasetReader
 {
     /**Reads datas from a dataset file using a TsvFileReader
-     * @param dataset the dataset to read
+     * @param datasetConstant the dataset to read
      * @return the readed data
      */
-    public static ArrayList<ArrayList<String>> readDataset(DatasetConstants dataset)
+    public static Dataset readDataset(DatasetConstants datasetConstant)
     {
         TsvFileReader fileReader = new TsvFileReader();
 //        todo: remove magic number
-        ArrayList<String> datasetLines = fileReader.readText(dataset.getPath(), 100000);
-        return fileReader.splitByChar(datasetLines);
+//        ArrayList<String> datasetLines = fileReader.readText(datasetConstant.getPath(), 100000);
+        ArrayList<ArrayList<String>> lines = fileReader.splitByChar(fileReader.readText(datasetConstant.getPath(), 100000));
+
+        Dataset dataset = new Dataset(datasetConstant.getName());
+        DatasetReader.addDataInDataset(dataset, lines, datasetConstant);
+        return dataset;
     }
 
 
@@ -32,8 +37,8 @@ public class DatasetReader
     static void addUserFollowed(ArrayList<String> userFriend, Dataset dataset)
     {
         assert userFriend.size()==2;
-        UserModel user = ModelFactory.getUser(Integer.parseInt(userFriend.get(0)));
-        UserModel followed = ModelFactory.getUser(Integer.parseInt(userFriend.get(1)));
+        UserModel user = ModelFactory.getUser(Long.parseLong(userFriend.get(0)));
+        UserModel followed = ModelFactory.getUser(Long.parseLong(userFriend.get(1)));
         user.addFollowOut(followed); // TODO: 16/10/18 non dovrebbe essere al contrario? cambiato, check it
         dataset.addUser(user);
         dataset.addUser(followed);
@@ -47,7 +52,7 @@ public class DatasetReader
     public static void addUserCorrespondingInterest(ArrayList<String> userWikiPage, Dataset dataset)
     {
         assert userWikiPage.size()==2;
-        UserModel user = ModelFactory.getUser(Integer.parseInt(userWikiPage.get(0)));
+        UserModel user = ModelFactory.getUser(Long.parseLong(userWikiPage.get(0)));
         WikiPageModel wikiPage = ModelFactory.getWikiPage(userWikiPage.get(1));
         user.addWikiPageAbout(wikiPage);
         dataset.addPage(wikiPage);
@@ -64,9 +69,9 @@ public class DatasetReader
     public static void addUserTweetInterestURL(ArrayList<String> userTweetInterestURL, Dataset dataset)
     {
         assert userTweetInterestURL.size()==4;
-        UserModel user = ModelFactory.getUser(Integer.parseInt(userTweetInterestURL.get(0)));
+        UserModel user = ModelFactory.getUser(Long.parseLong(userTweetInterestURL.get(0)));
         InterestModel interest = ModelFactory.getInterest(userTweetInterestURL.get(2));
-        TweetModel tweet = ModelFactory.getTweet(Integer.parseInt(userTweetInterestURL.get(1)), interest, userTweetInterestURL.get(3));
+        TweetModel tweet = ModelFactory.getTweet(Long.parseLong(userTweetInterestURL.get(1)), interest, userTweetInterestURL.get(3));
 
         user.addTweet(tweet);
 
@@ -97,7 +102,7 @@ public class DatasetReader
      */
     public static void addUser (ArrayList<String> user, Dataset dataset){
         assert user.size()==1;
-        UserModel u = new UserModel(Integer.parseInt(user.get(0)));
+        UserModel u = new UserModel(Long.parseLong(user.get(0)));
         dataset.addUser(u);
     }
 
@@ -108,7 +113,7 @@ public class DatasetReader
      */
     public static void addUserFollowedPage(ArrayList<String> userWikipage, Dataset dataset){
         assert userWikipage.size()==2;
-        UserModel user = ModelFactory.getUser(Integer.parseInt(userWikipage.get(0)));
+        UserModel user = ModelFactory.getUser(Long.parseLong(userWikipage.get(0)));
         WikiPageModel wikiPage = ModelFactory.getWikiPage(userWikipage.get(1));
 
         user.addWikiPageLiked(wikiPage);
@@ -123,7 +128,7 @@ public class DatasetReader
      * @param readedData
      * @param datasetConstants the datasetConstant to work upon
      */
-    public void addDataInDataset(Dataset dataset, ArrayList<ArrayList<String>> readedData, DatasetConstants datasetConstants)
+    public static  void addDataInDataset(Dataset dataset, ArrayList<ArrayList<String>> readedData, DatasetConstants datasetConstants)
     {
         switch(datasetConstants.getType()){
             case FRIENDBASED_DATASET:

@@ -13,14 +13,14 @@ public abstract class TwitterObjectModel implements Serializable {
     /**
      * The integer identifier. It is unique inside the same class
      */
-    private int id;
+    private long id;
 
     /**
      * The literal identifier. If present, it is unique.
      */
     private String idString;
 
-    TwitterObjectModel(int id) {
+    TwitterObjectModel(long id) {
         this.setId(id);
     }
 
@@ -35,11 +35,13 @@ public abstract class TwitterObjectModel implements Serializable {
      */
     abstract OneToOneHash<Integer, String> getIdMapping();
 
-    private void setId(int id) {
+    private void setId(long id) {
+        assert id > 0;
+
         this.id = id;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -48,6 +50,8 @@ public abstract class TwitterObjectModel implements Serializable {
     }
 
     private void setIdString(String idString) {
+        assert idString != null && !idString.equals("");
+
         this.idString = idString;
     }
 
@@ -57,6 +61,8 @@ public abstract class TwitterObjectModel implements Serializable {
      * @return the integer identifier
      */
     private int getNextId(String idString) {
+        assert idString != null && !idString.equals("");
+
         OneToOneHash<Integer, String> mapping = getIdMapping();
         int index = mapping.size();
         mapping.put(index, idString);

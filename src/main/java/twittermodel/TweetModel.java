@@ -23,21 +23,28 @@ public class TweetModel extends TwitterObjectModel {
      */
     private String interestSource;
 
-    public TweetModel(int id, InterestModel interest, String interestSourceUrl) {
+    public TweetModel(long id, InterestModel interest, String interestSourceUrl) {
         super(id);
+
         this.setInterest(interest);
         this.setInterestSource(interestSourceUrl);
     }
 
     public void setAuthor(UserModel author) {
+        assert author != null;
+
         this.author = author;
     }
 
     public void setInterestSource(String interestSource) {
+        assert interestSource != null && !interestSource.equals("");
+
         this.interestSource = interestSource;
     }
 
     public void setInterest(InterestModel interest) {
+        assert interest != null;
+
         this.interest = interest;
     }
 

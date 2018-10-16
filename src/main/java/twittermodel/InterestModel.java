@@ -21,6 +21,7 @@ public class InterestModel extends TwitterObjectModel {
 
         PlatformType(String text)
         {
+            assert text != null && !text.equals("");
             this.text = text;
         }
 
@@ -34,6 +35,8 @@ public class InterestModel extends TwitterObjectModel {
          * @return
          */
         public static PlatformType fromString(String text) {
+            assert text != null && !text.equals("");
+
             for (PlatformType b : PlatformType.values()) {
                 if (b.text.equalsIgnoreCase(text)) {
                     return b;
@@ -65,10 +68,15 @@ public class InterestModel extends TwitterObjectModel {
     }
 
     private void setPlatform(PlatformType platform) {
+        assert platform != null;
+
         this.platform = platform;
     }
 
-    private void setWikiPage(WikiPageModel wikiPage) {
+    private void setWikiPage(WikiPageModel wikiPage)
+    {
+        assert wikiPage != null;
+
         this.wikiPage = wikiPage;
     }
 

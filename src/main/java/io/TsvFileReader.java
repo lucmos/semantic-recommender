@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class TsvFileReader
 {
@@ -44,13 +45,13 @@ public class TsvFileReader
      */
     public ArrayList<ArrayList<String>> splitByChar(ArrayList<String> lines, char specialChar)
     {
-        ArrayList<ArrayList<String>>res = new ArrayList<ArrayList<String>>();
+        ArrayList<ArrayList<String>>res = new ArrayList<>();
 
         for (int i=0; i<lines.size(); i++)
         {
             String sentence= lines.get(i);
             String[] splittedSentences = sentence.split(""+specialChar);
-            ArrayList<String>  splitSent = new ArrayList<String>(Arrays.asList(splittedSentences));
+            ArrayList<String>  splitSent = new ArrayList<>(Arrays.asList(splittedSentences));
             res.add(splitSent);
         }
 //        System.out.println(res);
@@ -59,8 +60,7 @@ public class TsvFileReader
 
     public ArrayList<ArrayList<String>> splitByChar(ArrayList<String> lines)
     {
-        ArrayList<ArrayList<String>>res = this.splitByChar(lines, '\t');
-        return res;
+        return this.splitByChar(lines, '\t');
     }
     // TODO: 15/10/18 cancella main
 
