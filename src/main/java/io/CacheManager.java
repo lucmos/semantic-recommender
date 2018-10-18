@@ -9,8 +9,7 @@ import javax.rmi.CORBA.Util;
 
 public class CacheManager {
 
-    public static void writeToCache(DatasetName datasetName) {
-        Dataset dataset = DatasetReader.readDataset(datasetName);
+    public static void writeToCache(DatasetName datasetName, Dataset dataset) {
         Utils.save(dataset, datasetName.getBinPath());
 //        DatasetReader.readDataset(); // TODO: 16/10/18 finisci
     }
