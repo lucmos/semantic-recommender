@@ -30,12 +30,12 @@ public class DatasetReaderTest {
         UserModel u1 = ModelFactory.getUser(id1);
         UserModel u2 = ModelFactory.getUser(id2);
 
-        assertEquals(1, u1.getFollowOut().size());
-        assertTrue(u1.getFollowOut().contains(u2));
-        assertTrue(u1.getFollowIn().isEmpty());
+        assertEquals(1, u1.getFollowOutIds().size());
+        assertTrue(u1.getFollowOutIds().contains(u2));
+        assertTrue(u1.getFollowInIds().isEmpty());
 
-        assertTrue(u2.getFollowIn().contains(u1));
-        assertTrue(u2.getFollowOut().isEmpty());
+        assertTrue(u2.getFollowInIds().contains(u1));
+        assertTrue(u2.getFollowOutIds().isEmpty());
 
         DatasetReader.addRow_friendBased_dataset(couple1, d);
         assertEquals(2, d.getUsers().size());
@@ -43,13 +43,13 @@ public class DatasetReaderTest {
         UserModel u11 = ModelFactory.getUser(id1);
         UserModel u22 = ModelFactory.getUser(id2);
 
-        assertEquals(1, u11.getFollowOut().size());
-        assertTrue(u11.getFollowOut().contains(u2));
-        assertTrue(u11.getFollowIn().isEmpty());
+        assertEquals(1, u11.getFollowOutIds().size());
+        assertTrue(u11.getFollowOutIds().contains(u2));
+        assertTrue(u11.getFollowInIds().isEmpty());
 
-        assertEquals(1, u22.getFollowIn().size());
-        assertTrue(u22.getFollowIn().contains(u1));
-        assertTrue(u22.getFollowOut().isEmpty());
+        assertEquals(1, u22.getFollowInIds().size());
+        assertTrue(u22.getFollowInIds().contains(u1));
+        assertTrue(u22.getFollowOutIds().isEmpty());
     }
 
     @Test

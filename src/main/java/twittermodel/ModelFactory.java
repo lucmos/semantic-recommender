@@ -16,13 +16,6 @@ public class ModelFactory {
     private static HashMap<String, WikiPageModel> wikiPages = new HashMap<>();
     private static HashMap<String, InterestModel> interests = new HashMap<>();
 
-    public static String report() {
-        return "The users are " + users.size() + "\n" +
-                "The tweets are " + tweets.size() + "\n" +
-                "The wikipedia pages are " + wikiPages.size() + "\n" +
-                "The interests are " + interests.size() + "\n";
-    }
-
     /**
      * Returns a UserModel with the given id
      *

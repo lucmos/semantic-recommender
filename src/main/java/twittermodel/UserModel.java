@@ -1,76 +1,75 @@
 package twittermodel;
 
-import com.sun.org.apache.xpath.internal.functions.FuncFalse;
-import utils.OneToOneHash;
-
 import java.util.ArrayList;
 
 public class UserModel extends TwitterObjectModel {
     /**
      * The list of user that this user is following
      */
-    private ArrayList<UserModel> followOut;
+    private ArrayList<Long> followOutIds;
 
     /**
      * The list of user that follow this user
      */
-    private ArrayList<UserModel> followIn;
+    private ArrayList<Long> followInIds;
 
     /**
-     * The list of tweets that this user posted
+     * The list of tweetsIds that this user posted
      */
-    private ArrayList<TweetModel> tweets;
+    private ArrayList<Long> tweetsIds;
 
     /**
-     * The list of wikiPagesAboutUser associated to this user
+     * The list of wikiPagesAboutUserIds associated to this user
      * (taken from the dataset)
      */
-    private ArrayList<WikiPageModel> wikiPagesAboutUser;
+    private ArrayList<Long> wikiPagesAboutUserIds;
 
 
     /**
-     * The list of wikiPages that appear in his tweets
+     * The list of the wiki pages of the items that the user likes.
+     *
+     * Used only for the datsets S2*
      */
-    private ArrayList<WikiPageModel> wikiPageLiked;
-
+    private ArrayList<Long> wikiPagesOfLikedItemsIds;
 
 
     public UserModel(String id) {
         super(id);
-        this.followOut = new ArrayList<>();
-        this.followIn = new ArrayList<>();
-        this.tweets = new ArrayList<>();
-        this.wikiPagesAboutUser = new ArrayList<>();
-        this.wikiPageLiked = new ArrayList<>();
+        this.followOutIds = new ArrayList<>();
+        this.followInIds = new ArrayList<>();
+        this.tweetsIds = new ArrayList<>();
+        this.wikiPagesAboutUserIds = new ArrayList<>();
+        this.wikiPagesOfLikedItemsIds = new ArrayList<>();
     }
 
     /**
-     * Adds a user to the list of the follower, called followIn.
-     * This user will have its list of followOut automatically updated.
+     * Adds a user to the list of the follower, called followInIds.
+     * This user will have its list of followOutIds automatically updated.
      *
-     * @param userID the user to follow
+     * @param outFriend the user to follow
      */
-    public void addFollowOut(UserModel userID) {
-        assert userID != null;
+    public void addFollowOut(UserModel outFriend) {
+        assert outFriend != null;
 
-        if (!userID.getFollowIn().contains(this)) {
-            userID.followIn.add(this);
-            this.followOut.add(userID);
+        if (!outFriend.getFollowInIds().contains(getId())) {
+            assert !this.followOutIds.contains(outFriend.getId());
+
+            outFriend.followInIds.add(getId());
+            this.followOutIds.add(outFriend.getId());
         }
     }
 
 
     /**
-     * Adds a tweet to the list of the tweets posted by this user
+     * Adds a tweet to the list of the tweetsIds posted by this user
      *
-     * @param tweetID the tweet to add
+     * @param tweet the tweet to add
      */
-    public void addTweet(TweetModel tweetID) {
-        assert tweetID != null;
+    public void addTweet(TweetModel tweet) {
+        assert tweet != null;
 
-        tweetID.setAuthor(this);
-        addWikiPageLiked(tweetID.getInterest().getWikiPage());
-        this.tweets.add(tweetID);
+        tweet.setAuthorId(this);
+        this.tweetsIds.add(tweet.getId());
     }
 
     /**
@@ -81,50 +80,47 @@ public class UserModel extends TwitterObjectModel {
     public void addWikiPageAboutUser(WikiPageModel wikiPage) {
         assert wikiPage != null;
 
-        this.wikiPagesAboutUser.add(wikiPage);
+        this.wikiPagesAboutUserIds.add(wikiPage.getId());
     }
 
-    public void addWikiPageLiked(WikiPageModel wikiPage) {
-        // TODO: 16/10/18 4 interest hanno wikiPage null
-//        assert wikiPage != null;
+    public void addWikiPagesOfLikedItemsIds(WikiPageModel wikiPage) {
+        assert wikiPage != null;
 
-        this.wikiPageLiked.add(wikiPage);
+        this.wikiPagesAboutUserIds.add(wikiPage.getId());
     }
 
-    public ArrayList<UserModel> getFollowOut() {
-        assert followOut != null;
+    public ArrayList<Long> getFollowOutIds() {
+        assert followOutIds != null;
 
-        return followOut;
+        return followOutIds;
     }
 
-    public ArrayList<UserModel> getFollowIn() {
-        assert followIn != null;
+    public ArrayList<Long> getFollowInIds() {
+        assert followInIds != null;
 
-        return followIn;
+        return followInIds;
     }
 
-    public ArrayList<TweetModel> getTweets() {
-        assert tweets != null;
+    public ArrayList<Long> getTweetsIds() {
+        assert tweetsIds != null;
 
-        return tweets;
+        return tweetsIds;
     }
 
-    public ArrayList<WikiPageModel> getWikiPagesAboutUser() {
-        assert wikiPagesAboutUser != null;
+    public ArrayList<Long> getWikiPagesAboutUserIds() {
+        assert wikiPagesAboutUserIds != null;
 
-        return wikiPagesAboutUser;
+        return wikiPagesAboutUserIds;
     }
 
-    public ArrayList<WikiPageModel> getWikiPageLiked() {
-        assert wikiPageLiked != null;
+    public ArrayList<Long> getWikiPagesOfLikedItemsIds() {
+        assert wikiPagesOfLikedItemsIds != null;
 
-        return wikiPageLiked;
+        return wikiPagesOfLikedItemsIds;
     }
 
     @Override
     public String toString() {
-//        return "User " + getId() + " that has " + followIn + " follower, \n" + "follows " + followOut + " and has done " + tweets + " tweets.\n"
-//                + "Gli piacciono le pagine wikipedia" + wikiPageLiked + "\n" + "Parlano di lui " + wikiPagesAboutUser + " pagine di wikipedia";
         return String.format("(user: %d)", getId());
     }
 }

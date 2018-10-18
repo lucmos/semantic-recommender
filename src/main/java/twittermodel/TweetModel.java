@@ -6,18 +6,18 @@ package twittermodel;
 public class TweetModel extends TwitterObjectModel {
 
     /**
-     * The author of the tweet.
+     * The authorId of the tweet.
      * If this object if associated to an user, this field is written.
      */
-    private UserModel author;
+    private long authorId;
 
     /**
      * The interested this tweet is talking about
      */
-    private InterestModel interest;
+    private long interestId;
 
     /**
-     * The source from which the interest has been found
+     * The source from which the interestId has been found
      */
     private String interestUrl;
 
@@ -25,10 +25,10 @@ public class TweetModel extends TwitterObjectModel {
         super(id);
     }
 
-    public void setAuthor(UserModel author) {
-        assert author != null;
+    public void setAuthorId(UserModel authorId) {
+        assert authorId != null;
 
-        this.author = author;
+        this.authorId = authorId.getId();
     }
 
     public void setInterestUrl(String interestSource) {
@@ -37,16 +37,16 @@ public class TweetModel extends TwitterObjectModel {
         this.interestUrl = interestSource;
     }
 
-    public void setInterest(InterestModel interest) {
-        assert interest != null;
+    public void setInterestId(InterestModel interestId) {
+        assert interestId != null;
 
-        this.interest = interest;
+        this.interestId = interestId.getId();
     }
 
-    public UserModel getAuthor() {
-        assert author != null;
+    public long getAuthorId() {
+        assert authorId >= 0;
 
-        return author;
+        return authorId;
     }
 
     public String getInterestUrl() {
@@ -55,15 +55,14 @@ public class TweetModel extends TwitterObjectModel {
         return interestUrl;
     }
 
-    public InterestModel getInterest() {
-        assert interest != null;
+    public long getInterestId() {
+        assert interestId >= 0;
 
-        return interest;
+        return interestId;
     }
 
     @Override
     public String toString(){
-//        return "Tweet, with interest: " + interest + " , interest source: "+ interestUrl+ ", \nauthor: " + author.toString();
-        return String.format("(tweet: %d {interest: %s, interestUrl: %s})", getId(), interest, interestUrl);
+        return String.format("(tweet: %d {interestId: %s, interestUrl: %s})", getId(), interestId, interestUrl);
     }
 }

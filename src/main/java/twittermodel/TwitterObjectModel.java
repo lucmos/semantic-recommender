@@ -17,7 +17,7 @@ public abstract class TwitterObjectModel implements Serializable {
     private long seqId;
 
     /**
-     * The literal identifier. If present, it is unique.
+     * The literal identifier present in the dataset. If present, it is unique.
      */
     private String idString;
 

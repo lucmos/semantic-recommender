@@ -20,8 +20,8 @@ public class TsvFileReader
      * @param path the file path
      * @return an ArrayList of string, where each String is a line of the read file
      */
-    public static ArrayList<String> readText(String path,int  c)
-    { // TODO: 15/10/18 togli c 
+    public static ArrayList<String> readText(String path)
+    {
         ArrayList<String> lines = new ArrayList<String>();
         try
         {
@@ -29,10 +29,9 @@ public class TsvFileReader
             BufferedReader bReader = new BufferedReader(new FileReader(f));
             String readLine;
 
-            while (((readLine = bReader.readLine()) != null)&& c>0)
+            while (((readLine = bReader.readLine()) != null))
             {
                 lines.add(readLine);
-                c--;
             }
             return lines;
         }
@@ -70,7 +69,7 @@ public class TsvFileReader
     // TODO: 15/10/18 cancella main
     public static void main(String[] args)
     {
-        ArrayList<String> lines = readText("D://università//cache//SocialExtraction//WSIEProject/provaTesto.txt", 10);
+        ArrayList<String> lines = readText("D://università//cache//SocialExtraction//WSIEProject/provaTesto.txt");
 //        System.out.println(lines.size());
         ArrayList<ArrayList<String>> splittedLines = splitByChar(lines);
         System.out.println(splittedLines);

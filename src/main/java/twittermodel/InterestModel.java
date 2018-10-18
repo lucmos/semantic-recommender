@@ -1,7 +1,5 @@
 package twittermodel;
 
-import utils.OneToOneHash;
-
 import java.io.Serializable;
 
 /**
@@ -52,9 +50,9 @@ public class InterestModel extends TwitterObjectModel {
     private PlatformType platform;
 
     /**
-     * A wikiPage that describes the interest
+     * A wikiPageId that describes the interest
      */
-    private WikiPageModel wikiPage;
+    private long wikiPageId;
 
 
     public InterestModel(String idString) {
@@ -67,11 +65,11 @@ public class InterestModel extends TwitterObjectModel {
         this.platform = platform;
     }
 
-    public void setWikiPage(WikiPageModel wikiPage)
+    public void setWikiPageId(WikiPageModel wikiPageId)
     {
-        assert wikiPage != null;
+        assert wikiPageId != null;
 
-        this.wikiPage = wikiPage;
+        this.wikiPageId = wikiPageId.getId();
     }
 
     public PlatformType getPlatform() {
@@ -80,16 +78,15 @@ public class InterestModel extends TwitterObjectModel {
         return platform;
     }
 
-    public WikiPageModel getWikiPage() {
-        // TODO: 16/10/18 4 interest hanno wikiPage null 
-//        assert wikiPage != null;
+    public long getWikiPageId() {
+        // TODO: 16/10/18 4 interest hanno wikiPageId null
+//        assert wikiPageId != null;
 
-        return wikiPage;
+        return wikiPageId;
     }
 
     @Override
     public String toString(){
-//        return "Interest " + idMap +", platform type: "+ platform + ", wikipage: " + wikiPage;
-        return String.format("(interest: %s", getId());
+        return String.format("(interest: %s {wikipage: %s})", getId(), getWikiPageId());
     }
 }

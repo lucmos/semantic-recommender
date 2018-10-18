@@ -64,7 +64,7 @@ public class DatasetReader
         InterestModel interest = ModelFactory.getInterest(user_tweet_interest_interestUrl.get(2));
 
         TweetModel tweet = ModelFactory.getTweet(user_tweet_interest_interestUrl.get(1));
-        tweet.setInterest(interest);
+        tweet.setInterestId(interest);
         tweet.setInterestUrl(user_tweet_interest_interestUrl.get(3));
 
         user.addTweet(tweet);
@@ -88,7 +88,7 @@ public class DatasetReader
 
         InterestModel interest = ModelFactory.getInterest(interest_platform_wikipage.get(0));
         interest.setPlatform(InterestModel.PlatformType.fromString(interest_platform_wikipage.get(1)));
-        interest.setWikiPage(page);
+        interest.setWikiPageId(page);
 
         dataset.addPage(page);
         dataset.addInterest(interest);
@@ -102,7 +102,7 @@ public class DatasetReader
     public static void addRow_S21(ArrayList<String> user, Dataset dataset){
         assert user.size() == 1;
 
-        UserModel u = new UserModel(user.get(0));
+        UserModel u = ModelFactory.getUser(user.get(0));
 
         dataset.addUser(u);
     }
@@ -120,7 +120,7 @@ public class DatasetReader
         UserModel user = ModelFactory.getUser(user_to_wikipage.get(0));
         WikiPageModel wikiPage = ModelFactory.getWikiPage(user_to_wikipage.get(1));
 
-        user.addWikiPageLiked(wikiPage);
+        user.addWikiPagesOfLikedItemsIds(wikiPage);
 
         dataset.addUser(user);
         dataset.addPage(wikiPage);
@@ -136,8 +136,8 @@ public class DatasetReader
 
     /**Reads datas from a dataset file using a TsvFileReader
      *
-     * @param datasetConstant the dataset to read
-     * @return the readed data
+     * @param name the dataset to read
+     * @param dataset the datset to fill
      */
     public static void fillDataset(DatasetName name, Dataset dataset)
     {
@@ -147,26 +147,26 @@ public class DatasetReader
         // todo: remove magic number
         switch (name) {
             case WIKIMID:
-                TsvFileReader.splitByChar(TsvFileReader.readText(DatasetInfo.WIKIMID_MESSAGE_BASED_INTEREST_INFO.getPath(), 100000)).forEach(
+                TsvFileReader.splitByChar(TsvFileReader.readText(DatasetInfo.WIKIMID_MESSAGE_BASED_INTEREST_INFO.getPath())).forEach(
                         s -> addRow_messageBased_interest(s, dataset));
-                TsvFileReader.splitByChar(TsvFileReader.readText(DatasetInfo.WIKIMID_MESSAGE_BASED_DATASET.getPath(), 100000)).forEach(
+                TsvFileReader.splitByChar(TsvFileReader.readText(DatasetInfo.WIKIMID_MESSAGE_BASED_DATASET.getPath())).forEach(
                         s -> addRow_messageBased_dataset(s, dataset));
 
-                TsvFileReader.splitByChar(TsvFileReader.readText(DatasetInfo.WIKIMID_FRIEND_BASED_DATASET.getPath(), 100000)).forEach(
+                TsvFileReader.splitByChar(TsvFileReader.readText(DatasetInfo.WIKIMID_FRIEND_BASED_DATASET.getPath())).forEach(
                         s -> addRow_friendBased_dataset(s, dataset));
-                TsvFileReader.splitByChar(TsvFileReader.readText(DatasetInfo.WIKIMID_FRIEND_BASED_INTEREST_INFO.getPath(), 100000)).forEach(
+                TsvFileReader.splitByChar(TsvFileReader.readText(DatasetInfo.WIKIMID_FRIEND_BASED_INTEREST_INFO.getPath())).forEach(
                         s -> addRow_friendBased_interest(s, dataset));
                 break;
             case S21:
-                TsvFileReader.splitByChar(TsvFileReader.readText(DatasetInfo.S21_DATASET.getPath(), 100000)).forEach(
+                TsvFileReader.splitByChar(TsvFileReader.readText(DatasetInfo.S21_DATASET.getPath())).forEach(
                         s -> addRow_S21(s, dataset));
                 break;
             case S22:
-                TsvFileReader.splitByChar(TsvFileReader.readText(DatasetInfo.S22_DATASET.getPath(), 100000)).forEach(
+                TsvFileReader.splitByChar(TsvFileReader.readText(DatasetInfo.S22_DATASET.getPath())).forEach(
                         s -> addRow_S22_S23(s, dataset));
                 break;
             case S23:
-                TsvFileReader.splitByChar(TsvFileReader.readText(DatasetInfo.S23_DATASET.getPath(), 100000)).forEach(
+                TsvFileReader.splitByChar(TsvFileReader.readText(DatasetInfo.S23_DATASET.getPath())).forEach(
                         s -> addRow_S22_S23(s, dataset));
                 break;
         }

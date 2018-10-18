@@ -11,12 +11,17 @@ import javax.xml.crypto.Data;
 public class ReadingPhaseExecutor
 {
     public static void main(String[] args) {
-        DatasetName name = DatasetName.WIKIMID;
 
-        CacheManager.writeToCache(name);
+        for (DatasetName name : DatasetName.values()) {
+            Dataset d = DatasetReader.readDataset(name);
+            System.out.println(d);
+            System.out.println();
+        }
 
-        Dataset d = CacheManager.readFromCache(name);
-        System.out.println(d.getUsers().size());
+//        CacheManager.writeToCache(name);
+//
+//        Dataset d = CacheManager.readFromCache(name);
+//        System.out.println(d.getUsers().size());
 
 //        Dataset d = DatasetReader.readDataset(DatasetName.S23);
 //        Dataset wikimid = new Dataset("wikimid");
