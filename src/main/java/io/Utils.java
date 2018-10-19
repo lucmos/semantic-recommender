@@ -4,12 +4,22 @@ import constants.PathConstants;
 import utils.IndexedSerializable;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * A collections of utility methods
  */
 public final class Utils {
     private Utils() {
+    }
+
+
+    public static String timestamp;
+    static {
+        SimpleDateFormat dateFormat = new SimpleDateFormat();
+        dateFormat.applyPattern("d-MM_hh-mm");
+        timestamp = dateFormat.format(new Date(System.currentTimeMillis()));
     }
 
     /**

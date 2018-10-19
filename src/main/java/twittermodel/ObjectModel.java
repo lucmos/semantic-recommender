@@ -9,12 +9,12 @@ import java.io.Serializable;
  * It always has an integer identifier
  * It may have a literal identifier
  */
-public abstract class TwitterObjectModel implements Serializable {
+public abstract class ObjectModel implements Serializable {
     /**
      * The integer identifier. It is globally unique inside the same class
      * and automatically generated.
      */
-    private long seqId;
+    private int seqId;
 
     /**
      * The literal identifier present in the dataset. If present, it is unique.
@@ -26,7 +26,7 @@ public abstract class TwitterObjectModel implements Serializable {
      */
     private static OneToOneHash<Integer, String> idMap = new OneToOneHash<>();
 
-    TwitterObjectModel(String idString) {
+    ObjectModel(String idString) {
         this.setId(getNextId(idString));
         this.setIdString(idString);
     }
@@ -42,13 +42,13 @@ public abstract class TwitterObjectModel implements Serializable {
         return idMap;
     }
 
-    private void setId(long seqId) {
+    private void setId(int seqId) {
         assert seqId >= 0;
 
         this.seqId = seqId;
     }
 
-    public long getId() {
+    public int getId() {
         assert seqId >= 0;
 
         return seqId;

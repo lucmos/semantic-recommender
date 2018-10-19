@@ -1,19 +1,19 @@
 package constants;
 
 public enum DatasetName {
-    WIKIMID("datasets/bin/wikimid.bin"),
-    S21("datasets/bin/S21.bin"),
-    S22("datasets/bin/S22_preferences.bin"),
-    S23("datasets/bin/S23.bin");
+
+    WIKIMID("datasets/bin/wikimid_%s.bin"),
+    S21("datasets/bin/S21_%s.bin"),
+    S22("datasets/bin/S22_preferences_%s.bin"),
+    S23("datasets/bin/S23_%s.bin");
 
     private String binPath;
-
     DatasetName(String binPath) {
         this.binPath = binPath;
     }
 
-    public String getBinPath() {
-        return binPath;
+    public String getBinPath(String timestamp) {
+        return String.format(binPath, timestamp);
     }
 }
 

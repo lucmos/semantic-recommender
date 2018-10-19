@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Models an "interest"
  */
-public class InterestModel extends TwitterObjectModel {
+public class InterestModel extends ObjectModel {
 
     /**
      * Describes the possible types of platforms

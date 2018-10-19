@@ -1,11 +1,9 @@
 package twittermodel;
 
-import utils.OneToOneHash;
-
 /**
  * Model a wikipedia page
  */
-public class WikiPageModel extends TwitterObjectModel {
+public class WikiPageModel extends ObjectModel {
     private static final int NAME_COMPONENTS_NUMBER = 3;
 
     public WikiPageModel(String name) {

@@ -4,7 +4,7 @@ import constants.DatasetName;
 import twittermodel.*;
 import io.TsvFileReader;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class use a TsvFileReader to read a dataset and describes it building and managing a Dataset object
@@ -18,7 +18,7 @@ public class DatasetReader
      * @param user_to_friend the couple that should be added to the dataset, where the user follows the friend
      * @param dataset the object that stores all the informations
      */
-    static void addRow_friendBased_dataset(ArrayList<String> user_to_friend, Dataset dataset)
+    static void addRow_friendBased_dataset(List<String> user_to_friend, Dataset dataset)
     {
         assert user_to_friend.size()==2;
 
@@ -36,7 +36,7 @@ public class DatasetReader
      * @param user_to_wikipage the couple of a user and the wikipedia page which represents it
      * @param dataset the object that stores all the informations
      */
-    public static void addRow_friendBased_interest(ArrayList<String> user_to_wikipage, Dataset dataset)
+    public static void addRow_friendBased_interest(List<String> user_to_wikipage, Dataset dataset)
     {
         assert user_to_wikipage.size()==2;
 
@@ -55,7 +55,7 @@ public class DatasetReader
      *                             the url of the tweet
      * @param dataset the object that stores all the informations
      */
-    public static void addRow_messageBased_dataset(ArrayList<String> user_tweet_interest_interestUrl, Dataset dataset)
+    public static void addRow_messageBased_dataset(List<String> user_tweet_interest_interestUrl, Dataset dataset)
     {
         assert user_tweet_interest_interestUrl.size() == 4;
 
@@ -80,7 +80,7 @@ public class DatasetReader
      *                             wikipedia page id
      * @param dataset  the object that stores all the informations
      */
-    public static void addRow_messageBased_interest(ArrayList<String> interest_platform_wikipage, Dataset dataset)
+    public static void addRow_messageBased_interest(List<String> interest_platform_wikipage, Dataset dataset)
     {
         assert interest_platform_wikipage.size() == 3;
 
@@ -99,7 +99,7 @@ public class DatasetReader
      * @param user the id of the user to add
      * @param dataset the object that stores all the informations
      */
-    public static void addRow_S21(ArrayList<String> user, Dataset dataset){
+    public static void addRow_S21(List<String> user, Dataset dataset){
         assert user.size() == 1;
 
         UserModel u = ModelFactory.getUser(user.get(0));
@@ -114,7 +114,7 @@ public class DatasetReader
      * @param user_to_wikipage the couple of the user id and of the wikipedia page id
      * @param dataset the object that stores all the informations
      */
-    public static void addRow_S22_S23(ArrayList<String> user_to_wikipage, Dataset dataset){
+    public static void addRow_S22_S23(List<String> user_to_wikipage, Dataset dataset){
         assert user_to_wikipage.size()==2;
 
         UserModel user = ModelFactory.getUser(user_to_wikipage.get(0));
@@ -126,11 +126,11 @@ public class DatasetReader
         dataset.addPage(wikiPage);
     }
 
-    public static Dataset readDataset(DatasetName name) {
+    public static Dataset readDataset(DatasetName name, int limit) {
         assert name != null;
 
         Dataset dataset = new Dataset(name);
-        DatasetReader.fillDataset(name, dataset);
+        DatasetReader.fillDataset(name, dataset, limit);
         return dataset;
     }
 
@@ -139,84 +139,28 @@ public class DatasetReader
      * @param name the dataset to read
      * @param dataset the datset to fill
      */
-    public static void fillDataset(DatasetName name, Dataset dataset)
+    public static void fillDataset(DatasetName name, Dataset dataset, int limit)
     {
         assert name != null;
         assert dataset != null;
 
-        // todo: remove magic number
         switch (name) {
             case WIKIMID:
-                TsvFileReader.splitByChar(TsvFileReader.readText(DatasetInfo.WIKIMID_MESSAGE_BASED_INTEREST_INFO.getPath())).forEach(
-                        s -> addRow_messageBased_interest(s, dataset));
-                TsvFileReader.splitByChar(TsvFileReader.readText(DatasetInfo.WIKIMID_MESSAGE_BASED_DATASET.getPath())).forEach(
-                        s -> addRow_messageBased_dataset(s, dataset));
+                TsvFileReader.readText(DatasetInfo.WIKIMID_MESSAGE_BASED_INTEREST_INFO.getPath(), limit).forEach(s -> addRow_messageBased_interest(s, dataset));
+                TsvFileReader.readText(DatasetInfo.WIKIMID_MESSAGE_BASED_DATASET.getPath(), limit).forEach(s -> addRow_messageBased_dataset(s, dataset));
 
-                TsvFileReader.splitByChar(TsvFileReader.readText(DatasetInfo.WIKIMID_FRIEND_BASED_DATASET.getPath())).forEach(
-                        s -> addRow_friendBased_dataset(s, dataset));
-                TsvFileReader.splitByChar(TsvFileReader.readText(DatasetInfo.WIKIMID_FRIEND_BASED_INTEREST_INFO.getPath())).forEach(
-                        s -> addRow_friendBased_interest(s, dataset));
+                TsvFileReader.readText(DatasetInfo.WIKIMID_FRIEND_BASED_DATASET.getPath(), limit).forEach(s -> addRow_friendBased_dataset(s, dataset));
+                TsvFileReader.readText(DatasetInfo.WIKIMID_FRIEND_BASED_INTEREST_INFO.getPath(), limit).forEach(s -> addRow_friendBased_interest(s, dataset));
                 break;
             case S21:
-                TsvFileReader.splitByChar(TsvFileReader.readText(DatasetInfo.S21_DATASET.getPath())).forEach(
-                        s -> addRow_S21(s, dataset));
+                TsvFileReader.readText(DatasetInfo.S21_DATASET.getPath(), limit).forEach(s -> addRow_S21(s, dataset));
                 break;
             case S22:
-                TsvFileReader.splitByChar(TsvFileReader.readText(DatasetInfo.S22_DATASET.getPath())).forEach(
-                        s -> addRow_S22_S23(s, dataset));
+                TsvFileReader.readText(DatasetInfo.S22_DATASET.getPath(), limit).forEach(s -> addRow_S22_S23(s, dataset));
                 break;
             case S23:
-                TsvFileReader.splitByChar(TsvFileReader.readText(DatasetInfo.S23_DATASET.getPath())).forEach(
-                        s -> addRow_S22_S23(s, dataset));
+                TsvFileReader.readText(DatasetInfo.S23_DATASET.getPath(), limit).forEach(s -> addRow_S22_S23(s, dataset));
                 break;
         }
     }
-//
-//    /**
-//     * Stores a list of object taken from
-//     * @param dataset
-//     * @param readedData
-//     * @param datasetConstants the datasetConstant to work upon
-//     */
-//    public static  void addDataInDataset(Dataset dataset, ArrayList<ArrayList<String>> readedData, DatasetInfo datasetConstants)
-//    {
-//        switch(datasetConstants.getType()){
-//            case FRIENDBASED_DATASET:
-//                for (ArrayList<String> userFriend : readedData)
-//                {
-//                    addRow_friendBased_dataset(userFriend, dataset);
-//                }
-//                break;
-//            case FRIENDBASED_INTEREST:
-//                for (ArrayList<String> frienWikiPage : readedData)
-//                {
-//                    addRow_friendBased_interest(frienWikiPage, dataset);
-//                }
-//                break;
-//            case MESSAGEBASED_DATASET:
-//                for (ArrayList<String> userTweetIntURL : readedData)
-//                {
-//                    addRow_messageBased_dataset(userTweetIntURL, dataset);
-//                }
-//                break;
-//            case MESSAGEBASED_INTEREST:
-//                for (ArrayList<String> intPlatPage : readedData)
-//                {
-//                    addRow_messageBased_interest(intPlatPage, dataset);
-//                }
-//                break;
-//            case S21:
-//                for (ArrayList<String> user : readedData)
-//                {
-//                    addRow_S21(user, dataset);
-//                }
-//                break;
-//            case S22_S23:
-//                for (ArrayList<String> userPage : readedData)
-//                {
-//                    addRow_S22_S23(userPage, dataset);
-//                }
-//                break;
-//        }
-//    }
 }

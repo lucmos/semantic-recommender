@@ -6,17 +6,28 @@ import datasetsreader.Dataset;
 import datasetsreader.DatasetReader;
 import io.CacheManager;
 
+import javax.rmi.CORBA.Util;
 import javax.xml.crypto.Data;
 
-public class ReadingPhaseExecutor
-{
+public class ReadingPhaseExecutor {
     public static void main(String[] args) {
 
         for (DatasetName name : DatasetName.values()) {
-            Dataset d = DatasetReader.readDataset(name);
+            System.out.println("Reading... " + name);
+
+//            Dataset d = DatasetReader.readDataset(name, 100000);
+//            CacheManager.writeToCache(name, d);
+//
+            Dataset d = CacheManager.readFromCache(name);
+
+
             System.out.println(d);
             System.out.println();
         }
+    }
+
+
+
 
 //        CacheManager.writeToCache(name);
 //
@@ -45,5 +56,4 @@ public class ReadingPhaseExecutor
 
 //        dReader.addDataInDataset(wikimid, readedData, DatasetReader.DatasetType.WIKI_MID_FRIENDBASED_DATASET);
 
-    }
 }

@@ -6,7 +6,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Stream;
 
 public class TsvFileReader
 {
@@ -20,60 +23,25 @@ public class TsvFileReader
      * @param path the file path
      * @return an ArrayList of string, where each String is a line of the read file
      */
-    public static ArrayList<String> readText(String path)
-    {
-        ArrayList<String> lines = new ArrayList<String>();
-        try
-        {
-            File f = new File(path);
-            BufferedReader bReader = new BufferedReader(new FileReader(f));
-            String readLine;
+    public static List<List<String>>  readText(String path, int limit) {
+        List<List<String>> splitted_lines = new LinkedList<>();
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(path));
 
-            while (((readLine = bReader.readLine()) != null))
-            {
-                lines.add(readLine);
-            }
-            return lines;
+            Stream<String> lines = reader.lines();
+            lines = limit > 0 ? lines.limit(limit) : lines;
+
+            lines.forEach(line -> splitted_lines.add(Arrays.asList(line.split("\t"))));
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        catch (IOException e) {
-            e.printStackTrace();}
-            return lines;
+        System.out.println("Done reading: " + path);
+        return splitted_lines;
     }
 
-
-    /**
-     * Methods that split the lines of a file text by a specified character (the default is tab)
-     * @param lines
-     * @return
-     */
-    public static ArrayList<ArrayList<String>> splitByChar(ArrayList<String> lines, char specialChar)
-    {
-        ArrayList<ArrayList<String>>res = new ArrayList<>();
-
-        for (int i=0; i<lines.size(); i++)
-        {
-            String sentence= lines.get(i);
-            String[] splittedSentences = sentence.split(""+specialChar);
-            ArrayList<String>  splitSent = new ArrayList<>(Arrays.asList(splittedSentences));
-            res.add(splitSent);
-        }
-//        System.out.println(res);
-        return res;
-    }
-
-    public static ArrayList<ArrayList<String>> splitByChar(ArrayList<String> lines)
-    {
-        return TsvFileReader.splitByChar(lines, '\t');
-    }
-
-    // TODO: 15/10/18 cancella main
-    public static void main(String[] args)
-    {
-        ArrayList<String> lines = readText("D://università//cache//SocialExtraction//WSIEProject/provaTesto.txt");
-//        System.out.println(lines.size());
-        ArrayList<ArrayList<String>> splittedLines = splitByChar(lines);
-        System.out.println(splittedLines);
-        System.out.println(splittedLines.size());
+    public static List<List<String>>  readText(String path) {
+        return readText(path, -1);
     }
 
 

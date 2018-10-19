@@ -3,7 +3,7 @@ package twittermodel;
 /**
  * Models a "tweet"
  */
-public class TweetModel extends TwitterObjectModel {
+public class TweetModel extends ObjectModel {
 
     /**
      * The authorId of the tweet.

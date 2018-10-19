@@ -2,27 +2,27 @@ package twittermodel;
 
 import java.util.ArrayList;
 
-public class UserModel extends TwitterObjectModel {
+public class UserModel extends ObjectModel {
     /**
      * The list of user that this user is following
      */
-    private ArrayList<Long> followOutIds;
+    private ArrayList<Integer> followOutIds;
 
     /**
      * The list of user that follow this user
      */
-    private ArrayList<Long> followInIds;
+    private ArrayList<Integer> followInIds;
 
     /**
      * The list of tweetsIds that this user posted
      */
-    private ArrayList<Long> tweetsIds;
+    private ArrayList<Integer> tweetsIds;
 
     /**
      * The list of wikiPagesAboutUserIds associated to this user
      * (taken from the dataset)
      */
-    private ArrayList<Long> wikiPagesAboutUserIds;
+    private ArrayList<Integer> wikiPagesAboutUserIds;
 
 
     /**
@@ -30,7 +30,7 @@ public class UserModel extends TwitterObjectModel {
      *
      * Used only for the datsets S2*
      */
-    private ArrayList<Long> wikiPagesOfLikedItemsIds;
+    private ArrayList<Integer> wikiPagesOfLikedItemsIds;
 
 
     public UserModel(String id) {
@@ -89,31 +89,31 @@ public class UserModel extends TwitterObjectModel {
         this.wikiPagesAboutUserIds.add(wikiPage.getId());
     }
 
-    public ArrayList<Long> getFollowOutIds() {
+    public ArrayList<Integer> getFollowOutIds() {
         assert followOutIds != null;
 
         return followOutIds;
     }
 
-    public ArrayList<Long> getFollowInIds() {
+    public ArrayList<Integer> getFollowInIds() {
         assert followInIds != null;
 
         return followInIds;
     }
 
-    public ArrayList<Long> getTweetsIds() {
+    public ArrayList<Integer> getTweetsIds() {
         assert tweetsIds != null;
 
         return tweetsIds;
     }
 
-    public ArrayList<Long> getWikiPagesAboutUserIds() {
+    public ArrayList<Integer> getWikiPagesAboutUserIds() {
         assert wikiPagesAboutUserIds != null;
 
         return wikiPagesAboutUserIds;
     }
 
-    public ArrayList<Long> getWikiPagesOfLikedItemsIds() {
+    public ArrayList<Integer> getWikiPagesOfLikedItemsIds() {
         assert wikiPagesOfLikedItemsIds != null;
 
         return wikiPagesOfLikedItemsIds;
