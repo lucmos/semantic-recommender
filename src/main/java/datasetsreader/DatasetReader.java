@@ -1,6 +1,7 @@
 package datasetsreader;
 import constants.DatasetInfo;
 import constants.DatasetName;
+import constants.Dimension;
 import twittermodel.*;
 import io.TsvFileReader;
 
@@ -126,10 +127,12 @@ public class DatasetReader
         dataset.addPage(wikiPage);
     }
 
-    public static Dataset readDataset(DatasetName name, int limit) {
+    public static Dataset readDataset(DatasetName name, Dimension limit) {
         assert name != null;
 
         Dataset dataset = new Dataset(name);
+        dataset.setDimension(limit);
+
         DatasetReader.fillDataset(name, dataset, limit);
         return dataset;
     }
@@ -139,7 +142,7 @@ public class DatasetReader
      * @param name the dataset to read
      * @param dataset the datset to fill
      */
-    public static void fillDataset(DatasetName name, Dataset dataset, int limit)
+    public static void fillDataset(DatasetName name, Dataset dataset, Dimension limit)
     {
         assert name != null;
         assert dataset != null;

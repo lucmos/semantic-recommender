@@ -1,5 +1,7 @@
 package constants;
 
+import io.CacheManager;
+
 public enum DatasetName {
 
     WIKIMID("datasets/bin/wikimid_%s.bin"),
@@ -12,8 +14,8 @@ public enum DatasetName {
         this.binPath = binPath;
     }
 
-    public String getBinPath(String timestamp) {
-        return String.format(binPath, timestamp);
+    public String getBinPath(Dimension dim) {
+        return String.format(binPath, dim.getName());
     }
 }
 

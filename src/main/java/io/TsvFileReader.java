@@ -1,5 +1,7 @@
 package io;
 
+import constants.Dimension;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -23,13 +25,13 @@ public class TsvFileReader
      * @param path the file path
      * @return an ArrayList of string, where each String is a line of the read file
      */
-    public static List<List<String>>  readText(String path, int limit) {
+    public static List<List<String>>  readText(String path, Dimension limit) {
         List<List<String>> splitted_lines = new LinkedList<>();
         try {
             BufferedReader reader = new BufferedReader(new FileReader(path));
 
             Stream<String> lines = reader.lines();
-            lines = limit > 0 ? lines.limit(limit) : lines;
+            lines = limit.getDim() > 0 ? lines.limit(limit.getDim()) : lines;
 
             lines.forEach(line -> splitted_lines.add(Arrays.asList(line.split("\t"))));
 
@@ -41,7 +43,7 @@ public class TsvFileReader
     }
 
     public static List<List<String>>  readText(String path) {
-        return readText(path, -1);
+        return readText(path, Dimension.COMPLETE);
     }
 
 
