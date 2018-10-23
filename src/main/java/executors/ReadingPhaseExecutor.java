@@ -5,11 +5,12 @@ import constants.DatasetName;
 import constants.Dimension;
 import datasetsreader.Dataset;
 import datasetsreader.DatasetReader;
-import io.CacheManager;
+import io.Cache;
 
 import javax.rmi.CORBA.Util;
 import javax.xml.crypto.Data;
 
+@Deprecated
 public class ReadingPhaseExecutor {
     public static void main(String[] args) {
 
@@ -18,9 +19,9 @@ public class ReadingPhaseExecutor {
             System.out.println("Reading... " + name);
 
 //            Dataset d = DatasetReader.readDataset(name, Dimension.COMPLETE);
-//            CacheManager.writeToCache(name, d);
+//            Cache.writeToCache(name, d);
 
-          Dataset d = CacheManager.readFromCache(name, Dimension.COMPLETE);
+          Dataset d = Cache.readFromCache(name, Dimension.COMPLETE);
 
             System.out.println(d);
             long now = System.currentTimeMillis();
