@@ -61,7 +61,6 @@ public class Chrono {
         stop();
     }
 
-
     public void seconds() {
         seconds(defaultFinalMessage);
     }
@@ -125,7 +124,7 @@ public class Chrono {
     }
 
     private String finalPrefix() {
-        return (positionChrono == nestedChronos) ? "\t" : StringUtils.repeat("\t", positionChrono);
+        return (nestedNewLines == 0) ? StringUtils.repeat("\t", positionChrono) : "\t";
     }
 
     private String finalPostfix() {
