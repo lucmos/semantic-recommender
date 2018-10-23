@@ -98,3 +98,5 @@ buildNumber.properties
 
 
 # End of https://www.gitignore.io/api/maven,intellij
+
+datasets/bin/*.bin
