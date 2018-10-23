@@ -1,7 +1,5 @@
 package constants;
 
-import io.CacheManager;
-
 public enum DatasetName {
 
     WIKIMID("datasets/bin/wikimid_%s.bin"),
