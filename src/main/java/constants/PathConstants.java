@@ -5,7 +5,7 @@ package constants;
  */
 public enum PathConstants {
 
-    SAVED_OBJECT("saved/object.sav");
+    WIKIPAGE_TO_CATDOM("dataset/bin/wikipage_to_catdom.bin");
 
     private String path;
 

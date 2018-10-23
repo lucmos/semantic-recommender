@@ -1,5 +1,8 @@
 package twittermodel;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Model a wikipedia page
  */
@@ -26,9 +29,17 @@ public class WikiPageModel extends ObjectModel {
     }
 
     //    Example of wikiname: WIKI:EN:Teru
+    private static final Pattern PATTERN = Pattern.compile("^\\w+:\\w+:((.*))$");
+
     public String getSimpleName() {
-        String[] nameComp = getIdString().split(":");
-        assert (nameComp.length == 3);
-        return nameComp[2];
+        Matcher matcher = PATTERN.matcher(getIdString());
+        if (matcher.find()) {
+
+            String simpleName = matcher.group(1);
+            assert simpleName != null;
+            assert simpleName.length() > 0;
+            return simpleName;
+        }
+        throw new RuntimeException();
     }
 }

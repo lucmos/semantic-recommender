@@ -1,4 +1,5 @@
 ## Personal
+config/babelnet.var.properties
 .idea/compiler.xml
 **/.directory
 src/main/resources/twitter4j.properties
