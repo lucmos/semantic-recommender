@@ -22,6 +22,13 @@ public class WikiPageModel extends ObjectModel {
 
     @Override
     public String toString(){
-        return String.format("(wikiPage: %s)", getId());
+        return String.format("(wikiPage: %s)", getIdString());
+    }
+
+    //    Example of wikiname: WIKI:EN:Teru
+    public String getSimpleName() {
+        String[] nameComp = getIdString().split(":");
+        assert (nameComp.length == 3);
+        return nameComp[2];
     }
 }
