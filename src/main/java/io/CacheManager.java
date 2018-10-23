@@ -12,7 +12,7 @@ public class CacheManager {
 
     public static void main(String[] args) {
         CacheManager.regenCache(Dimension.SMALL);
-        CacheManager.regenCache(Dimension.COMPLETE);
+//        CacheManager.regenCache(Dimension.COMPLETE);
     }
 
     public static void regenCache(Dimension dim) {
