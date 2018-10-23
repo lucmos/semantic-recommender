@@ -1,16 +1,14 @@
 package io;
 
 import constants.Dimension;
+import utils.Chrono;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
 public class TsvFileReader
@@ -26,6 +24,7 @@ public class TsvFileReader
      * @return an ArrayList of string, where each String is a line of the read file
      */
     public static List<List<String>>  readText(String path, Dimension limit) {
+        Chrono c = new Chrono(String.format("Reading %s...", path));
         List<List<String>> splitted_lines = new LinkedList<>();
         try {
             BufferedReader reader = new BufferedReader(new FileReader(path));
@@ -38,7 +37,7 @@ public class TsvFileReader
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("Done reading: " + path);
+        c.millis();
         return splitted_lines;
     }
 
