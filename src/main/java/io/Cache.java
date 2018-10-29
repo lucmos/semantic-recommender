@@ -13,7 +13,7 @@ import java.io.File;
 
 public abstract class Cache {
 
-    public static <E extends IndexedSerializable> void writeToCache(E obj, String name, String path) {
+    private static <E extends IndexedSerializable> void writeToCache(E obj, String name, String path) {
         Chrono c = new Chrono(String.format("Writing to cache: %s...", name));
 //        Utils.saveObj(obj, path);
         Utils.saveJson(obj, path);
@@ -21,7 +21,7 @@ public abstract class Cache {
     }
 
     // TODO: 29/10/18 check usage
-    public static <E extends IndexedSerializable> E readFromCache(Class<E> classe, String name, String path) throws Utils.CacheNotPresent {
+    private static <E extends IndexedSerializable> E readFromCache(Class<E> classe, String name, String path) throws Utils.CacheNotPresent {
         Chrono c = new Chrono(String.format("Reading from cache: %s...", name));
 
         E d;
