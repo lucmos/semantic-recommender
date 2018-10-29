@@ -67,7 +67,7 @@ public abstract class Cache {
 
         public static Dataset readFromCache(DatasetName datasetName, Dimension dim) throws Utils.CacheNotPresent {
             String path = new File(datasetName.getBinPath(dim)).getPath();
-            return Cache.readFromCache(Dataset.class, datasetName.toString(), path);
+            return Cache.readFromCache(Dataset.class, datasetName.toString() + " " + dim, path);
         }
     }
 
