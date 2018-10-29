@@ -128,6 +128,6 @@ public class Chrono {
     }
 
     private String finalPostfix() {
-        return (positionChrono == 0 ? "\n" : "");
+        return "";
     }
 }
