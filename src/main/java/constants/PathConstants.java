@@ -5,7 +5,7 @@ package constants;
  */
 public enum PathConstants {
 
-    WIKIPAGE_TO_CATDOM("dataset/bin/wikipage_to_catdom.bin");
+    WIKIPAGE_TO_BABELNET("dataset/bin/wikipage_to_babelnet.bin");
 
     private String path;
 

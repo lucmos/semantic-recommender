@@ -26,42 +26,56 @@ import java.util.Set;
 public class WikiPageMapping implements IndexedSerializable {
 
     public static void main(String[] args) {
-        WikiPageMapping mapping = new WikiPageMapping();
-        Utils.save(mapping, PathConstants.WIKIPAGE_TO_CATDOM.getPath());
+        WikiPageMapping mapping = new WikiPageMapping(Dimension.SMALL);
+        Utils.save(mapping, PathConstants.WIKIPAGE_TO_BABELNET.getPath());
     }
 
     private BabelNet babelnet;
 
-    private HashMap<Integer, BabelSynset> wikiToSynset = new HashMap<>();
+    private HashMap<String, BabelSynset> wikiToSynset = new HashMap<>();
     private HashMap<BabelSynset, List<BabelCategory>> synsetToCategories = new HashMap<>();
     private HashMap<BabelSynset, Set<Domain>> synsetToDomain = new HashMap<>();
 
-    public WikiPageMapping() {
+    public WikiPageMapping(Dimension dim) {
         this.babelnet = BabelNet.getInstance();
 
         for (DatasetName name : DatasetName.values()) {
-            Dataset d = Cache.readFromCache(name, Dimension.SMALL);
+            Dataset d = Cache.readFromCache(name, dim);
 
             for (Map.Entry<Integer, WikiPageModel> pageEntry : d.getPages().entrySet()) {
                 WikiPageModel page = pageEntry.getValue();
-
-                BabelSynset syn = getSynset(page);
-                System.out.println(syn);
-
-                if (syn != null) {
-
-                    List<BabelCategory> cat = getCategories(syn);
-                    System.out.println("CATEGORIES: " + cat);
-                    synsetToCategories.put(syn, cat);
-
-                    Set<Domain> doms = getDomains(syn);
-                    System.out.println("DOMAINS: " + doms);
-                    synsetToDomain.put(syn, doms);
-                }
-                System.out.println();
+                addSynsetToMap(page);
             }
         }
     }
+
+    private void addSynsetToMap(WikiPageModel page) {
+        if (wikiToSynset.containsKey(page.getIdString())) {
+            return;
+        }
+
+        BabelSynset syn = getSynset(page);
+
+        if (syn != null) {
+            wikiToSynset.put(page.getIdString(), syn);
+            System.out.println(syn);
+
+            List<BabelCategory> cat = getCategories(syn);
+            if (!cat.isEmpty()) {
+                System.out.println("CATEGORIES: " + cat);
+                synsetToCategories.put(syn, cat);
+            }
+
+            Set<Domain> doms = getDomains(syn);
+            if (!doms.isEmpty()) {
+                System.out.println("DOMAINS: " + doms);
+                synsetToDomain.put(syn, doms);
+            }
+        }
+
+        System.out.println();
+    }
+
 
     public BabelSynset getSynset(WikiPageModel wikiPage) {
         assert (wikiPage != null);
@@ -72,7 +86,7 @@ public class WikiPageMapping implements IndexedSerializable {
             return null;
         }
 
-        assert synset != null;
+//        assert synset != null;
         return synset;
     }
 
@@ -95,7 +109,4 @@ public class WikiPageMapping implements IndexedSerializable {
 //        assert !l.isEmpty();
         return l.keySet();
     }
-
-
 }
-//System.out.println(BabelNet.getInstance().getSynset(new WikipediaID("Maxene_Magalona", Language.EN)).getCategories());

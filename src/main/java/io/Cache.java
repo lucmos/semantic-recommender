@@ -30,7 +30,7 @@ public class Cache {
 
     public static void writeToCache(DatasetName datasetName, Dataset dataset) {
         String binPath = datasetName.getBinPath(dataset.getDimension());
-        Chrono c = new Chrono(String.format("Writing: %s...", binPath));
+        Chrono c = new Chrono(String.format("Writing to cache: %s...", binPath));
 
         Utils.save(dataset, binPath);
 
@@ -39,7 +39,7 @@ public class Cache {
 
     public static Dataset readFromCache(DatasetName datasetName, Dimension dim) {
         File file = new File(datasetName.getBinPath(dim));
-        Chrono c = new Chrono(String.format("Reading: %s...", datasetName));
+        Chrono c = new Chrono(String.format("Reading from cache: %s...", datasetName));
 
         if (!file.exists()) {
             throw new RuntimeException("File cache not present: " + file.getPath());
