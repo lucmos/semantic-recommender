@@ -2,7 +2,6 @@ package executors;
 
 import constants.DatasetInfo;
 import constants.DatasetName;
-import constants.Dimension;
 import datasetsreader.Dataset;
 import datasetsreader.DatasetReader;
 import io.Cache;
@@ -21,7 +20,7 @@ public class ReadingPhaseExecutor {
 //            Dataset d = DatasetReader.readDataset(name, Dimension.COMPLETE);
 //            Cache.writeToCache(name, d);
 
-          Dataset d = Cache.readFromCache(name, Dimension.COMPLETE);
+          Dataset d = Cache.readFromCache(name);
 
             System.out.println(d);
             long now = System.currentTimeMillis();

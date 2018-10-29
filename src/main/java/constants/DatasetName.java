@@ -1,5 +1,7 @@
 package constants;
 
+import properties.PropReader;
+
 public enum DatasetName {
 
     WIKIMID("datasets/bin/wikimid_%s.bin"),
@@ -12,7 +14,7 @@ public enum DatasetName {
         this.binPath = binPath;
     }
 
-    public String getBinPath(Dimension dim) {
+    public String getBinPath(PropReader.Dimension dim) {
         return String.format(binPath, dim.getName());
     }
 }
