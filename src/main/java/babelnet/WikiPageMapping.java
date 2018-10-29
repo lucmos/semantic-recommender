@@ -1,25 +1,23 @@
 package babelnet;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import constants.DatasetName;
 import constants.Dimension;
-import constants.PathConstants;
 import datasetsreader.Dataset;
 import io.Cache;
 import io.Utils;
 import it.uniroma1.lcl.babelnet.BabelNet;
 import it.uniroma1.lcl.babelnet.BabelSynset;
 import it.uniroma1.lcl.babelnet.data.BabelCategory;
-import it.uniroma1.lcl.babelnet.data.BabelDomain;
 import it.uniroma1.lcl.babelnet.resources.WikipediaID;
 import it.uniroma1.lcl.jlt.util.Language;
 import it.uniroma1.lcl.kb.Domain;
 import twittermodel.WikiPageModel;
 import utils.Chrono;
+import utils.Counter;
 import utils.IndexedSerializable;
 
-import javax.rmi.CORBA.Util;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class WikiPageMapping implements IndexedSerializable {
 
@@ -164,7 +162,7 @@ public class WikiPageMapping implements IndexedSerializable {
     private List<BabelCategory> getCategoriesFromBabelnet(BabelSynset synset) {
         assert (synset != null);
 
-        List<BabelCategory> l = synset.getCategories();
+        List<BabelCategory> l = synset.getCategories().stream().filter(x -> x.getLanguage().equals(Language.EN)).collect(Collectors.toList());
 
         assert l != null;
 //        assert !l.isEmpty();
@@ -185,8 +183,50 @@ public class WikiPageMapping implements IndexedSerializable {
         return dimension;
     }
 
+    public int getNumberOfCategories() {
+        return getNumberOf(synsetToCategories);
+    }
+
+    public int getNumberOfDomains() {
+        return getNumberOf(synsetToDomain);
+    }
+
+    public int getNumberOf(Map<String, Set<String>> map) {
+        Set<String> elements = new HashSet<>();
+
+        for (Map.Entry<String, Set<String>> entry : map.entrySet()) {
+            elements.addAll(entry.getValue());
+        }
+        return elements.size();
+    }
+
+    public Counter<String> getDistributionOf(Map<String, Set<String>> map) {
+        Counter<String> elements = new Counter<>();
+
+        for (Map.Entry<String, Set<String>> entry : map.entrySet()) {
+            elements.increment(entry.getValue());
+        }
+        return elements;
+    }
+
     @Override
     public String toString() {
-        return String.format("(pages: %s)", wikiToSynset.size());
+        return String.format("(wikipages: %s {categories: %s, domains: %s})", wikiToSynset.size(), getNumberOfCategories(), getNumberOfDomains());
     }
+
+    public String stats() {
+        int numberSyn = wikiToSynset.size();
+        int domainsNum = getNumberOfDomains();
+        String domaindistr = getDistributionOf(synsetToDomain).getDistribution();
+        int catNum = getNumberOfCategories();
+        String catdistr = getDistributionOf(synsetToCategories).getDistribution(50);
+
+        return String.format("Stats of the wikipages mapping %s\n" +
+                "Number of synsets found: %s\n" +
+                "Number of domains found: %s\n" +
+                "Number of cateries found: %s\n" +
+                "Distribution of domains: \n%s\n" +
+                "Distribution of categories: \n%s\n", dimension, numberSyn, domainsNum, catNum, domaindistr, catdistr);
+    }
+
 }
