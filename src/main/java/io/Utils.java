@@ -36,9 +36,10 @@ public final class Utils {
         timestamp = dateFormat.format(new Date(System.currentTimeMillis()));
     }
 
-    private static Gson gson = new Gson();
+    private static Gson gsonDefault = new Gson();
+    private static Gson gsonPretty = new GsonBuilder().setPrettyPrinting().create();
 
-    public static <E extends IndexedSerializable> void saveJson(E obj, String path) {
+    public static <E extends IndexedSerializable> void saveJson(E obj, String path, Gson gson) {
         try (BufferedWriter fileOutput = new BufferedWriter(new FileWriter(path)) ){
             gson.toJson(obj, fileOutput);
         } catch (IOException e) {
@@ -47,10 +48,18 @@ public final class Utils {
         }
     }
 
+    public static <E extends IndexedSerializable> void saveJson(E obj, String path) {
+        saveJson(obj, path, gsonDefault);
+    }
+
+    public static <E extends IndexedSerializable> void savePrettyJson(E obj, String path) {
+        saveJson(obj, path, gsonPretty);
+    }
+
     @SuppressWarnings("unchecked")
     public static <E extends IndexedSerializable> E restoreJson(String path, Class classe) throws CacheNotPresent {
         try (BufferedReader fileInput = new BufferedReader(new FileReader(path)) ){
-            return (E) gson.fromJson(fileInput, classe);
+            return (E) gsonDefault.fromJson(fileInput, classe);
         } catch (IOException e) {
             throw new CacheNotPresent(e);
         }
