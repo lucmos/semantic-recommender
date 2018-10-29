@@ -1,6 +1,8 @@
 package twittermodel;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Models an "interest"
@@ -52,7 +54,7 @@ public class InterestModel extends ObjectModel {
     /**
      * A wikiPageId that describes the interest
      */
-    private long wikiPageId;
+    private int wikiPageId;
 
 
     public InterestModel(String idString) {
@@ -78,11 +80,20 @@ public class InterestModel extends ObjectModel {
         return platform;
     }
 
-    public long getWikiPageId() {
+    public int getWikiPageId() {
         // TODO: 16/10/18 4 interest hanno wikiPageId null
 //        assert wikiPageId != null;
 
         return wikiPageId;
+    }
+
+    public WikiPageModel getWikiPageModel(Map<Integer, WikiPageModel> pages) {
+        assert pages.containsKey(wikiPageId);
+
+        WikiPageModel page = pages.get(wikiPageId);
+        assert page.getId() == wikiPageId;
+
+        return page;
     }
 
     @Override

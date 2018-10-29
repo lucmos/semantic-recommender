@@ -1,8 +1,6 @@
 package twittermodel;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class UserModel extends ObjectModel {
     /**
@@ -119,6 +117,15 @@ public class UserModel extends ObjectModel {
         assert wikiPagesOfLikedItemsIds != null;
 
         return wikiPagesOfLikedItemsIds;
+    }
+
+    public TweetModel getTweetModel(Map<Integer, TweetModel> tweets, Integer tweetId) {
+        assert tweets.containsKey(tweetId);
+
+        TweetModel tweet = tweets.get(tweetId);
+        assert tweet.getId() == tweetId;
+
+        return tweet;
     }
 
     @Override

@@ -1,5 +1,8 @@
 package twittermodel;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Models a "tweet"
  */
@@ -9,12 +12,12 @@ public class TweetModel extends ObjectModel {
      * The authorId of the tweet.
      * If this object if associated to an user, this field is written.
      */
-    private long authorId;
+    private int authorId;
 
     /**
      * The interested this tweet is talking about
      */
-    private long interestId;
+    private int interestId;
 
     /**
      * The source from which the interestId has been found
@@ -43,7 +46,7 @@ public class TweetModel extends ObjectModel {
         this.interestId = interestId.getId();
     }
 
-    public long getAuthorId() {
+    public int getAuthorId() {
         assert authorId >= 0;
 
         return authorId;
@@ -55,10 +58,23 @@ public class TweetModel extends ObjectModel {
         return interestUrl;
     }
 
-    public long getInterestId() {
+    public int getInterestId() {
         assert interestId >= 0;
 
         return interestId;
+    }
+
+    public InterestModel getInterestModel(Map<Integer, InterestModel> interests) {
+        assert interests.containsKey(getInterestId());
+
+        InterestModel interest = interests.get(getInterestId());
+        assert interest.getId() == getInterestId();
+
+        return interest;
+    }
+
+    public WikiPageModel getWikiPageModel(Map<Integer, InterestModel> interests, Map<Integer, WikiPageModel> pages) {
+        return getInterestModel(interests).getWikiPageModel(pages);
     }
 
     @Override
