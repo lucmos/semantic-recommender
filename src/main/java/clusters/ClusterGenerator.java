@@ -40,7 +40,7 @@ public class ClusterGenerator {
 
 
     public Clusters generateCategoryClusters(Dimension dim) {
-        Chrono c = new Chrono("Generating category clusters...");
+        Chrono c = new Chrono(String.format("Generating category clusters %s...", dim));
 
         Clusters clusters = clusterize(this.wikiMap.getSynsetToCategories());
         System.out.println(clusters.getClusterToUsers().size() + " " + clusters.getUserToCluster().size());
@@ -51,7 +51,7 @@ public class ClusterGenerator {
     }
 
     public Clusters generateDomainClusters(Dimension dim) {
-        Chrono c = new Chrono("Generating domain clusters...");
+        Chrono c = new Chrono(String.format("Generating domain clusters %s...", dim));
 
         Clusters clusters = clusterize(this.wikiMap.getSynsetToDomain());
         Utils.savePrettyJson(clusters, PathConstants.CLUSTERS_DOM.getPath(dim));
