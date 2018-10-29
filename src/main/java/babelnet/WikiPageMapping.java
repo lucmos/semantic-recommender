@@ -43,9 +43,9 @@ public class WikiPageMapping implements IndexedSerializable {
         }
     }
 
-    private HashMap<String, String> wikiToSynset = new HashMap<>();
-    private HashMap<String, Set<String>> synsetToCategories = new HashMap<>();
-    private HashMap<String, Set<String>> synsetToDomain = new HashMap<>();
+    private Map<String, String> wikiToSynset = new HashMap<>();
+    private Map<String, Set<String>> synsetToCategories = new HashMap<>();
+    private Map<String, Set<String>> synsetToDomain = new HashMap<>();
 
     public WikiPageMapping(Dimension dim) throws Utils.CacheNotPresent {
         BabelNet.getInstance();
@@ -67,6 +67,17 @@ public class WikiPageMapping implements IndexedSerializable {
         }
     }
 
+    public Map<String, String> getWikiToSynset() {
+        return wikiToSynset;
+    }
+    public Map<String, Set<String>> getSynsetToCategories() {
+        return synsetToCategories;
+    }
+
+    public Map<String, Set<String>> getSynsetToDomain() {
+        return synsetToDomain;
+    }
+
     public Set<String> getCategories(WikiPageModel pageModel) {
         return getStrings(pageModel, synsetToCategories);
     }
@@ -74,16 +85,17 @@ public class WikiPageMapping implements IndexedSerializable {
     public Set<String> getDomains(WikiPageModel pageModel) {
         return getStrings(pageModel, synsetToDomain);
     }
-    private Set<String> getStrings(WikiPageModel pageModel,
-                                   HashMap<String, Set<String>> idToString) {
+
+    public Set<String> getStrings(WikiPageModel pageModel,
+                                   Map<String, Set<String>> idToString) {
         String synsetId = getSynsetID(pageModel);
 
         if (!idToString.containsKey(synsetId)) return null;
-        Set<String> babelDomains = idToString.get(synsetId);
-        assert babelDomains != null;
-        assert !babelDomains.isEmpty();
+        Set<String> strings = idToString.get(synsetId);
+        assert strings != null;
+        assert !strings.isEmpty();
 
-        return babelDomains;
+        return strings;
     }
 
     public String getSynsetID(WikiPageModel pageModel) {
