@@ -18,7 +18,7 @@ public class ReadingPhaseExecutor {
 //            Dataset d = DatasetReader.readDataset(name, Dimension.COMPLETE);
 //            Cache.writeToCache(name, d);
 
-            Dataset d = Cache.DatasetCache.readFromCache(name, Dimension.COMPLETE);
+            Dataset d = Cache.DatasetCache.readFromCache(name, Dimension.SMALL);
             System.out.println(d);
             c.millis();
         }

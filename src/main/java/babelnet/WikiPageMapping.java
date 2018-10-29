@@ -27,6 +27,10 @@ public class WikiPageMapping implements IndexedSerializable {
 
     public static void main(String[] args) throws Utils.CacheNotPresent {
         WikiPageMapping p = WikiPageMapping.getInstance(Dimension.COMPLETE);
+        System.out.println(p);
+
+        p = WikiPageMapping.getInstance(Dimension.SMALL);
+        System.out.println(p);
     }
 
     private static WikiPageMapping getInstance(Dimension dimension) throws Utils.CacheNotPresent {
