@@ -168,4 +168,9 @@ public class WikiPageMapping implements IndexedSerializable {
     public Dimension getDimension() {
         return dimension;
     }
+
+    @Override
+    public String toString() {
+        return String.format("(pages: %s)", wikiToSynset.size());
+    }
 }
