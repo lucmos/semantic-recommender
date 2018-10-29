@@ -5,7 +5,9 @@ package constants;
  */
 public enum PathConstants {
 
-    WIKIPAGE_TO_BABELNET("datasets/bin/wikipage_to_babelnet_%s.bin");
+    WIKIPAGE_TO_BABELNET("datasets/bin/wikipage_to_babelnet_%s.bin"),
+    CLUSTERS_CAT("results/clusters_cat_%s.json"),
+    CLUSTERS_DOM("results/clusters_dom_%s.json");
 
     private String path;
 
