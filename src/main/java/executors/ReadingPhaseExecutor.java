@@ -22,8 +22,12 @@ public class ReadingPhaseExecutor {
 ////            Dataset d = Cache.DatasetCache.readFromCache(name, Dimension.SMALL);
 //            c.millis();
 //        }
-        WikiPageMapping d = Cache.WikiMappingCache.readFromCache(Dimension.SMALL);
+        WikiPageMapping d = Cache.WikiMappingCache.readFromCache(Dimension.COMPLETE);
         System.out.println(d);
         System.out.println(d.stats());
+
+//        d = Cache.WikiMappingCache.readFromCache(Dimension.COMPLETE);
+//        System.out.println(d);
+//        System.out.println(d.stats());
     }
 }

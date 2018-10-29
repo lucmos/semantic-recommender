@@ -20,7 +20,7 @@ import java.util.Set;
 public class ClusterGenerator {
 
     public static void main(String[] args) throws Utils.CacheNotPresent {
-        Dimension dim = Dimension.SMALL;
+        Dimension dim = Dimension.COMPLETE;
         Dataset d = Cache.DatasetCache.readFromCache(DatasetName.WIKIMID, dim);
         WikiPageMapping wmap = Cache.WikiMappingCache.readFromCache(dim);
 
