@@ -1,28 +1,30 @@
 package twittermodel;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class UserModel extends ObjectModel {
     /**
      * The list of user that this user is following
      */
-    private ArrayList<Integer> followOutIds;
+    private Set<Integer> followOutIds;
 
     /**
      * The list of user that follow this user
      */
-    private ArrayList<Integer> followInIds;
+    private Set<Integer> followInIds;
 
     /**
      * The list of tweetsIds that this user posted
      */
-    private ArrayList<Integer> tweetsIds;
+    private Set<Integer> tweetsIds;
 
     /**
      * The list of wikiPagesAboutUserIds associated to this user
      * (taken from the dataset)
      */
-    private ArrayList<Integer> wikiPagesAboutUserIds;
+    private Set<Integer> wikiPagesAboutUserIds;
 
 
     /**
@@ -30,16 +32,16 @@ public class UserModel extends ObjectModel {
      *
      * Used only for the datsets S2*
      */
-    private ArrayList<Integer> wikiPagesOfLikedItemsIds;
+    private Set<Integer> wikiPagesOfLikedItemsIds;
 
 
     public UserModel(String id) {
         super(id);
-        this.followOutIds = new ArrayList<>();
-        this.followInIds = new ArrayList<>();
-        this.tweetsIds = new ArrayList<>();
-        this.wikiPagesAboutUserIds = new ArrayList<>();
-        this.wikiPagesOfLikedItemsIds = new ArrayList<>();
+        this.followOutIds = new HashSet<>();
+        this.followInIds = new HashSet<>();
+        this.tweetsIds = new HashSet<>();
+        this.wikiPagesAboutUserIds = new HashSet<>();
+        this.wikiPagesOfLikedItemsIds = new HashSet<>();
     }
 
     /**
@@ -89,31 +91,31 @@ public class UserModel extends ObjectModel {
         this.wikiPagesAboutUserIds.add(wikiPage.getId());
     }
 
-    public ArrayList<Integer> getFollowOutIds() {
+    public Set<Integer> getFollowOutIds() {
         assert followOutIds != null;
 
         return followOutIds;
     }
 
-    public ArrayList<Integer> getFollowInIds() {
+    public Set<Integer> getFollowInIds() {
         assert followInIds != null;
 
         return followInIds;
     }
 
-    public ArrayList<Integer> getTweetsIds() {
+    public Set<Integer> getTweetsIds() {
         assert tweetsIds != null;
 
         return tweetsIds;
     }
 
-    public ArrayList<Integer> getWikiPagesAboutUserIds() {
+    public Set<Integer> getWikiPagesAboutUserIds() {
         assert wikiPagesAboutUserIds != null;
 
         return wikiPagesAboutUserIds;
     }
 
-    public ArrayList<Integer> getWikiPagesOfLikedItemsIds() {
+    public Set<Integer> getWikiPagesOfLikedItemsIds() {
         assert wikiPagesOfLikedItemsIds != null;
 
         return wikiPagesOfLikedItemsIds;
