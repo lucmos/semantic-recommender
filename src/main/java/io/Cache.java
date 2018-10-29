@@ -85,12 +85,12 @@ public abstract class Cache {
 
         public static void writeToCache(WikiPageMapping mapping) {
             String binPath = PathConstants.WIKIPAGE_TO_BABELNET.getPath(mapping.getDimension());
-            Cache.writeToCache(mapping, PathConstants.WIKIPAGE_TO_BABELNET.toString(), binPath);
+            Cache.writeToCache(mapping, PathConstants.WIKIPAGE_TO_BABELNET.toString() + " " + mapping.getDimension(), binPath);
         }
 
         public static WikiPageMapping readFromCache(Dimension dimension) throws Utils.CacheNotPresent {
             String path = PathConstants.WIKIPAGE_TO_BABELNET.getPath(dimension);
-            return Cache.readFromCache(PathConstants.WIKIPAGE_TO_BABELNET.toString(), path);
+            return Cache.readFromCache(PathConstants.WIKIPAGE_TO_BABELNET.toString() + " " + dimension, path);
         }
     }
 }
