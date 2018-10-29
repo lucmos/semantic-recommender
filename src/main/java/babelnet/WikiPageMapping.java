@@ -214,12 +214,12 @@ public class WikiPageMapping implements IndexedSerializable {
         return String.format("(wikipages: %s {categories: %s, domains: %s})", wikiToSynset.size(), getNumberOfCategories(), getNumberOfDomains());
     }
 
-    public String stats() {
+    public String stats(int k) {
         int numberSyn = wikiToSynset.size();
         int domainsNum = getNumberOfDomains();
         String domaindistr = getDistributionOf(synsetToDomain).getDistribution();
         int catNum = getNumberOfCategories();
-        String catdistr = getDistributionOf(synsetToCategories).getDistribution(50);
+        String catdistr = getDistributionOf(synsetToCategories).getDistribution(k);
 
         return String.format("Stats of the wikipages mapping %s\n" +
                 "Number of synsets found: %s\n" +
@@ -227,6 +227,10 @@ public class WikiPageMapping implements IndexedSerializable {
                 "Number of cateries found: %s\n" +
                 "Distribution of domains: \n%s\n" +
                 "Distribution of categories: \n%s\n", dimension, numberSyn, domainsNum, catNum, domaindistr, catdistr);
+    }
+
+    public String stats() {
+        return stats(50);
     }
 
 }

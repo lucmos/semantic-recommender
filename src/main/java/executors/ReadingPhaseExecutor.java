@@ -24,7 +24,7 @@ public class ReadingPhaseExecutor {
 //        }
         WikiPageMapping d = Cache.WikiMappingCache.readFromCache(Dimension.COMPLETE);
         System.out.println(d);
-        System.out.println(d.stats());
+        System.out.println(d.stats(200));
 
 //        d = Cache.WikiMappingCache.readFromCache(Dimension.COMPLETE);
 //        System.out.println(d);
