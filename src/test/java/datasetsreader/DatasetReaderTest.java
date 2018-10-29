@@ -16,7 +16,7 @@ public class DatasetReaderTest {
 
     @Test
     public void addUserFollowed() {
-        Dataset d = new Dataset(null);
+        Dataset d = new Dataset(null, null);
         String id1 = "1";
         String id2 = "2";
 

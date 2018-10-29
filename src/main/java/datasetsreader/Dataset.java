@@ -31,8 +31,10 @@ public class Dataset implements IndexedSerializable {
 //                "The interests are " + interests.size() + "\n";
     }
 
-    public Dataset(DatasetName name) {
+    public Dataset(DatasetName name, Dimension limit) {
         this.name = name;
+        this.dimension = limit;
+
         interests = new HashMap<>();
         tweets = new HashMap<>();
         users = new HashMap<>();
