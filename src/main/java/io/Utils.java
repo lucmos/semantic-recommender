@@ -11,6 +11,17 @@ import java.util.Date;
  * A collections of utility methods
  */
 public final class Utils {
+
+    public static class CacheNotPresent extends Exception {
+        public CacheNotPresent() {
+
+        }
+
+        public CacheNotPresent(Exception e) {
+            super(e);
+        }
+    }
+
     private Utils() {
     }
 
@@ -31,7 +42,7 @@ public final class Utils {
      */
     public static <E extends IndexedSerializable> void save(E obj, String path) {
         try( FileOutputStream fileOutput = new FileOutputStream(path);
-             ObjectOutputStream objOutput = new ObjectOutputStream(fileOutput)) {
+             ObjectOutputStream objOutput = new ObjectOutputStream(new BufferedOutputStream(fileOutput))) {
             objOutput.writeObject(obj);
         } catch (IOException e) {
             e.printStackTrace();
@@ -47,13 +58,12 @@ public final class Utils {
      * @return the restored object
      */
     @SuppressWarnings("unchecked")
-    public static <E extends IndexedSerializable> E restore(String path) {
+    public static <E extends IndexedSerializable> E restore(String path) throws CacheNotPresent {
         try (FileInputStream fileInput = new FileInputStream(path);
-             ObjectInputStream objInput = new ObjectInputStream(fileInput)) {
+             ObjectInputStream objInput = new ObjectInputStream(new BufferedInputStream(fileInput))) {
             return (E) objInput.readObject();
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Error while restoring to object");
+            throw new CacheNotPresent(e);
         }
     }
 }
