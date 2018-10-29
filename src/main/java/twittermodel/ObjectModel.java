@@ -1,5 +1,6 @@
 package twittermodel;
 
+import utils.IndexedSerializable;
 import utils.OneToOneHash;
 
 import java.io.Serializable;
@@ -9,7 +10,7 @@ import java.io.Serializable;
  * It always has an integer identifier
  * It may have a literal identifier
  */
-public abstract class ObjectModel implements Serializable {
+public abstract class ObjectModel implements IndexedSerializable {
     /**
      * The integer identifier. It is globally unique inside the same class
      * and automatically generated.
