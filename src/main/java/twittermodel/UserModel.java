@@ -1,6 +1,10 @@
 package twittermodel;
 
-import java.util.*;
+
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 
 public class UserModel extends ObjectModel {
     /**

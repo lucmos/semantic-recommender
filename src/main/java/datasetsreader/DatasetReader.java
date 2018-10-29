@@ -1,7 +1,7 @@
 package datasetsreader;
 import constants.DatasetInfo;
 import constants.DatasetName;
-import constants.Dimension;
+import properties.PropReader;
 import twittermodel.*;
 import io.TsvFileReader;
 import utils.Chrono;
@@ -129,12 +129,12 @@ public class DatasetReader
         dataset.addPage(wikiPage);
     }
 
-    public static Dataset readDataset(DatasetName name, Dimension limit) {
+    public static Dataset readDataset(DatasetName name) {
         assert name != null;
 
-        Dataset dataset = new Dataset(name, limit);
+        Dataset dataset = new Dataset(name, PropReader.getInstance().dimension());
 
-        DatasetReader.fillDataset(name, dataset, limit);
+        DatasetReader.fillDataset(name, dataset);
         return dataset;
     }
 
@@ -143,7 +143,7 @@ public class DatasetReader
      * @param name the dataset to read
      * @param dataset the datset to fill
      */
-    public static void fillDataset(DatasetName name, Dataset dataset, Dimension limit)
+    public static void fillDataset(DatasetName name, Dataset dataset)
     {
         assert name != null;
         assert dataset != null;
@@ -152,30 +152,30 @@ public class DatasetReader
         Chrono c;
         switch (name) {
             case WIKIMID:
-                s = TsvFileReader.readText(DatasetInfo.WIKIMID_MESSAGE_BASED_INTEREST_INFO.getPath(), limit);
+                s = TsvFileReader.readText(DatasetInfo.WIKIMID_MESSAGE_BASED_INTEREST_INFO.getPath());
 
                 c = new Chrono("Building objects...");
                 s.forEach(p -> addRow_messageBased_interest(p, dataset));
                 c.millis();
 
-                s = TsvFileReader.readText(DatasetInfo.WIKIMID_MESSAGE_BASED_DATASET.getPath(), limit);
+                s = TsvFileReader.readText(DatasetInfo.WIKIMID_MESSAGE_BASED_DATASET.getPath());
                 c = new Chrono("Building objects...");
                 s.forEach(p -> addRow_messageBased_dataset(p, dataset));
                 c.millis();
 
-                s = TsvFileReader.readText(DatasetInfo.WIKIMID_FRIEND_BASED_DATASET.getPath(), limit);
+                s = TsvFileReader.readText(DatasetInfo.WIKIMID_FRIEND_BASED_DATASET.getPath());
                 c = new Chrono("Building objects...");
                 s.forEach(p -> addRow_friendBased_dataset(p, dataset));
                 c.millis();
 
-                s = TsvFileReader.readText(DatasetInfo.WIKIMID_FRIEND_BASED_INTEREST_INFO.getPath(), limit);
+                s = TsvFileReader.readText(DatasetInfo.WIKIMID_FRIEND_BASED_INTEREST_INFO.getPath());
                 c = new Chrono("Building objects...");
                 s.forEach(p -> addRow_friendBased_interest(p, dataset));
                 c.millis();
 
                 break;
             case S21:
-                s = TsvFileReader.readText(DatasetInfo.S21_DATASET.getPath(), limit);
+                s = TsvFileReader.readText(DatasetInfo.S21_DATASET.getPath());
 
                 c = new Chrono("Building objects...");
                 s.forEach(p -> addRow_S21(p, dataset));
@@ -183,7 +183,7 @@ public class DatasetReader
 
                 break;
             case S22:
-                s = TsvFileReader.readText(DatasetInfo.S22_DATASET.getPath(), limit);
+                s = TsvFileReader.readText(DatasetInfo.S22_DATASET.getPath());
 
                 c = new Chrono("Building objects...");
                 s.forEach(p -> addRow_S22_S23(p, dataset));
@@ -191,12 +191,11 @@ public class DatasetReader
 
                 break;
             case S23:
-                s = TsvFileReader.readText(DatasetInfo.S23_DATASET.getPath(), limit);
+                s = TsvFileReader.readText(DatasetInfo.S23_DATASET.getPath());
 
                 c = new Chrono("Building objects...");
                 s.forEach(p -> addRow_S22_S23(p, dataset));
                 c.millis();
-
                 break;
         }
     }

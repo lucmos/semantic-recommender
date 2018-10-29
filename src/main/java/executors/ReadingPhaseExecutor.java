@@ -2,11 +2,12 @@ package executors;
 
 import babelnet.WikiPageMapping;
 import constants.DatasetName;
-import constants.Dimension;
 import datasetsreader.Dataset;
+
+import datasetsreader.DatasetReader;
 import io.Cache;
 import io.Utils;
-import utils.Chrono;
+
 
 @Deprecated
 public class ReadingPhaseExecutor {
@@ -22,7 +23,10 @@ public class ReadingPhaseExecutor {
 ////            Dataset d = Cache.DatasetCache.readFromCache(name, Dimension.SMALL);
 //            c.millis();
 //        }
-        WikiPageMapping d = Cache.WikiMappingCache.readFromCache(Dimension.COMPLETE);
+
+
+        WikiPageMapping d = Cache.WikiMappingCache.readFromCache();
+//        WikiPageMapping d = WikiPageMapping.getInstance();
         System.out.println(d);
         System.out.println(d.stats(200));
 

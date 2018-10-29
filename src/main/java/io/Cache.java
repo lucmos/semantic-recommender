@@ -2,10 +2,11 @@ package io;
 
 import babelnet.WikiPageMapping;
 import constants.DatasetName;
-import constants.Dimension;
+
 import constants.PathConstants;
 import datasetsreader.Dataset;
 import datasetsreader.DatasetReader;
+import properties.PropReader;
 import utils.Chrono;
 import utils.IndexedSerializable;
 
@@ -29,6 +30,7 @@ public abstract class Cache {
 //            d = Utils.restoreObj(path);
             d = Utils.restoreJson(path, classe);
         } catch (Utils.CacheNotPresent e) {
+            e.printStackTrace();
             String err = String.format("[error: %s]", e);
             c.millis(String.format("%s - %s", "done (in %s %s)", err));
             throw new Utils.CacheNotPresent(e);
@@ -43,21 +45,18 @@ public abstract class Cache {
     public static class DatasetCache extends Cache {
 
         public static void main(String[] args) {
-            DatasetCache.regenCache(Dimension.SMALL);
-            DatasetCache.regenCache(Dimension.COMPLETE);
+            DatasetCache.regenCache();
         }
 
-        public static void regenCache(Dimension dim) {
-            Chrono c0 = new Chrono(String.format("Regenerating cache with dimension: %s...", dim));
+        public static void regenCache() {
             for (DatasetName name : DatasetName.values()) {
                 Chrono c = new Chrono(String.format("Reading: %s...", name));
 
-                Dataset d = DatasetReader.readDataset(name, dim);
+                Dataset d = DatasetReader.readDataset(name);
                 DatasetCache.writeToCache(name, d);
 
                 c.millis("done (in %s %s) --> " + name + ": " + d);
             }
-            c0.seconds();
         }
 
         public static void writeToCache(DatasetName datasetName, Dataset dataset) {
@@ -65,31 +64,35 @@ public abstract class Cache {
             Cache.writeToCache(dataset, binPath, binPath);
         }
 
-        public static Dataset readFromCache(DatasetName datasetName, Dimension dim) throws Utils.CacheNotPresent {
+        public static Dataset readFromCache(DatasetName datasetName) throws Utils.CacheNotPresent {
+            PropReader.Dimension dim = PropReader.getInstance().dimension();
             String path = new File(datasetName.getBinPath(dim)).getPath();
             return Cache.readFromCache(Dataset.class, datasetName.toString() + " " + dim, path);
         }
     }
 
+
     public static class WikiMappingCache extends Cache {
         public static void main(String[] args) throws Utils.CacheNotPresent {
-            WikiMappingCache.regenCache(Dimension.SMALL);
-            WikiMappingCache.regenCache(Dimension.COMPLETE);
+            WikiMappingCache.regenCache();
         }
 
-        public static void regenCache(Dimension dim) throws Utils.CacheNotPresent {
-            WikiPageMapping mapping = new WikiPageMapping(dim);
+        public static void regenCache() throws Utils.CacheNotPresent {
+            WikiPageMapping mapping = new WikiPageMapping();
+            mapping.compute();
             Cache.WikiMappingCache.writeToCache(mapping);
         }
 
         public static void writeToCache(WikiPageMapping mapping) {
-            String binPath = PathConstants.WIKIPAGE_TO_BABELNET.getPath(mapping.getDimension());
-            Cache.writeToCache(mapping, PathConstants.WIKIPAGE_TO_BABELNET.toString() + " " + mapping.getDimension(), binPath);
+            PropReader.Dimension dim = PropReader.getInstance().dimension();
+            String binPath = PathConstants.WIKIPAGE_TO_BABELNET.getPath(dim);
+            Cache.writeToCache(mapping, PathConstants.WIKIPAGE_TO_BABELNET.toString() + " " + dim, binPath);
         }
 
-        public static WikiPageMapping readFromCache(Dimension dimension) throws Utils.CacheNotPresent {
-            String path = PathConstants.WIKIPAGE_TO_BABELNET.getPath(dimension);
-            return Cache.readFromCache(WikiPageMapping.class,PathConstants.WIKIPAGE_TO_BABELNET.toString() + " " + dimension, path);
+        public static WikiPageMapping readFromCache() throws Utils.CacheNotPresent {
+            PropReader.Dimension dim = PropReader.getInstance().dimension();
+            String path = PathConstants.WIKIPAGE_TO_BABELNET.getPath(dim);
+            return Cache.readFromCache(WikiPageMapping.class, PathConstants.WIKIPAGE_TO_BABELNET.toString() + " " + dim, path);
         }
     }
 }

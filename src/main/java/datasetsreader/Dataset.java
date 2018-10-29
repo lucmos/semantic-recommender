@@ -3,7 +3,7 @@ package datasetsreader;
 //import twittermodel.;
 
 import constants.DatasetName;
-import constants.Dimension;
+import properties.PropReader;
 import sun.security.x509.DNSName;
 import twittermodel.*;
 import utils.IndexedSerializable;
@@ -13,7 +13,7 @@ import java.util.*;
 
 public class Dataset implements IndexedSerializable {
     private DatasetName name;
-    private Dimension dimension;
+    private PropReader.Dimension dimension;
 
     private HashMap<Integer, InterestModel> interests;
     private HashMap<Integer, TweetModel> tweets;
@@ -73,11 +73,11 @@ public class Dataset implements IndexedSerializable {
         pages.putIfAbsent(pg.getId(), pg);
     }
 
-    public Dimension getDimension() {
+    public PropReader.Dimension getDimension() {
         return dimension;
     }
 
-    public void setDimension(Dimension dimension) {
+    public void setDimension(PropReader.Dimension dimension) {
         this.dimension = dimension;
     }
 }
