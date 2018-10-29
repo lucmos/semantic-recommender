@@ -39,4 +39,18 @@ public class Counter<T> {
     public String toString() {
         return counts.toString();
     }
+
+    public String getDistribution(int k) {
+        List<T> list = k < 0 ? mostCommon(counts.size()) : mostCommon(k);
+
+        StringBuilder s = new StringBuilder();
+        for (T e : list) {
+            s.append(String.format("\t%s\t\t%s\n", e, count(e)));
+        }
+        return s.toString();
+    }
+
+    public String getDistribution() {
+        return getDistribution(-1);
+    }
 }
