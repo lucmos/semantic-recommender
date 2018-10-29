@@ -6,6 +6,7 @@ import it.uniroma1.lcl.jlt.util.Language;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Deprecated
 public class BabelnetReference
 {
 	public static void main(String[] args)

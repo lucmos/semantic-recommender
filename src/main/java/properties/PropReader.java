@@ -34,18 +34,17 @@ public class PropReader {
                     return b;
                 }
             }
-            return null;
+            throw new RuntimeException("Invalid dimension: " + text);
         }
     }
 
     static {
         PropReader instance = PropReader.getInstance();
-        System.out.println(String.format("WORKING WITH DIMENSION: %s", instance.dimension()));
+        System.out.println(String.format(" >>>>> WORKING WITH DIMENSION: %s", instance.dimension()));
     }
 
-    public static final String CONFIG_FILE = "config/wsie.properties";
-
-    public static final String DIMENSION = "dimension";
+    private static final String CONFIG_FILE = "config/wsie.properties";
+    private static final String DIMENSION = "dimension";
 
     private static PropReader instance;
     public static PropReader getInstance() {
@@ -55,13 +54,13 @@ public class PropReader {
         return instance;
     }
 
-    private Properties properties = new Properties();
     private Dimension dimension;
     private PropReader() {
         try (InputStream input = new FileInputStream(CONFIG_FILE))
         {
+            Properties properties = new Properties();
             properties.load(input);
-            this.dimension = loadDimension();
+            this.dimension = Dimension.fromString(properties.getProperty(DIMENSION));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -70,15 +69,5 @@ public class PropReader {
 
     public Dimension dimension() {
         return dimension;
-    }
-
-    private Dimension loadDimension() {
-        String dim = properties.getProperty(DIMENSION);
-
-        Dimension d = Dimension.fromString(dim);
-        if (d == null) {
-            throw new RuntimeException("Invalid dimension: " + dim);
-        }
-        return d;
     }
 }

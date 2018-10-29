@@ -1,14 +1,10 @@
 package datasetsreader;
 
-//import twittermodel.;
 
 import constants.DatasetName;
 import properties.PropReader;
-import sun.security.x509.DNSName;
 import twittermodel.*;
 import utils.IndexedSerializable;
-
-import javax.print.attribute.standard.PagesPerMinute;
 import java.util.*;
 
 public class Dataset implements IndexedSerializable {

@@ -21,12 +21,6 @@ import java.util.stream.Collectors;
 
 public class WikiPageMapping implements IndexedSerializable {
 
-
-    public static void main(String[] args) throws Utils.CacheNotPresent {
-        WikiPageMapping p = WikiPageMapping.getInstance();
-        System.out.println(p);
-    }
-
     public static WikiPageMapping getInstance() throws Utils.CacheNotPresent {
         try {
             return Cache.WikiMappingCache.readFromCache();
@@ -145,7 +139,6 @@ public class WikiPageMapping implements IndexedSerializable {
         return false;
     }
 
-
     private BabelSynset getSynsetFromBabelnet(WikiPageModel wikiPage) {
         assert (wikiPage != null);
 
@@ -217,7 +210,7 @@ public class WikiPageMapping implements IndexedSerializable {
         int catNum = getNumberOfCategories();
         String catdistr = getDistributionOf(synsetToCategories).getDistribution(k);
 
-        return String.format("Stats of the wikipages mapping %s\n" +
+        return String.format("Stats of the wikipages mapping %s:\n" +
                         "Number of synsets found: %s\n" +
                         "Number of domains found: %s\n" +
                         "Number of cateries found: %s\n" +

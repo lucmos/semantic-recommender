@@ -67,7 +67,7 @@ public abstract class Cache {
         public static Dataset readFromCache(DatasetName datasetName) throws Utils.CacheNotPresent {
             PropReader.Dimension dim = PropReader.getInstance().dimension();
             String path = new File(datasetName.getBinPath(dim)).getPath();
-            return Cache.readFromCache(Dataset.class, datasetName.toString() + " " + dim, path);
+            return Cache.readFromCache(Dataset.class, datasetName.toString(), path);
         }
     }
 
@@ -86,13 +86,13 @@ public abstract class Cache {
         public static void writeToCache(WikiPageMapping mapping) {
             PropReader.Dimension dim = PropReader.getInstance().dimension();
             String binPath = PathConstants.WIKIPAGE_TO_BABELNET.getPath(dim);
-            Cache.writeToCache(mapping, PathConstants.WIKIPAGE_TO_BABELNET.toString() + " " + dim, binPath);
+            Cache.writeToCache(mapping, PathConstants.WIKIPAGE_TO_BABELNET.toString(), binPath);
         }
 
         public static WikiPageMapping readFromCache() throws Utils.CacheNotPresent {
             PropReader.Dimension dim = PropReader.getInstance().dimension();
             String path = PathConstants.WIKIPAGE_TO_BABELNET.getPath(dim);
-            return Cache.readFromCache(WikiPageMapping.class, PathConstants.WIKIPAGE_TO_BABELNET.toString() + " " + dim, path);
+            return Cache.readFromCache(WikiPageMapping.class, PathConstants.WIKIPAGE_TO_BABELNET.toString(), path);
         }
     }
 }
