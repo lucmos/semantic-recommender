@@ -31,7 +31,7 @@ public class Dataset implements IndexedSerializable {
 //                "The interests are " + interests.size() + "\n";
     }
 
-    public Dataset(DatasetName name, Dimension limit) {
+    public Dataset(DatasetName name, PropReader.Dimension limit) {
         this.name = name;
         this.dimension = limit;
 

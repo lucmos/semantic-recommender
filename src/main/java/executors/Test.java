@@ -1,7 +1,6 @@
 package executors;
 
 import constants.DatasetName;
-import constants.Dimension;
 import datasetsreader.Dataset;
 import io.Cache;
 import utils.Chrono;

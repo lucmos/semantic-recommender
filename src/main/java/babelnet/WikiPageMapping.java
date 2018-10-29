@@ -1,7 +1,6 @@
 package babelnet;
 
 import constants.DatasetName;
-import constants.Dimension;
 import datasetsreader.Dataset;
 import io.Cache;
 import io.Utils;
@@ -11,6 +10,7 @@ import it.uniroma1.lcl.babelnet.data.BabelCategory;
 import it.uniroma1.lcl.babelnet.resources.WikipediaID;
 import it.uniroma1.lcl.jlt.util.Language;
 import it.uniroma1.lcl.kb.Domain;
+import properties.PropReader;
 import twittermodel.WikiPageModel;
 import utils.Chrono;
 import utils.Counter;
@@ -21,21 +21,18 @@ import java.util.stream.Collectors;
 
 public class WikiPageMapping implements IndexedSerializable {
 
-    private final Dimension dimension;
 
     public static void main(String[] args) throws Utils.CacheNotPresent {
-        WikiPageMapping p = WikiPageMapping.getInstance(Dimension.COMPLETE);
-        System.out.println(p);
-
-        p = WikiPageMapping.getInstance(Dimension.SMALL);
+        WikiPageMapping p = WikiPageMapping.getInstance();
         System.out.println(p);
     }
 
-    private static WikiPageMapping getInstance(Dimension dimension) throws Utils.CacheNotPresent {
+    public static WikiPageMapping getInstance() throws Utils.CacheNotPresent {
         try {
-            return Cache.WikiMappingCache.readFromCache(dimension);
+            return Cache.WikiMappingCache.readFromCache();
         } catch (Utils.CacheNotPresent cacheNotPresent) {
-            WikiPageMapping mapping = new WikiPageMapping(dimension);
+            WikiPageMapping mapping = new WikiPageMapping();
+            mapping.compute();
             Cache.WikiMappingCache.writeToCache(mapping);
             return mapping;
         }
@@ -45,14 +42,16 @@ public class WikiPageMapping implements IndexedSerializable {
     private Map<String, Set<String>> synsetToCategories = new HashMap<>();
     private Map<String, Set<String>> synsetToDomain = new HashMap<>();
 
-    public WikiPageMapping(Dimension dim) throws Utils.CacheNotPresent {
+    public WikiPageMapping() {
+    }
+
+    public void compute() throws Utils.CacheNotPresent
+    {
         BabelNet.getInstance();
 
-        this.dimension = dim;
-
         for (DatasetName name : DatasetName.values()) {
-            Dataset d = Cache.DatasetCache.readFromCache(name, dim);
-            Chrono c = new Chrono(String.format("Generating wikipage mapping for %s %s...", name, dim));
+            Dataset d = Cache.DatasetCache.readFromCache(name);
+            Chrono c = new Chrono(String.format("Generating wikipage mapping for %s...", name));
             int notFound = 0;
             for (Map.Entry<Integer, WikiPageModel> pageEntry : d.getPages().entrySet()) {
                 WikiPageModel page = pageEntry.getValue();
@@ -68,6 +67,7 @@ public class WikiPageMapping implements IndexedSerializable {
     public Map<String, String> getWikiToSynset() {
         return wikiToSynset;
     }
+
     public Map<String, Set<String>> getSynsetToCategories() {
         return synsetToCategories;
     }
@@ -85,7 +85,7 @@ public class WikiPageMapping implements IndexedSerializable {
     }
 
     public Set<String> getStrings(WikiPageModel pageModel,
-                                   Map<String, Set<String>> idToString) {
+                                  Map<String, Set<String>> idToString) {
         String synsetId = getSynsetID(pageModel);
 
         if (!idToString.containsKey(synsetId)) return null;
@@ -179,10 +179,6 @@ public class WikiPageMapping implements IndexedSerializable {
         return l.keySet();
     }
 
-    public Dimension getDimension() {
-        return dimension;
-    }
-
     public int getNumberOfCategories() {
         return getNumberOf(synsetToCategories);
     }
@@ -222,11 +218,12 @@ public class WikiPageMapping implements IndexedSerializable {
         String catdistr = getDistributionOf(synsetToCategories).getDistribution(k);
 
         return String.format("Stats of the wikipages mapping %s\n" +
-                "Number of synsets found: %s\n" +
-                "Number of domains found: %s\n" +
-                "Number of cateries found: %s\n" +
-                "Distribution of domains: \n%s\n" +
-                "Distribution of categories: \n%s\n", dimension, numberSyn, domainsNum, catNum, domaindistr, catdistr);
+                        "Number of synsets found: %s\n" +
+                        "Number of domains found: %s\n" +
+                        "Number of cateries found: %s\n" +
+                        "Distribution of domains: \n%s\n" +
+                        "Distribution of categories: \n%s\n",
+                PropReader.getInstance().dimension(), numberSyn, domainsNum, catNum, domaindistr, catdistr);
     }
 
     public String stats() {

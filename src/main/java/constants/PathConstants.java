@@ -1,5 +1,7 @@
 package constants;
 
+import properties.PropReader;
+
 /**
  * This enum gathers the paths of the objects that are generated.
  */
@@ -20,7 +22,7 @@ public enum PathConstants {
      *
      * @return the path
      */
-    public String getPath(Dimension dim) {
+    public String getPath(PropReader.Dimension dim) {
         return String.format(this.path, dim.getName());
     }
 }

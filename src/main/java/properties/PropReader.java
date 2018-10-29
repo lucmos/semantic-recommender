@@ -38,7 +38,12 @@ public class PropReader {
         }
     }
 
-    public static final String CONFIG_FILE = "/home/luca/IdeaProjects/WSIEProject/config/wsie.properties";
+    static {
+        PropReader instance = PropReader.getInstance();
+        System.out.println(String.format("WORKING WITH DIMENSION: %s", instance.dimension()));
+    }
+
+    public static final String CONFIG_FILE = "config/wsie.properties";
 
     public static final String DIMENSION = "dimension";
 
@@ -51,11 +56,12 @@ public class PropReader {
     }
 
     private Properties properties = new Properties();
-
+    private Dimension dimension;
     private PropReader() {
         try (InputStream input = new FileInputStream(CONFIG_FILE))
         {
             properties.load(input);
+            this.dimension = loadDimension();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -63,6 +69,10 @@ public class PropReader {
     }
 
     public Dimension dimension() {
+        return dimension;
+    }
+
+    private Dimension loadDimension() {
         String dim = properties.getProperty(DIMENSION);
 
         Dimension d = Dimension.fromString(dim);

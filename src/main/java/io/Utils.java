@@ -61,6 +61,7 @@ public final class Utils {
         try (BufferedReader fileInput = new BufferedReader(new FileReader(path)) ){
             return (E) gsonDefault.fromJson(fileInput, classe);
         } catch (IOException e) {
+            e.printStackTrace();
             throw new CacheNotPresent(e);
         }
     }

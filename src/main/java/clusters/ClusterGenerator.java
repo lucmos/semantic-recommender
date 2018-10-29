@@ -2,11 +2,11 @@ package clusters;
 
 import babelnet.WikiPageMapping;
 import constants.DatasetName;
-import constants.Dimension;
 import constants.PathConstants;
 import datasetsreader.Dataset;
 import io.Cache;
 import io.Utils;
+import properties.PropReader;
 import twittermodel.TweetModel;
 import twittermodel.UserModel;
 import twittermodel.WikiPageModel;
@@ -20,13 +20,12 @@ import java.util.Set;
 public class ClusterGenerator {
 
     public static void main(String[] args) throws Utils.CacheNotPresent {
-        Dimension dim = Dimension.COMPLETE;
-        Dataset d = Cache.DatasetCache.readFromCache(DatasetName.WIKIMID, dim);
-        WikiPageMapping wmap = Cache.WikiMappingCache.readFromCache(dim);
+        Dataset d = Cache.DatasetCache.readFromCache(DatasetName.WIKIMID);
+        WikiPageMapping wmap = Cache.WikiMappingCache.readFromCache();
 
         ClusterGenerator gen = new ClusterGenerator(d, wmap);
-        gen.generateCategoryClusters(dim);
-        gen.generateDomainClusters(dim);
+        gen.generateCategoryClusters();
+        gen.generateDomainClusters();
     }
 
 
@@ -39,22 +38,22 @@ public class ClusterGenerator {
     }
 
 
-    public Clusters generateCategoryClusters(Dimension dim) {
-        Chrono c = new Chrono(String.format("Generating category clusters %s...", dim));
+    public Clusters generateCategoryClusters() {
+        Chrono c = new Chrono("Generating category clusters...");
 
         Clusters clusters = clusterize(this.wikiMap.getSynsetToCategories());
         System.out.println(clusters.getClusterToUsers().size() + " " + clusters.getUserToCluster().size());
-        Utils.savePrettyJson(clusters, PathConstants.CLUSTERS_CAT.getPath(dim));
+        Utils.savePrettyJson(clusters, PathConstants.CLUSTERS_CAT.getPath(PropReader.getInstance().dimension()));
 
         c.millis();
         return clusters;
     }
 
-    public Clusters generateDomainClusters(Dimension dim) {
-        Chrono c = new Chrono(String.format("Generating domain clusters %s...", dim));
+    public Clusters generateDomainClusters() {
+        Chrono c = new Chrono("Generating domain clusters...");
 
         Clusters clusters = clusterize(this.wikiMap.getSynsetToDomain());
-        Utils.savePrettyJson(clusters, PathConstants.CLUSTERS_DOM.getPath(dim));
+        Utils.savePrettyJson(clusters, PathConstants.CLUSTERS_DOM.getPath(PropReader.getInstance().dimension()));
 
         c.millis();
         return clusters;
