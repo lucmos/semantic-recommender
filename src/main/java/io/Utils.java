@@ -1,6 +1,9 @@
 package io;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import constants.PathConstants;
+import twittermodel.UserModel;
 import utils.IndexedSerializable;
 
 import java.io.*;
@@ -33,14 +36,34 @@ public final class Utils {
         timestamp = dateFormat.format(new Date(System.currentTimeMillis()));
     }
 
+    private static Gson gson = new Gson();
+
+    public static <E extends IndexedSerializable> void saveJson(E obj, String path) {
+        try (BufferedWriter fileOutput = new BufferedWriter(new FileWriter(path)) ){
+            gson.toJson(obj, fileOutput);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error while saving to file");
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <E extends IndexedSerializable> E restoreJson(String path, Class classe) throws CacheNotPresent {
+        try (BufferedReader fileInput = new BufferedReader(new FileReader(path)) ){
+            return (E) gson.fromJson(fileInput, classe);
+        } catch (IOException e) {
+            throw new CacheNotPresent(e);
+        }
+    }
+
     /**
      * Save a given object in a file
      *
-     * @param obj the object to save
+     * @param obj the object to saveObj
      * @param path the path in which the obj must be saved
      * @param <E> the type of the object
      */
-    public static <E extends IndexedSerializable> void save(E obj, String path) {
+    public static <E extends IndexedSerializable> void saveObj(E obj, String path) {
         try( FileOutputStream fileOutput = new FileOutputStream(path);
              ObjectOutputStream objOutput = new ObjectOutputStream(new BufferedOutputStream(fileOutput))) {
             objOutput.writeObject(obj);
@@ -58,7 +81,7 @@ public final class Utils {
      * @return the restored object
      */
     @SuppressWarnings("unchecked")
-    public static <E extends IndexedSerializable> E restore(String path) throws CacheNotPresent {
+    public static <E extends IndexedSerializable> E restoreObj(String path) throws CacheNotPresent {
         try (FileInputStream fileInput = new FileInputStream(path);
              ObjectInputStream objInput = new ObjectInputStream(new BufferedInputStream(fileInput))) {
             return (E) objInput.readObject();

@@ -10,25 +10,24 @@ import utils.Chrono;
 import utils.IndexedSerializable;
 
 import java.io.File;
-import java.nio.file.Path;
 
 public abstract class Cache {
 
     public static <E extends IndexedSerializable> void writeToCache(E obj, String name, String path) {
         Chrono c = new Chrono(String.format("Writing to cache: %s...", name));
-        Utils.save(obj, path);
+//        Utils.saveObj(obj, path);
+        Utils.saveJson(obj, path);
         c.millis();
     }
 
     // TODO: 29/10/18 check usage
-    public static <E extends IndexedSerializable> E readFromCache(String name, String path) throws Utils.CacheNotPresent {
+    public static <E extends IndexedSerializable> E readFromCache(Class<E> classe, String name, String path) throws Utils.CacheNotPresent {
         Chrono c = new Chrono(String.format("Reading from cache: %s...", name));
 
         E d;
         try {
-
-            d = Utils.restore(path);
-
+//            d = Utils.restoreObj(path);
+            d = Utils.restoreJson(path, classe);
         } catch (Utils.CacheNotPresent e) {
             String err = String.format("[error: %s]", e);
             c.millis(String.format("%s - %s", "done (in %s %s)", err));
@@ -68,7 +67,7 @@ public abstract class Cache {
 
         public static Dataset readFromCache(DatasetName datasetName, Dimension dim) throws Utils.CacheNotPresent {
             String path = new File(datasetName.getBinPath(dim)).getPath();
-            return Cache.readFromCache(datasetName.toString(), path);
+            return Cache.readFromCache(Dataset.class, datasetName.toString(), path);
         }
     }
 
@@ -90,7 +89,7 @@ public abstract class Cache {
 
         public static WikiPageMapping readFromCache(Dimension dimension) throws Utils.CacheNotPresent {
             String path = PathConstants.WIKIPAGE_TO_BABELNET.getPath(dimension);
-            return Cache.readFromCache(PathConstants.WIKIPAGE_TO_BABELNET.toString() + " " + dimension, path);
+            return Cache.readFromCache(WikiPageMapping.class,PathConstants.WIKIPAGE_TO_BABELNET.toString() + " " + dimension, path);
         }
     }
 }
