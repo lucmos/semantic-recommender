@@ -5,7 +5,7 @@ package constants;
  */
 public enum PathConstants {
 
-    WIKIPAGE_TO_BABELNET("dataset/bin/wikipage_to_babelnet.bin");
+    WIKIPAGE_TO_BABELNET("datasets/bin/wikipage_to_babelnet_%s.bin");
 
     private String path;
 
@@ -18,7 +18,7 @@ public enum PathConstants {
      *
      * @return the path
      */
-    public String getPath() {
-        return this.path;
+    public String getPath(Dimension dim) {
+        return String.format(this.path, dim.getName());
     }
 }
