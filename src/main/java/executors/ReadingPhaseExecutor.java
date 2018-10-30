@@ -6,7 +6,6 @@ import clusters.Clusters;
 import constants.DatasetName;
 import datasetsreader.Dataset;
 
-import datasetsreader.DatasetReader;
 import io.Cache;
 import io.Utils;
 
@@ -20,22 +19,32 @@ public class ReadingPhaseExecutor {
 //           Chrono c = new Chrono("Reading... " + name);
 //
 ////            Dataset d = DatasetReader.readDataset(name, Dimension.COMPLETE);
-////            Cache.writeToCache(name, d);
+////            Cache.write(name, d);
 //
-////            Dataset d = Cache.DatasetCache.readFromCache(name, Dimension.SMALL);
+////            Dataset d = Cache.DatasetCache.read(name, Dimension.SMALL);
 //            c.millis();
 //        }
+        //
 
-        Dataset d = Cache.DatasetCache.readFromCache(DatasetName.WIKIMID);
-        WikiPageMapping w = Cache.WikiMappingCache.readFromCache();
+        Dataset d = Cache.DatasetCache.read(DatasetName.WIKIMID);
+        Clusters c = Cache.ClustersWikiMidCache.readCategories();
+        System.out.println(c);
+        System.out.println(c.stats(d, "BNCAT:EN:Swedish_DJs"));
+//        WikiPageMapping w = Cache.WikiMappingCache.read();
+//        System.out.println(w.stats());
+        //
+
+
+
 //        WikiPageMapping d = WikiPageMapping.getInstance();
-        Clusters clu = new ClusterGenerator(d, w).loadCategoryClusters();
-//        clu.statsCoherence(d, "")
-        System.out.println(clu.statsCoherence(d, "BNCAT:EN:Films_directed_by_Tony_Kaye_(director)"));
+//        Clusters clu = new ClusterGenerator(d, w).loadCategoryClusters();
+//        clu.stats(d, "")
+//        System.out.println(clu.stats(d, "BNCAT:EN:Films_directed_by_Tony_Kaye_(director)"));
 //        System.out.println(d);
 //        System.out.println(w.stats(200));
+//        System.out.println(d.stats(200));
 
-//        d = Cache.WikiMappingCache.readFromCache(Dimension.COMPLETE);
+//        d = Cache.WikiMappingCache.read(Dimension.COMPLETE);
 //        System.out.println(d);
 //        System.out.println(d.stats());
     }
