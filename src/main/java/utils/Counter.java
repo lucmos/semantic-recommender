@@ -45,6 +45,10 @@ public class Counter<T> {
         for (T e : list) {
             s.append(String.format("\t%s\t\t%s\n", e, count(e)));
         }
+
+        if (k > 0 && k < counts.size() - 1) {
+            s.append("\t.\n\t.\n\t.\n");
+        }
         return s.toString();
     }
 
