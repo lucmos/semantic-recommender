@@ -145,6 +145,6 @@ public class UserModel extends ObjectModel {
 
     @Override
     public String toString() {
-        return String.format("(user: %s)", getIdString());
+        return String.format("(user: %s {tweets: %s, out: %s, in: %s})", getIdString(), tweetsIds.size(), followOutIds.size(), followInIds.size());
     }
 }
