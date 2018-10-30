@@ -1,12 +1,12 @@
 package clusters;
 
+import datasetsreader.Dataset;
+import twittermodel.TweetModel;
 import twittermodel.UserModel;
 import utils.IndexedSerializable;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Clusters implements IndexedSerializable {
     private HashMap<String, String> userToCluster = new HashMap<>();
@@ -43,5 +43,26 @@ public class Clusters implements IndexedSerializable {
 
     public Map<String, String> getUserToCluster() {
         return userToCluster;
+    }
+
+    public String statsCoherence(Dataset dataset, String cluster) {
+        StringBuilder s = new StringBuilder(String.format("Cluster: %s\n", cluster));
+        Set<String> users = clusterToUsers.get(cluster);
+
+        for (String userId : users) {
+            List<String> list = dataset.getUsers().get(userId).getTweetsIds().stream()
+                    .map(tweetId ->{
+                                TweetModel tweet = dataset.getTweets().get(tweetId);
+                                if (tweet.getInterestModel(dataset.getInterests()).isValid()) {
+                                    return tweet.getWikiPageModel(dataset.getInterests(), dataset.getPages()).toString();
+                                    }
+                                    else{
+                                    return null;
+                                }})
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());
+            s.append(String.format("\t%s:\t\t%s\n", userId, list));
+        }
+        return s.toString();
     }
 }
