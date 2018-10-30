@@ -5,9 +5,7 @@ import constants.ClusterName;
 import datasetsreader.Dataset;
 import io.Utils;
 import properties.Config;
-import twittermodel.TweetModel;
 import twittermodel.UserModel;
-import twittermodel.WikiPageModel;
 import utils.Chrono;
 import utils.Counter;
 
@@ -49,7 +47,7 @@ public class ClusterGenerator {
     }
 
     private Clusters clusterize(Map<String, Set<String>> synToCat) {
-        Map<UserModel, Counter<String>> userTocatCounter = getUserToCounter(synToCat);;
+        Map<UserModel, Counter<String>> userTocatCounter = ClustersUtils.getUserToCatCounter(dataset, synToCat);
 
         switch (config.clusterType()) {
             case MOST_COMMON:
@@ -61,29 +59,6 @@ public class ClusterGenerator {
 
         }
         throw new RuntimeException("Error while creating clusters.");
-    }
-
-
-    /**
-     * Associa ad ogni utente il counter delle categorie che gli piacciono
-     */
-    private Map<UserModel, Counter<String>> getUserToCounter(Map<String, Set<String>> synToCat) {
-        HashMap<UserModel, Counter<String>> userTocatCounter = new HashMap<>();
-
-        for (UserModel user : dataset.getUsers().values()) {
-            for (String tweetID : user.getTweetsIds()) {
-                TweetModel tweet = user.getTweetModel(dataset.getTweets(), tweetID);
-                WikiPageModel page = tweet.getWikiPageModel(dataset.getInterests(), dataset.getPages());
-                if (page == null) continue; // il synset non aveva associato niente
-
-                Set<String> possibleClusters = this.wikiMap.getSet(page, synToCat);
-                if (possibleClusters == null) continue;
-
-                userTocatCounter.putIfAbsent(user, new Counter<>());
-                userTocatCounter.get(user).increment(possibleClusters);
-            }
-        }
-        return userTocatCounter;
     }
 
     /**

@@ -1,7 +1,6 @@
 package clusters;
 
 import datasetsreader.Dataset;
-import twittermodel.TweetModel;
 import twittermodel.UserModel;
 import utils.Counter;
 import utils.IndexedSerializable;
@@ -59,12 +58,12 @@ public class Clusters implements IndexedSerializable {
     public String toString() {
         return String.format("(clusters: %s {users: %s})", numberOfClusters(), numberOfUsers());
     }
-    
+
     public String report(Dataset dataset, String cluster, int k) {
-        return stats() + clusterDistribution(k) + clusterInspection(dataset, cluster);
+        return clustersStats() + clustersDistribution(k) + clusterInspection(dataset, cluster);
     }
 
-    public String stats() {
+    public String clustersStats() {
         double[] cluster_sizes = clusterToUsers.values().stream().mapToDouble(Set::size).toArray();
         Statistics stat = new Statistics(cluster_sizes);
 
@@ -73,7 +72,7 @@ public class Clusters implements IndexedSerializable {
                 stat.report();
     }
 
-    public String clusterDistribution(int k) {
+    public String clustersDistribution(int k) {
         String clustDistr = Counter.fromMap(userToCluster).getDistribution(k);
         return String.format("\n[CLUSTERS DISTRIBUTION]\n %s\n", clustDistr);
     }
