@@ -1,6 +1,8 @@
 package executors;
 
 import babelnet.WikiPageMapping;
+import clusters.ClusterGenerator;
+import clusters.Clusters;
 import constants.DatasetName;
 import datasetsreader.Dataset;
 
@@ -24,11 +26,14 @@ public class ReadingPhaseExecutor {
 //            c.millis();
 //        }
 
-
-        WikiPageMapping d = Cache.WikiMappingCache.readFromCache();
+        Dataset d = Cache.DatasetCache.readFromCache(DatasetName.WIKIMID);
+        WikiPageMapping w = Cache.WikiMappingCache.readFromCache();
 //        WikiPageMapping d = WikiPageMapping.getInstance();
-        System.out.println(d);
-        System.out.println(d.stats(200));
+        Clusters clu = new ClusterGenerator(d, w).loadCategoryClusters();
+//        clu.statsCoherence(d, "")
+        System.out.println(clu.statsCoherence(d, "BNCAT:EN:Films_directed_by_Tony_Kaye_(director)"));
+//        System.out.println(d);
+//        System.out.println(w.stats(200));
 
 //        d = Cache.WikiMappingCache.readFromCache(Dimension.COMPLETE);
 //        System.out.println(d);
