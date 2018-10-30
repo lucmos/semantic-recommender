@@ -39,6 +39,7 @@ public class WikiPageMapping implements IndexedSerializable {
     public WikiPageMapping() {
     }
 
+
     public void compute() throws Utils.CacheNotPresent
     {
         BabelNet.getInstance();
@@ -70,6 +71,30 @@ public class WikiPageMapping implements IndexedSerializable {
         return synsetToDomain;
     }
 
+
+    public Map<String, Set<String>> getPagesToCategories() {
+        return mergePagesSynset(synsetToCategories);
+    }
+
+    public Map<String, Set<String>> getPagesToDomain() {
+        return mergePagesSynset(synsetToDomain);
+    }
+
+    public Map<String, Set<String>> mergePagesSynset(Map<String, Set<String>> synsetToCategories) {
+        Map<String, Set<String>> map = new HashMap<>();
+
+        for (Map.Entry<String, String> entry : wikiToSynset.entrySet()) {
+            String synKey = entry.getValue();
+            String pageKey = entry.getKey();
+
+            if (synsetToCategories.containsKey(synKey)) {
+                map.put(pageKey, synsetToCategories.get(synKey));
+            }
+        }
+
+        return map;
+    }
+
     public Set<String> getCategories(WikiPageModel pageModel) {
         return getSet(pageModel, synsetToCategories);
     }
@@ -78,11 +103,11 @@ public class WikiPageMapping implements IndexedSerializable {
         return getSet(pageModel, synsetToDomain);
     }
 
-    public Set<String> getSet(WikiPageModel pageModel, Map<String, Set<String>> idToString) {
+    public Set<String> getSet(WikiPageModel pageModel, Map<String, Set<String>> stringSetMap) {
         String synsetId = getSynsetID(pageModel);
 
-        if (!idToString.containsKey(synsetId)) return null;
-        Set<String> strings = idToString.get(synsetId);
+        if (!stringSetMap.containsKey(synsetId)) return null;
+        Set<String> strings = stringSetMap.get(synsetId);
         assert strings != null;
         assert !strings.isEmpty();
 
