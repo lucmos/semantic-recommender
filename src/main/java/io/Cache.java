@@ -1,6 +1,7 @@
 package io;
 
 import babelnet.WikiPageMapping;
+import clusters.Clusters;
 import constants.DatasetName;
 
 import constants.PathConstants;
@@ -93,6 +94,20 @@ public abstract class Cache {
             PropReader.Dimension dim = PropReader.getInstance().dimension();
             String path = PathConstants.WIKIPAGE_TO_BABELNET.getPath(dim);
             return Cache.readFromCache(WikiPageMapping.class, PathConstants.WIKIPAGE_TO_BABELNET.toString(), path);
+        }
+    }
+
+    public static class ClustersCache extends Cache {
+        public static void writeToCache(Clusters mapping, PathConstants path) {
+            PropReader.Dimension dim = PropReader.getInstance().dimension();
+            String binPath = path.getPath(dim);
+            Cache.writeToCache(mapping, path.toString(), binPath);
+        }
+
+        public static Clusters readFromCache(PathConstants path) throws Utils.CacheNotPresent {
+            PropReader.Dimension dim = PropReader.getInstance().dimension();
+            String p = path.getPath(dim);
+            return Cache.readFromCache(Clusters.class, path.toString(), p);
         }
     }
 }
