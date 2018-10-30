@@ -1,6 +1,7 @@
 package io;
 
 import babelnet.WikiPageMapping;
+import clusters.ClusterGenerator;
 import clusters.Clusters;
 import constants.DatasetName;
 
@@ -15,11 +16,19 @@ import java.io.File;
 
 public abstract class Cache {
 
-    private static <E extends IndexedSerializable> void writeToCache(E obj, String name, String path) {
+
+    private static <E extends IndexedSerializable> void writeToCache(E obj, String name, String path, boolean pretty) {
         Chrono c = new Chrono(String.format("Writing to cache: %s...", name));
-//        Utils.saveObj(obj, path);
-        Utils.saveJson(obj, path);
+        if (pretty) {
+            Utils.savePrettyJson(obj, path);
+        } else {
+            Utils.saveJson(obj, path);
+        }
         c.millis();
+    }
+
+    private static <E extends IndexedSerializable> void writeToCache(E obj, String name, String path) {
+        writeToCache(obj, name, path, false);
     }
 
     // TODO: 29/10/18 check usage
@@ -54,18 +63,18 @@ public abstract class Cache {
                 Chrono c = new Chrono(String.format("Reading: %s...", name));
 
                 Dataset d = DatasetReader.readDataset(name);
-                DatasetCache.writeToCache(name, d);
+                DatasetCache.write(name, d);
 
                 c.millis("done (in %s %s) --> " + name + ": " + d);
             }
         }
 
-        public static void writeToCache(DatasetName datasetName, Dataset dataset) {
+        public static void write(DatasetName datasetName, Dataset dataset) {
             String binPath = datasetName.getBinPath(dataset.getDimension());
             Cache.writeToCache(dataset, binPath, binPath);
         }
 
-        public static Dataset readFromCache(DatasetName datasetName) throws Utils.CacheNotPresent {
+        public static Dataset read(DatasetName datasetName) throws Utils.CacheNotPresent {
             PropReader.Dimension dim = PropReader.getInstance().dimension();
             String path = new File(datasetName.getBinPath(dim)).getPath();
             return Cache.readFromCache(Dataset.class, datasetName.toString(), path);
@@ -81,33 +90,69 @@ public abstract class Cache {
         public static void regenCache() throws Utils.CacheNotPresent {
             WikiPageMapping mapping = new WikiPageMapping();
             mapping.compute();
-            Cache.WikiMappingCache.writeToCache(mapping);
+            Cache.WikiMappingCache.write(mapping);
         }
 
-        public static void writeToCache(WikiPageMapping mapping) {
+        public static void write(WikiPageMapping mapping) {
             PropReader.Dimension dim = PropReader.getInstance().dimension();
             String binPath = PathConstants.WIKIPAGE_TO_BABELNET.getPath(dim);
             Cache.writeToCache(mapping, PathConstants.WIKIPAGE_TO_BABELNET.toString(), binPath);
         }
 
-        public static WikiPageMapping readFromCache() throws Utils.CacheNotPresent {
+        public static WikiPageMapping read() throws Utils.CacheNotPresent {
             PropReader.Dimension dim = PropReader.getInstance().dimension();
             String path = PathConstants.WIKIPAGE_TO_BABELNET.getPath(dim);
             return Cache.readFromCache(WikiPageMapping.class, PathConstants.WIKIPAGE_TO_BABELNET.toString(), path);
         }
     }
 
-    public static class ClustersCache extends Cache {
-        public static void writeToCache(Clusters mapping, PathConstants path) {
-            PropReader.Dimension dim = PropReader.getInstance().dimension();
-            String binPath = path.getPath(dim);
-            Cache.writeToCache(mapping, path.toString(), binPath);
+    public static class ClustersWikiMidCache extends Cache {
+
+        public static void main(String[] args) throws Utils.CacheNotPresent {
+            ClustersWikiMidCache.regenCache();
         }
 
-        public static Clusters readFromCache(PathConstants path) throws Utils.CacheNotPresent {
+        public static void regenCache() throws Utils.CacheNotPresent {
+            Dataset d = Cache.DatasetCache.read(DatasetName.WIKIMID);
+            WikiPageMapping w = Cache.WikiMappingCache.read();
+            ClusterGenerator c = new ClusterGenerator(d, w);
+
+            Clusters c1  = c.generateCategoryClusters();
+            Clusters c2  = c.generateDomainClusters();
+
+            System.out.println(c1);
+            System.out.println(c2);
+
+            writeCategories(c1);
+            writeDomains(c2);
+        }
+
+        public static void write(Clusters mapping, PathConstants path) {
+            PropReader.Dimension dim = PropReader.getInstance().dimension();
+            String binPath = path.getPath(dim);
+            Cache.writeToCache(mapping, path.toString(), binPath, true);
+        }
+
+        public static Clusters read(PathConstants path) throws Utils.CacheNotPresent {
             PropReader.Dimension dim = PropReader.getInstance().dimension();
             String p = path.getPath(dim);
             return Cache.readFromCache(Clusters.class, path.toString(), p);
+        }
+
+        public static void writeCategories(Clusters mapping) {
+            ClustersWikiMidCache.write(mapping, PathConstants.CLUSTERS_CAT);
+        }
+
+        public static void writeDomains(Clusters mapping) {
+            ClustersWikiMidCache.write(mapping, PathConstants.CLUSTERS_DOM);
+        }
+
+        public static Clusters readCategories() throws Utils.CacheNotPresent {
+            return ClustersWikiMidCache.read(PathConstants.CLUSTERS_CAT);
+        }
+
+        public static Clusters readDomains() throws Utils.CacheNotPresent {
+            return ClustersWikiMidCache.read(PathConstants.CLUSTERS_DOM);
         }
     }
 }
