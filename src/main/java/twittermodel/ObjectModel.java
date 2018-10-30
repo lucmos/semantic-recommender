@@ -32,7 +32,13 @@ public abstract class ObjectModel implements IndexedSerializable {
         this.setIdString(idString);
     }
 
-//    /**
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof ObjectModel)) return false;
+        return idString.equals(((ObjectModel) obj).getIdString());
+    }
+
+    //    /**
 //     * Defines the mapping between the given literal identifier and the generated integer identifier
 //     *
 //     * @return the mapping, local to each class
