@@ -32,6 +32,30 @@ public class Dataset implements IndexedSerializable {
         pages = new HashMap<>();
     }
 
+    public InterestModel getInterest(String id) { // TODO: 30/10/18 usa solo interest validi? metodo isValid()
+        assert interests.containsKey(id);
+
+        return interests.get(id);
+    }
+
+    public TweetModel getTweet(String id) {
+        assert tweets.containsKey(id);
+
+        return tweets.get(id);
+    }
+
+    public UserModel getUser(String id) {
+        assert users.containsKey(id);
+
+        return users.get(id);
+    }
+
+    public WikiPageModel getPage(String id) {
+        assert pages.containsKey(id);
+
+        return pages.get(id);
+    }
+
     public Map<String, InterestModel> getInterests() { // TODO: 30/10/18 usa solo interest validi? metodo isValid()
         return interests;
     }
