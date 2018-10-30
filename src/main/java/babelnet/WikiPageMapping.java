@@ -15,6 +15,7 @@ import twittermodel.WikiPageModel;
 import utils.Chrono;
 import utils.Counter;
 import utils.IndexedSerializable;
+import utils.Statistics;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -23,11 +24,11 @@ public class WikiPageMapping implements IndexedSerializable {
 
     public static WikiPageMapping getInstance() throws Utils.CacheNotPresent {
         try {
-            return Cache.WikiMappingCache.readFromCache();
+            return Cache.WikiMappingCache.read();
         } catch (Utils.CacheNotPresent cacheNotPresent) {
             WikiPageMapping mapping = new WikiPageMapping();
             mapping.compute();
-            Cache.WikiMappingCache.writeToCache(mapping);
+            Cache.WikiMappingCache.write(mapping);
             return mapping;
         }
     }
@@ -44,7 +45,7 @@ public class WikiPageMapping implements IndexedSerializable {
         BabelNet.getInstance();
 
         for (DatasetName name : DatasetName.values()) {
-            Dataset d = Cache.DatasetCache.readFromCache(name);
+            Dataset d = Cache.DatasetCache.read(name);
             Chrono c = new Chrono(String.format("Generating wikipage mapping for %s...", name));
             final int[] notFound = {0};
 //            for (Map.Entry<Integer, WikiPageModel> pageEntry : d.getPages().entrySet()) {
@@ -195,38 +196,31 @@ public class WikiPageMapping implements IndexedSerializable {
         return elements.size();
     }
 
-    public Counter<String> getDistributionOf(Map<String, Set<String>> map) {
-        Counter<String> elements = new Counter<>();
-
-        for (Map.Entry<String, Set<String>> entry : map.entrySet()) {
-            elements.increment(entry.getValue());
-        }
-        return elements;
-    }
 
     @Override
     public String toString() {
         return String.format("(wikipages: %s {categories: %s, domains: %s})", wikiToSynset.size(), getNumberOfCategories(), getNumberOfDomains());
     }
 
-    public String stats(int k) {
-        int numberSyn = wikiToSynset.size();
-        int domainsNum = getNumberOfDomains();
-        String domaindistr = getDistributionOf(synsetToDomain).getDistribution();
-        int catNum = getNumberOfCategories();
-        String catdistr = getDistributionOf(synsetToCategories).getDistribution(k);
-
-        return String.format("Stats of the wikipages mapping %s:\n" +
-                        "Number of synsets found: %s\n" +
-                        "Number of domains found: %s\n" +
-                        "Number of cateries found: %s\n" +
-                        "Distribution of domains: \n%s\n" +
-                        "Distribution of categories: \n%s\n",
-                PropReader.getInstance().dimension(), numberSyn, domainsNum, catNum, domaindistr, catdistr);
-    }
-
     public String stats() {
         return stats(50);
     }
 
+    public String stats(int k) {
+        return String.format("\n[WIKIPAGES MAPPING STATS]\n" +
+                "\tsynsets found: %s\n", wikiToSynset.size()) +
+                _stats(synsetToDomain, "domains", k).append(_stats(synsetToCategories, "categories", k));
+    }
+
+    private StringBuilder _stats(Map<String, Set<String>> map, String name, int k) {
+        StringBuilder s = new StringBuilder(String.format("\n[OCCURRENCES OF THE ~ %s ~ ACROSS SYNSETS]\n", name.toUpperCase()));
+
+        Counter<String> elements = Counter.fromMultiMap(map);
+        Statistics stat = new Statistics(elements);
+
+        s.append(stat.report());
+
+        s.append(String.format("\n[%s DISTRIBUTION]\n%s\n", name.toUpperCase(), elements.getDistribution(k)));
+        return s;
+    }
 }
