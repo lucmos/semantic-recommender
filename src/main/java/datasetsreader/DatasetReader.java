@@ -1,4 +1,6 @@
 package datasetsreader;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import constants.DatasetInfo;
 import constants.DatasetName;
 import properties.PropReader;
@@ -6,8 +8,10 @@ import twittermodel.*;
 import io.TsvFileReader;
 import utils.Chrono;
 
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * This class use a TsvFileReader to read a dataset and describes it building and managing a Dataset object
@@ -173,7 +177,9 @@ public class DatasetReader
                 s.forEach(p -> addRow_friendBased_interest(p, dataset));
                 c.millis();
 
+                clean_WikiMID(dataset);
                 break;
+
             case S21:
                 s = TsvFileReader.readText(DatasetInfo.S21_DATASET.getPath());
 
@@ -198,5 +204,34 @@ public class DatasetReader
                 c.millis();
                 break;
         }
+        
+    }
+
+    private static void clean_WikiMID(Dataset dataset) {
+        // TODO: 30/10/18 Inutile. 4 interesti con wikipage non usati, non 4 interest senza wikipage... [...] 
+        Chrono c = new Chrono("Cleaning wikimid...");
+        Map<UserModel, Map<TweetModel, InterestModel>> toRemove = new HashMap<>();
+
+        for (UserModel user : dataset.getUsers().values()) {
+            for (String tweetId : user.getTweetsIds()) {
+                TweetModel tweet = user.getTweetModel(dataset.getTweets(), tweetId);
+                InterestModel interest = tweet.getInterestModel(dataset.getInterests());
+
+                if (!interest.isValid()) {
+                    toRemove.putIfAbsent(user, new HashMap<>());
+
+                    Map<TweetModel, InterestModel> m = toRemove.get(user);
+                    m.put(tweet, interest);
+                }
+            }
+        }
+        
+        toRemove.forEach((user, y) -> y.forEach((tweet, interest) -> {
+            dataset.removeInterest(interest);
+            dataset.removeTweet(tweet);
+            user.removeTweet(tweet);
+        }));
+
+        c.millis("done (in %s %s)" + String.format(" - [interests deleted: %s]", toRemove.values()));
     }
 }
