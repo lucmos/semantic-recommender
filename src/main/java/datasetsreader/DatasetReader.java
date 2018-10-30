@@ -1,9 +1,7 @@
 package datasetsreader;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import constants.DatasetInfo;
 import constants.DatasetName;
-import properties.PropReader;
+import properties.Config;
 import twittermodel.*;
 import io.TsvFileReader;
 import utils.Chrono;
@@ -11,7 +9,6 @@ import utils.Chrono;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * This class use a TsvFileReader to read a dataset and describes it building and managing a Dataset object
@@ -136,7 +133,7 @@ public class DatasetReader
     public static Dataset readDataset(DatasetName name) {
         assert name != null;
 
-        Dataset dataset = new Dataset(name, PropReader.getInstance().dimension());
+        Dataset dataset = new Dataset(name, Config.getInstance().dimension());
 
         DatasetReader.fillDataset(name, dataset);
         return dataset;

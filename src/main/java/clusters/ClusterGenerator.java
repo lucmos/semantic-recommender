@@ -1,12 +1,10 @@
 package clusters;
 
 import babelnet.WikiPageMapping;
-import constants.DatasetName;
-import constants.PathConstants;
+import constants.ClusterName;
 import datasetsreader.Dataset;
-import io.Cache;
 import io.Utils;
-import properties.PropReader;
+import properties.Config;
 import twittermodel.TweetModel;
 import twittermodel.UserModel;
 import twittermodel.WikiPageModel;
@@ -19,20 +17,13 @@ import java.util.Set;
 
 public class ClusterGenerator {
 
-    public static void main(String[] args) throws Utils.CacheNotPresent {
-        Dataset d = Cache.DatasetCache.read(DatasetName.WIKIMID);
-        WikiPageMapping wmap = Cache.WikiMappingCache.read();
+    private final Config config;
+    private final Dataset dataset;
+    private final WikiPageMapping wikiMap;
 
-        ClusterGenerator gen = new ClusterGenerator(d, wmap);
-        gen.generateCategoryClusters();
-        gen.generateDomainClusters();
-    }
-
-
-    private Dataset dataset;
-    private WikiPageMapping wikiMap;
 
     public ClusterGenerator(Dataset dataset, WikiPageMapping wikiMap) {
+        this.config = Config.getInstance();
         this.dataset = dataset;
         this.wikiMap = wikiMap;
     }
@@ -41,8 +32,7 @@ public class ClusterGenerator {
         Chrono c = new Chrono("Generating category clusters...");
 
         Clusters clusters = clusterize(this.wikiMap.getSynsetToCategories());
-        System.out.println(clusters.getClusterToUsers().size() + " " + clusters.getUserToCluster().size());
-        Utils.savePrettyJson(clusters, PathConstants.CLUSTERS_CAT.getPath(PropReader.getInstance().dimension()));
+        Utils.savePrettyJson(clusters, ClusterName.CLUSTERS_CAT.getPath(config.dimension(), config.clusterType()));
 
         c.millis();
         return clusters;
@@ -52,47 +42,89 @@ public class ClusterGenerator {
         Chrono c = new Chrono("Generating domain clusters...");
 
         Clusters clusters = clusterize(this.wikiMap.getSynsetToDomain());
-        Utils.savePrettyJson(clusters, PathConstants.CLUSTERS_DOM.getPath(PropReader.getInstance().dimension()));
+        Utils.savePrettyJson(clusters, ClusterName.CLUSTERS_DOM.getPath(config.dimension(), config.clusterType()));
 
         c.millis();
         return clusters;
     }
 
-    private Clusters clusterize(Map<String, Set<String>> synToClusters) {
+    private Clusters clusterize(Map<String, Set<String>> synToCat) {
+        Map<UserModel, Counter<String>> userTocatCounter = getUserToCounter(synToCat);;
+
+        switch (config.clusterType()) {
+            case MOST_COMMON:
+                return generateCluster(userTocatCounter);
+
+            case TF_IDF:
+                return generateCluster(getUserToCounterTFIDF(synToCat, userTocatCounter));
+
+
+        }
+        throw new RuntimeException("Error while creating clusters.");
+    }
+
+
+    /**
+     * Associa ad ogni utente il counter delle categorie che gli piacciono
+     */
+    private Map<UserModel, Counter<String>> getUserToCounter(Map<String, Set<String>> synToCat) {
         HashMap<UserModel, Counter<String>> userTocatCounter = new HashMap<>();
 
-//      Associa ad ogni utente il conteggio delle categorie che gli piacciono
         for (UserModel user : dataset.getUsers().values()) {
             for (String tweetID : user.getTweetsIds()) {
                 TweetModel tweet = user.getTweetModel(dataset.getTweets(), tweetID);
                 WikiPageModel page = tweet.getWikiPageModel(dataset.getInterests(), dataset.getPages());
-                if (page == null) continue;
+                if (page == null) continue; // il synset non aveva associato niente
 
-                Set<String> possibleClusters = this.wikiMap.getStrings(page, synToClusters);
-                if (possibleClusters == null) {
-                    continue;
-                }
+                Set<String> possibleClusters = this.wikiMap.getSet(page, synToCat);
+                if (possibleClusters == null) continue;
 
-                if (!userTocatCounter.containsKey(user)) {
-                    userTocatCounter.put(user, new Counter<>());
-                }
+                userTocatCounter.putIfAbsent(user, new Counter<>());
+                userTocatCounter.get(user).increment(possibleClusters);
+            }
+        }
+        return userTocatCounter;
+    }
 
-                for (String s : possibleClusters) {
+    /**
+     * Genera i clusters prendendo per ogni utente prende la categoria più comunte/importante
+     */
+    private Clusters generateCluster(Map<UserModel, Counter<String>> userToCounter) {
+        Clusters clusters = new Clusters();
+        for (Map.Entry<UserModel, Counter<String>> entry : userToCounter.entrySet()) {
+            clusters.addUser(entry.getKey(), entry.getValue().mostCommon());
+        }
+        return clusters;
+    }
 
-//                    userTocatCounter.get(user).set(s, importance.get(s));
-                    userTocatCounter.get(user).increment(possibleClusters);
-                }
+    /**
+     * Genera un counter in cui per ogni utentet associa il tf.idf di ogni sua categoria
+     * @param userToCounter
+     * @return
+     */
+    private Map<UserModel, Counter<String>> getUserToCounterTFIDF(Map<String, Set<String>> synToCat, Map<UserModel, Counter<String>> userToCounter) {
+
+        Counter<String> categories = Counter.fromMultiMap(synToCat);
+
+        HashMap<UserModel, Counter<String>> userToCounterTFIDF = new HashMap<>();
+
+//      numero documenti
+        double documents = synToCat.size();
+
+//      calcolo del document frequency (ogni categoria in quanti documenti è?)
+        Counter<String> documentFreq = new Counter<>();
+        for (Set<String> doc : synToCat.values()) {
+            for (String term : doc) {
+                documentFreq.increment(term);
             }
         }
 
-//        Counter<String> catdistr = Counter.fromMultiMap(wikiMap.getSynsetToCategories());
-        HashMap<UserModel, Counter<String>> usersTocatImportance = new HashMap<>();
-
-        HashMap<String, Double> cache = new HashMap<>();
-        double documents = synToClusters.size();
+//      calcolo idf
+        HashMap<String, Double> idfCache = new HashMap<>();
+        categories.getMap().keySet().forEach(cat -> idfCache.put(cat, Math.log(documents / documentFreq.countDouble(cat))));
 
 //        Associa ad ogni utente le categire che gli piacciono associate ad una misura di importanza basata sul tf.idf
-        for (Map.Entry<UserModel, Counter<String>> entry : userTocatCounter.entrySet()) {
+        for (Map.Entry<UserModel, Counter<String>> entry : userToCounter.entrySet()) {
             UserModel user = entry.getKey();
 
             Counter<String> userCatCounter = entry.getValue();
@@ -100,29 +132,16 @@ public class ClusterGenerator {
 
             for (Map.Entry<String, Double> e : userCatCounter.getMap().entrySet()) {
                 String cat = e.getKey();
-
-                double cf = userCatCounter.importance(cat) / userCatCounter.size();
-                double iuf;
-
-                if (cache.containsKey(cat)) {
-                    iuf = cache.get(cat);
-                }
-                else{
-                    double uf = synToClusters.values().stream().parallel().filter(x -> x.contains(cat)).count();
-                    iuf = Math.log(documents / uf);
-                    cache.put(cat, iuf);
-                }
-//                System.out.println(String.format("%s\n%s\n%s\n%s\n", cf, documntes, uf, iuf));
-                userImpCounter.set(cat, cf * iuf);
+                double tf = userCatCounter.countDouble(cat) / userCatCounter.totalDouble();
+                double idf = idfCache.get(cat);
+//                System.out.println(String.format("t: %s, tot: %s\n tf: %s\n idf: %s \n tf*idf: %s",
+//                        userCatCounter.count(cat), userCatCounter.totalDouble(),
+//                        tf, idf, tf * idf));
+                userImpCounter.set(cat, tf * idf);
             }
-            usersTocatImportance.put(user, userImpCounter);
-        }
 
-//        Per ogni utente prende la categoria più importante
-        Clusters clusters = new Clusters();
-        for (Map.Entry<UserModel, Counter<String>> entry : usersTocatImportance.entrySet()) {
-            clusters.addUser(entry.getKey(), entry.getValue().mostCommon());
+            userToCounterTFIDF.put(user, userImpCounter);
         }
-        return clusters;
+        return userToCounterTFIDF;
     }
 }

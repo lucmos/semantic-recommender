@@ -3,12 +3,13 @@ package io;
 import babelnet.WikiPageMapping;
 import clusters.ClusterGenerator;
 import clusters.Clusters;
+import constants.ClusterName;
 import constants.DatasetName;
 
 import constants.PathConstants;
 import datasetsreader.Dataset;
 import datasetsreader.DatasetReader;
-import properties.PropReader;
+import properties.Config;
 import utils.Chrono;
 import utils.IndexedSerializable;
 
@@ -75,7 +76,7 @@ public abstract class Cache {
         }
 
         public static Dataset read(DatasetName datasetName) throws Utils.CacheNotPresent {
-            PropReader.Dimension dim = PropReader.getInstance().dimension();
+            Config.Dimension dim = Config.getInstance().dimension();
             String path = new File(datasetName.getBinPath(dim)).getPath();
             return Cache.readFromCache(Dataset.class, datasetName.toString(), path);
         }
@@ -94,13 +95,13 @@ public abstract class Cache {
         }
 
         public static void write(WikiPageMapping mapping) {
-            PropReader.Dimension dim = PropReader.getInstance().dimension();
+            Config.Dimension dim = Config.getInstance().dimension();
             String binPath = PathConstants.WIKIPAGE_TO_BABELNET.getPath(dim);
             Cache.writeToCache(mapping, PathConstants.WIKIPAGE_TO_BABELNET.toString(), binPath);
         }
 
         public static WikiPageMapping read() throws Utils.CacheNotPresent {
-            PropReader.Dimension dim = PropReader.getInstance().dimension();
+            Config.Dimension dim = Config.getInstance().dimension();
             String path = PathConstants.WIKIPAGE_TO_BABELNET.getPath(dim);
             return Cache.readFromCache(WikiPageMapping.class, PathConstants.WIKIPAGE_TO_BABELNET.toString(), path);
         }
@@ -120,39 +121,40 @@ public abstract class Cache {
             Clusters c1  = c.generateCategoryClusters();
             Clusters c2  = c.generateDomainClusters();
 
-            System.out.println(c1);
-            System.out.println(c2);
-
             writeCategories(c1);
             writeDomains(c2);
         }
 
-        public static void write(Clusters mapping, PathConstants path) {
-            PropReader.Dimension dim = PropReader.getInstance().dimension();
-            String binPath = path.getPath(dim);
-            Cache.writeToCache(mapping, path.toString(), binPath, true);
+        public static void write(Clusters mapping, ClusterName name) {
+            Config.Dimension dim = Config.getInstance().dimension();
+            Config.ClusterType type = Config.getInstance().clusterType();
+
+            String binPath = name.getPath(dim, type);
+            Cache.writeToCache(mapping, binPath, binPath, true);
         }
 
-        public static Clusters read(PathConstants path) throws Utils.CacheNotPresent {
-            PropReader.Dimension dim = PropReader.getInstance().dimension();
-            String p = path.getPath(dim);
+        public static Clusters read(ClusterName path) throws Utils.CacheNotPresent {
+            Config.Dimension dim = Config.getInstance().dimension();
+            Config.ClusterType type = Config.getInstance().clusterType();
+
+            String p = path.getPath(dim, type);
             return Cache.readFromCache(Clusters.class, path.toString(), p);
         }
 
         public static void writeCategories(Clusters mapping) {
-            ClustersWikiMidCache.write(mapping, PathConstants.CLUSTERS_CAT);
+            ClustersWikiMidCache.write(mapping, ClusterName.CLUSTERS_CAT);
         }
 
         public static void writeDomains(Clusters mapping) {
-            ClustersWikiMidCache.write(mapping, PathConstants.CLUSTERS_DOM);
+            ClustersWikiMidCache.write(mapping, ClusterName.CLUSTERS_DOM);
         }
 
         public static Clusters readCategories() throws Utils.CacheNotPresent {
-            return ClustersWikiMidCache.read(PathConstants.CLUSTERS_CAT);
+            return ClustersWikiMidCache.read(ClusterName.CLUSTERS_CAT);
         }
 
         public static Clusters readDomains() throws Utils.CacheNotPresent {
-            return ClustersWikiMidCache.read(PathConstants.CLUSTERS_DOM);
+            return ClustersWikiMidCache.read(ClusterName.CLUSTERS_DOM);
         }
     }
 }

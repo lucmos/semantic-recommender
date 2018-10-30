@@ -10,7 +10,6 @@ import it.uniroma1.lcl.babelnet.data.BabelCategory;
 import it.uniroma1.lcl.babelnet.resources.WikipediaID;
 import it.uniroma1.lcl.jlt.util.Language;
 import it.uniroma1.lcl.kb.Domain;
-import properties.PropReader;
 import twittermodel.WikiPageModel;
 import utils.Chrono;
 import utils.Counter;
@@ -48,17 +47,11 @@ public class WikiPageMapping implements IndexedSerializable {
             Dataset d = Cache.DatasetCache.read(name);
             Chrono c = new Chrono(String.format("Generating wikipage mapping for %s...", name));
             final int[] notFound = {0};
-//            for (Map.Entry<Integer, WikiPageModel> pageEntry : d.getPages().entrySet()) {
-//                WikiPageModel page = pageEntry.getValue();
-//                boolean synFound = addSynsetToMap(page);
-//                notFound = synFound ? notFound : notFound + 1;
-//            }
 
             d.getPages().forEach((key, value) -> {
                 boolean synFound = addSynsetToMap(value);
                 notFound[0] = synFound ? notFound[0] : notFound[0] + 1;
             });
-
 
             String counts = String.format("[synsets not found: %s/%s]", notFound[0], d.getPages().size());
             c.millis(String.format("%s - %s", "done (in %s %s)", counts));
@@ -78,15 +71,14 @@ public class WikiPageMapping implements IndexedSerializable {
     }
 
     public Set<String> getCategories(WikiPageModel pageModel) {
-        return getStrings(pageModel, synsetToCategories);
+        return getSet(pageModel, synsetToCategories);
     }
 
     public Set<String> getDomains(WikiPageModel pageModel) {
-        return getStrings(pageModel, synsetToDomain);
+        return getSet(pageModel, synsetToDomain);
     }
 
-    public Set<String> getStrings(WikiPageModel pageModel,
-                                  Map<String, Set<String>> idToString) {
+    public Set<String> getSet(WikiPageModel pageModel, Map<String, Set<String>> idToString) {
         String synsetId = getSynsetID(pageModel);
 
         if (!idToString.containsKey(synsetId)) return null;

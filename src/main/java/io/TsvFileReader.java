@@ -1,6 +1,6 @@
 package io;
 
-import properties.PropReader;
+import properties.Config;
 import utils.Chrono;
 
 import java.io.BufferedReader;
@@ -25,7 +25,7 @@ public class TsvFileReader
      * @return an ArrayList of string, where each String is a line of the read file
      */
     public static List<List<String>> readText(String path) {
-        PropReader.Dimension limit = PropReader.getInstance().dimension();
+        Config.Dimension limit = Config.getInstance().dimension();
 
         Chrono c = new Chrono(String.format("Reading %s...", path));
         List<List<String>> splitted_lines = new LinkedList<>();

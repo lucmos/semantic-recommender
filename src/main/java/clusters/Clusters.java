@@ -79,8 +79,15 @@ public class Clusters implements IndexedSerializable {
         s.append(stat.report());
 
         String clustDistr = Counter.fromMap(userToCluster).getDistribution(k);
-        s.append(String.format("\n[CLULSTERS DISTRIBUTION]\n %s", clustDistr));
+        s.append(String.format("\n[CLUSTERS DISTRIBUTION]\n %s", clustDistr));
 
+        s.append(clusterInspection(dataset, cluster));
+
+        return s.toString();
+    }// TODO: 30/10/18 fai report
+
+    public String clusterInspection(Dataset dataset, String cluster) {
+        StringBuilder s = new StringBuilder();
         s.append(String.format("\n[CLUSTER INSPECTION] -> %s\n", cluster));
         Set<String> users = clusterToUsers.get(cluster);
         for (String userId : users) {
@@ -97,3 +104,4 @@ public class Clusters implements IndexedSerializable {
         return s.toString();
     }
 }
+

@@ -1,6 +1,6 @@
 package constants;
 
-import properties.PropReader;
+import properties.Config;
 
 public enum DatasetName {
 
@@ -14,7 +14,7 @@ public enum DatasetName {
         this.binPath = binPath;
     }
 
-    public String getBinPath(PropReader.Dimension dim) {
+    public String getBinPath(Config.Dimension dim) {
         return String.format(binPath, dim.getName());
     }
 }

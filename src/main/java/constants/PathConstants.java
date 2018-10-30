@@ -1,15 +1,13 @@
 package constants;
 
-import properties.PropReader;
+import properties.Config;
 
 /**
  * This enum gathers the paths of the objects that are generated.
  */
 public enum PathConstants {
 
-    WIKIPAGE_TO_BABELNET("datasets/bin/wikipage_to_babelnet_%s.bin"),
-    CLUSTERS_CAT("results/clusters_cat_%s.json"),
-    CLUSTERS_DOM("results/clusters_dom_%s.json");
+    WIKIPAGE_TO_BABELNET("datasets/bin/wikipage_to_babelnet_%s.bin");
 
     private String path;
 
@@ -22,7 +20,7 @@ public enum PathConstants {
      *
      * @return the path
      */
-    public String getPath(PropReader.Dimension dim) {
+    public String getPath(Config.Dimension dim) {
         return String.format(this.path, dim.getName());
     }
 }

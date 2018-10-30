@@ -2,14 +2,14 @@ package datasetsreader;
 
 
 import constants.DatasetName;
-import properties.PropReader;
+import properties.Config;
 import twittermodel.*;
 import utils.IndexedSerializable;
 import java.util.*;
 
 public class Dataset implements IndexedSerializable {
     private DatasetName name;
-    private PropReader.Dimension dimension;
+    private Config.Dimension dimension;
 
     private HashMap<String, InterestModel> interests;
     private HashMap<String, TweetModel> tweets;
@@ -22,7 +22,7 @@ public class Dataset implements IndexedSerializable {
                 name, users.size(), tweets.size(), interests.size(), pages.size());
     }
 
-    public Dataset(DatasetName name, PropReader.Dimension limit) {
+    public Dataset(DatasetName name, Config.Dimension limit) {
         this.name = name;
         this.dimension = limit;
 
@@ -85,11 +85,11 @@ public class Dataset implements IndexedSerializable {
         pages.remove(pg.getIdString());
     }
 
-    public PropReader.Dimension getDimension() {
+    public Config.Dimension getDimension() {
         return dimension;
     }
 
-    public void setDimension(PropReader.Dimension dimension) {
+    public void setDimension(Config.Dimension dimension) {
         this.dimension = dimension;
     }
 }

@@ -47,7 +47,7 @@ public class Counter<T> {
         }
 
         if (k > 0 && k < counts.size() - 1) {
-            s.append("\t.\n\t.\n\t.\n");
+            s.append("\t...\n");
         }
         return s.toString();
     }
@@ -59,7 +59,7 @@ public class Counter<T> {
     public int count(T t) {
         return (int) get(t);
     }
-    public double importance(T t) {
+    public double countDouble(T t) {
         return get(t);
     }
 
@@ -67,7 +67,7 @@ public class Counter<T> {
         return counts.values().stream().mapToInt(Double::intValue).sum();
     }
 
-    public double totalImportance() {
+    public double totalDouble() {
         return counts.values().stream().mapToDouble(Double::doubleValue).sum();
     }
 

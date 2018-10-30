@@ -27,13 +27,17 @@ public class ReadingPhaseExecutor {
         //
 
         Dataset d = Cache.DatasetCache.read(DatasetName.WIKIMID);
-        System.out.println(d);
         Clusters c = Cache.ClustersWikiMidCache.readCategories();
-        System.out.println(c);
-        System.out.println(c.stats(d, "BNCAT:EN:Swedish_DJs"));
-        WikiPageMapping w = Cache.WikiMappingCache.read();
-        System.out.println(w.stats());
+        System.out.println(c.stats(d, "BNCAT:EN:Swedish_DJs", 10));
+
+        System.out.println(
+        );
+        System.out.println(c.getCluster("37962832"));
+//        WikiPageMapping w = Cache.WikiMappingCache.read();
+//        System.out.println(w.stats());
         //
+        System.out.println(c.clusterInspection(d, "BNCAT:EN:Swedish_people_of_Italian_descent"));
+
 
 
 
