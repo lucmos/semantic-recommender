@@ -20,11 +20,6 @@ public class Dataset implements IndexedSerializable {
     public String toString() {
         return String.format("(name: %s, users: %s, tweets: %s, interest: %s, pages: %s)",
                 name, users.size(), tweets.size(), interests.size(), pages.size());
-
-//        "The users are " + users.size() + "\n" +
-//                "The tweets are " + tweets.size() + "\n" +
-//                "The wikipedia pages are " + pages.size() + "\n" +
-//                "The interests are " + interests.size() + "\n";
     }
 
     public Dataset(DatasetName name, PropReader.Dimension limit) {
@@ -67,6 +62,27 @@ public class Dataset implements IndexedSerializable {
 
     public void addPage(WikiPageModel pg) {
         pages.putIfAbsent(pg.getIdString(), pg);
+    }
+
+
+    public void removeInterest(InterestModel interest) {
+        assert interests.containsKey(interest.getIdString());
+        interests.remove(interest.getIdString());
+    }
+
+    public void removeTweet(TweetModel tw) {
+        assert tweets.containsKey(tw.getIdString());
+        tweets.remove(tw.getIdString());
+    }
+
+    public void removeUser(UserModel usr) {
+        assert users.containsKey(usr.getIdString());
+        users.remove(usr.getIdString());
+    }
+
+    public void removePage(WikiPageModel pg) {
+        assert pages.containsKey(pg.getIdString());
+        pages.remove(pg.getIdString());
     }
 
     public PropReader.Dimension getDimension() {
