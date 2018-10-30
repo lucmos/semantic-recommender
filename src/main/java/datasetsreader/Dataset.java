@@ -11,10 +11,10 @@ public class Dataset implements IndexedSerializable {
     private DatasetName name;
     private PropReader.Dimension dimension;
 
-    private HashMap<Integer, InterestModel> interests;
-    private HashMap<Integer, TweetModel> tweets;
-    private HashMap<Integer, UserModel> users;
-    private HashMap<Integer, WikiPageModel> pages;
+    private HashMap<String, InterestModel> interests;
+    private HashMap<String, TweetModel> tweets;
+    private HashMap<String, UserModel> users;
+    private HashMap<String, WikiPageModel> pages;
 
     @Override
     public String toString() {
@@ -37,36 +37,36 @@ public class Dataset implements IndexedSerializable {
         pages = new HashMap<>();
     }
 
-    public Map<Integer, InterestModel> getInterests() {
+    public Map<String, InterestModel> getInterests() { // TODO: 30/10/18 usa solo interest validi? metodo isValid()
         return interests;
     }
 
-    public Map<Integer, TweetModel> getTweets() {
+    public Map<String, TweetModel> getTweets() {
         return tweets;
     }
 
-    public Map<Integer, UserModel> getUsers() {
+    public Map<String, UserModel> getUsers() {
         return users;
     }
 
-    public Map<Integer, WikiPageModel> getPages() {
+    public Map<String, WikiPageModel> getPages() {
         return pages;
     }
 
     public void addInterest(InterestModel interest) {
-        interests.putIfAbsent(interest.getId(), interest);
+        interests.putIfAbsent(interest.getIdString(), interest);
     }
 
     public void addTweet(TweetModel tw) {
-        tweets.putIfAbsent(tw.getId(), tw);
+        tweets.putIfAbsent(tw.getIdString(), tw);
     }
 
     public void addUser(UserModel usr) {
-        users.putIfAbsent(usr.getId(), usr);
+        users.putIfAbsent(usr.getIdString(), usr);
     }
 
     public void addPage(WikiPageModel pg) {
-        pages.putIfAbsent(pg.getId(), pg);
+        pages.putIfAbsent(pg.getIdString(), pg);
     }
 
     public PropReader.Dimension getDimension() {

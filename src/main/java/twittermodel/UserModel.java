@@ -10,23 +10,23 @@ public class UserModel extends ObjectModel {
     /**
      * The list of user that this user is following
      */
-    private Set<Integer> followOutIds;
+    private Set<String> followOutIds;
 
     /**
      * The list of user that follow this user
      */
-    private Set<Integer> followInIds;
+    private Set<String> followInIds;
 
     /**
      * The list of tweetsIds that this user posted
      */
-    private Set<Integer> tweetsIds;
+    private Set<String> tweetsIds;
 
     /**
      * The list of wikiPagesAboutUserIds associated to this user
      * (taken from the dataset)
      */
-    private Set<Integer> wikiPagesAboutUserIds;
+    private Set<String> wikiPagesAboutUserIds;
 
 
     /**
@@ -34,7 +34,7 @@ public class UserModel extends ObjectModel {
      *
      * Used only for the datsets S2*
      */
-    private Set<Integer> wikiPagesOfLikedItemsIds;
+    private Set<String> wikiPagesOfLikedItemsIds;
 
 
     public UserModel(String id) {
@@ -55,11 +55,11 @@ public class UserModel extends ObjectModel {
     public void addFollowOut(UserModel outFriend) {
         assert outFriend != null;
 
-        if (!outFriend.getFollowInIds().contains(getId())) {
-            assert !this.followOutIds.contains(outFriend.getId());
+        if (!outFriend.getFollowInIds().contains(getIdString())) {
+            assert !this.followOutIds.contains(outFriend.getIdString());
 
-            outFriend.followInIds.add(getId());
-            this.followOutIds.add(outFriend.getId());
+            outFriend.followInIds.add(getIdString());
+            this.followOutIds.add(outFriend.getIdString());
         }
     }
 
@@ -73,7 +73,7 @@ public class UserModel extends ObjectModel {
         assert tweet != null;
 
         tweet.setAuthorId(this);
-        this.tweetsIds.add(tweet.getId());
+        this.tweetsIds.add(tweet.getIdString());
     }
 
     /**
@@ -84,56 +84,56 @@ public class UserModel extends ObjectModel {
     public void addWikiPageAboutUser(WikiPageModel wikiPage) {
         assert wikiPage != null;
 
-        this.wikiPagesAboutUserIds.add(wikiPage.getId());
+        this.wikiPagesAboutUserIds.add(wikiPage.getIdString());
     }
 
     public void addWikiPagesOfLikedItemsIds(WikiPageModel wikiPage) {
         assert wikiPage != null;
 
-        this.wikiPagesAboutUserIds.add(wikiPage.getId());
+        this.wikiPagesAboutUserIds.add(wikiPage.getIdString());
     }
 
-    public Set<Integer> getFollowOutIds() {
+    public Set<String> getFollowOutIds() {
         assert followOutIds != null;
 
         return followOutIds;
     }
 
-    public Set<Integer> getFollowInIds() {
+    public Set<String> getFollowInIds() {
         assert followInIds != null;
 
         return followInIds;
     }
 
-    public Set<Integer> getTweetsIds() {
+    public Set<String> getTweetsIds() {
         assert tweetsIds != null;
 
         return tweetsIds;
     }
 
-    public Set<Integer> getWikiPagesAboutUserIds() {
+    public Set<String> getWikiPagesAboutUserIds() {
         assert wikiPagesAboutUserIds != null;
 
         return wikiPagesAboutUserIds;
     }
 
-    public Set<Integer> getWikiPagesOfLikedItemsIds() {
+    public Set<String> getWikiPagesOfLikedItemsIds() {
         assert wikiPagesOfLikedItemsIds != null;
 
         return wikiPagesOfLikedItemsIds;
     }
 
-    public TweetModel getTweetModel(Map<Integer, TweetModel> tweets, Integer tweetId) {
+    public TweetModel getTweetModel(Map<String, TweetModel> tweets, String tweetId) {
         assert tweets.containsKey(tweetId);
 
         TweetModel tweet = tweets.get(tweetId);
-        assert tweet.getId() == tweetId;
+        assert tweet.getIdString().equals(tweetId);
 
         return tweet;
     }
 
     @Override
     public String toString() {
-        return String.format("(user: %d)", getId());
+        return String.format("(user: %s)", getIdString());
     }
 }

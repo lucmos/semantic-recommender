@@ -3,6 +3,8 @@ package twittermodel;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 /**
  * Models an "interest"
@@ -54,7 +56,7 @@ public class InterestModel extends ObjectModel {
     /**
      * A wikiPageId that describes the interest
      */
-    private int wikiPageId;
+    private String wikiPageId;
 
 
     public InterestModel(String idString) {
@@ -71,7 +73,7 @@ public class InterestModel extends ObjectModel {
     {
         assert wikiPageId != null;
 
-        this.wikiPageId = wikiPageId.getId();
+        this.wikiPageId = wikiPageId.getIdString();
     }
 
     public PlatformType getPlatform() {
@@ -80,24 +82,30 @@ public class InterestModel extends ObjectModel {
         return platform;
     }
 
-    public int getWikiPageId() {
+    public String getWikiPageId() {
         // TODO: 16/10/18 4 interest hanno wikiPageId null
 //        assert wikiPageId != null;
 
         return wikiPageId;
     }
 
-    public WikiPageModel getWikiPageModel(Map<Integer, WikiPageModel> pages) {
+    public WikiPageModel getWikiPageModel(Map<String, WikiPageModel> pages) {
         assert pages.containsKey(wikiPageId);
 
         WikiPageModel page = pages.get(wikiPageId);
-        assert page.getId() == wikiPageId;
+        assert page.getIdString().equals(wikiPageId);
 
         return page;
     }
 
     @Override
     public String toString(){
-        return String.format("(interest: %s {wikipage: %s})", getId(), getWikiPageId());
+        return String.format("(interest: %s {wikipage: %s})", getIdString(), getWikiPageId());
     }
+
+    public boolean isValid() {
+        // TODO: 30/10/18 4 interesti hanno un id, ma non sono associati a nessuna wikipage...
+        return wikiPageId != null;
+    }
+
 }

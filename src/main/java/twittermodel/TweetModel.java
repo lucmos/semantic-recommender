@@ -12,12 +12,12 @@ public class TweetModel extends ObjectModel {
      * The authorId of the tweet.
      * If this object if associated to an user, this field is written.
      */
-    private int authorId;
+    private String authorId;
 
     /**
      * The interested this tweet is talking about
      */
-    private int interestId;
+    private String interestId;
 
     /**
      * The source from which the interestId has been found
@@ -31,7 +31,7 @@ public class TweetModel extends ObjectModel {
     public void setAuthorId(UserModel authorId) {
         assert authorId != null;
 
-        this.authorId = authorId.getId();
+        this.authorId = authorId.getIdString();
     }
 
     public void setInterestUrl(String interestSource) {
@@ -40,14 +40,14 @@ public class TweetModel extends ObjectModel {
         this.interestUrl = interestSource;
     }
 
-    public void setInterestId(InterestModel interestId) {
-        assert interestId != null;
+    public void setInterestId(InterestModel interest) {
+        assert interest != null;
 
-        this.interestId = interestId.getId();
+        this.interestId = interest.getIdString();
     }
 
-    public int getAuthorId() {
-        assert authorId >= 0;
+    public String getAuthorId() {
+        assert authorId != null && !authorId.equals("");
 
         return authorId;
     }
@@ -58,27 +58,32 @@ public class TweetModel extends ObjectModel {
         return interestUrl;
     }
 
-    public int getInterestId() {
-        assert interestId >= 0;
+    public String getInterestId() {
+        assert interestId != null && !interestId.equals("");
 
         return interestId;
     }
 
-    public InterestModel getInterestModel(Map<Integer, InterestModel> interests) {
+    public InterestModel getInterestModel(Map<String, InterestModel> interests) {
         assert interests.containsKey(getInterestId());
 
         InterestModel interest = interests.get(getInterestId());
-        assert interest.getId() == getInterestId();
+        assert interest.getIdString().equals(getInterestId());
 
         return interest;
     }
 
-    public WikiPageModel getWikiPageModel(Map<Integer, InterestModel> interests, Map<Integer, WikiPageModel> pages) {
-        return getInterestModel(interests).getWikiPageModel(pages);
+    public WikiPageModel getWikiPageModel(Map<String, InterestModel> interests, Map<String, WikiPageModel> pages) {
+        InterestModel i = getInterestModel(interests);
+        if (i.isValid()) {
+            return i.getWikiPageModel(pages);
+        } else {
+            return null;
+        }
     }
 
     @Override
     public String toString(){
-        return String.format("(tweet: %d {interestId: %s, interestUrl: %s})", getId(), interestId, interestUrl);
+        return String.format("(tweet: %s {interestId: %s, interestUrl: %s})", getIdString(), interestId, interestUrl);
     }
 }
