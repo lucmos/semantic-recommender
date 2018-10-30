@@ -134,10 +134,10 @@ public class ClusterGenerator {
                 String cat = e.getKey();
                 double tf = userCatCounter.countDouble(cat) / userCatCounter.totalDouble();
                 double idf = idfCache.get(cat);
+                userImpCounter.set(cat, tf * idf);
 //                System.out.println(String.format("t: %s, tot: %s\n tf: %s\n idf: %s \n tf*idf: %s",
 //                        userCatCounter.count(cat), userCatCounter.totalDouble(),
 //                        tf, idf, tf * idf));
-                userImpCounter.set(cat, tf * idf);
             }
 
             userToCounterTFIDF.put(user, userImpCounter);
