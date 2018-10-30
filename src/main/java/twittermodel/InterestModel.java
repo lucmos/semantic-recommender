@@ -74,6 +74,8 @@ public class InterestModel extends ObjectModel {
         assert wikiPageId != null;
 
         this.wikiPageId = wikiPageId.getIdString();
+
+        assert this.wikiPageId != null;
     }
 
     public PlatformType getPlatform() {
@@ -83,8 +85,7 @@ public class InterestModel extends ObjectModel {
     }
 
     public String getWikiPageId() {
-        // TODO: 16/10/18 4 interest hanno wikiPageId null
-//        assert wikiPageId != null;
+        assert wikiPageId != null;
 
         return wikiPageId;
     }
@@ -104,7 +105,6 @@ public class InterestModel extends ObjectModel {
     }
 
     public boolean isValid() {
-        // TODO: 30/10/18 4 interesti hanno un id, ma non sono associati a nessuna wikipage...
         return wikiPageId != null;
     }
 

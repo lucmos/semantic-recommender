@@ -77,6 +77,17 @@ public class UserModel extends ObjectModel {
     }
 
     /**
+     * Adds a tweet to the list of the tweetsIds posted by this user
+     *
+     * @param tweet the tweet to add
+     */
+    public void removeTweet(TweetModel tweet) {
+        assert tweetsIds.contains(tweet.getIdString());
+
+        this.tweetsIds.remove(tweet.getIdString());
+    }
+
+    /**
      * Adds a wikiPage to the list of wikipedia pages related to this user
      *
      * @param wikiPage the wikipedia page to add

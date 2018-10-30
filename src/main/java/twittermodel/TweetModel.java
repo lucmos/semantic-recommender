@@ -75,11 +75,10 @@ public class TweetModel extends ObjectModel {
 
     public WikiPageModel getWikiPageModel(Map<String, InterestModel> interests, Map<String, WikiPageModel> pages) {
         InterestModel i = getInterestModel(interests);
-        if (i.isValid()) {
-            return i.getWikiPageModel(pages);
-        } else {
-            return null;
-        }
+        WikiPageModel p = i.getWikiPageModel(pages);
+
+        assert p != null;
+        return p;
     }
 
     @Override
