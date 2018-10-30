@@ -37,6 +37,13 @@ public class ClusterGenerator {
         this.wikiMap = wikiMap;
     }
 
+    public Clusters loadCategoryClusters() throws Utils.CacheNotPresent {
+        return Cache.ClustersCache.readFromCache(PathConstants.CLUSTERS_CAT);
+    }
+
+    public Clusters loadDomainsClusters() throws Utils.CacheNotPresent {
+        return Cache.ClustersCache.readFromCache(PathConstants.CLUSTERS_DOM);
+    }
 
     public Clusters generateCategoryClusters() {
         Chrono c = new Chrono("Generating category clusters...");
@@ -63,9 +70,10 @@ public class ClusterGenerator {
         HashMap<UserModel, Counter<String>> clusterization = new HashMap<>();
 
         for (UserModel user : dataset.getUsers().values()) {
-            for (Integer tweetID : user.getTweetsIds()) {
+            for (String tweetID : user.getTweetsIds()) {
                 TweetModel tweet = user.getTweetModel(dataset.getTweets(), tweetID);
                 WikiPageModel page = tweet.getWikiPageModel(dataset.getInterests(), dataset.getPages());
+                if (page == null) continue;
 
                 Set<String> possibleClusters = this.wikiMap.getStrings(page, synToClusters);
                 if (possibleClusters == null) {
