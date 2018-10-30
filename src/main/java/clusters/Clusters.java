@@ -59,32 +59,24 @@ public class Clusters implements IndexedSerializable {
     public String toString() {
         return String.format("(clusters: %s {users: %s})", numberOfClusters(), numberOfUsers());
     }
-
-    public String stats(Dataset dataset) {
-        return stats(dataset, clusterToUsers.keySet().stream().limit(1).findFirst().get(), 50);
+    
+    public String report(Dataset dataset, String cluster, int k) {
+        return stats() + clusterDistribution(k) + clusterInspection(dataset, cluster);
     }
 
-    public String stats(Dataset dataset, String cluster) {
-        return stats(dataset, cluster, 50);
-    }
-
-    public String stats(Dataset dataset, String cluster, int k) {
-        int userNum = numberOfUsers();
-
+    public String stats() {
         double[] cluster_sizes = clusterToUsers.values().stream().mapToDouble(Set::size).toArray();
         Statistics stat = new Statistics(cluster_sizes);
 
-        StringBuilder s = new StringBuilder("\n[CLUSTER STATS]\n");
-        s.append(String.format("\t#Users: %s\n", userNum));
-        s.append(stat.report());
+        return "\n[CLUSTER STATS]\n" +
+                String.format("\t#Users: %s\n", numberOfUsers()) +
+                stat.report();
+    }
 
+    public String clusterDistribution(int k) {
         String clustDistr = Counter.fromMap(userToCluster).getDistribution(k);
-        s.append(String.format("\n[CLUSTERS DISTRIBUTION]\n %s", clustDistr));
-
-        s.append(clusterInspection(dataset, cluster));
-
-        return s.toString();
-    }// TODO: 30/10/18 fai report
+        return String.format("\n[CLUSTERS DISTRIBUTION]\n %s\n", clustDistr);
+    }
 
     public String clusterInspection(Dataset dataset, String cluster) {
         StringBuilder s = new StringBuilder();
