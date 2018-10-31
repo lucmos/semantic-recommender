@@ -1,4 +1,5 @@
 package datasetsreader;
+import babelnet.WikiPageMapping;
 import constants.DatasetInfo;
 import constants.DatasetName;
 import properties.Config;
@@ -6,9 +7,8 @@ import twittermodel.*;
 import io.TsvFileReader;
 import utils.Chrono;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 /**
  * This class use a TsvFileReader to read a dataset and describes it building and managing a Dataset object
@@ -59,7 +59,7 @@ public class DatasetReader {
 
         user.addWikiPageAboutUser(wikiPage);
 
-        dataset.addPage(wikiPage);
+        dataset.addWikiPage(wikiPage);
         dataset.addUser(user);
     }
 
@@ -104,7 +104,7 @@ public class DatasetReader {
         interest.setPlatform(InterestModel.PlatformType.fromString(interest_platform_wikipage.get(1)));
         interest.setWikiPageId(page);
 
-        dataset.addPage(page);
+        dataset.addWikiPage(page);
         dataset.addInterest(interest);
     }
 
@@ -138,7 +138,7 @@ public class DatasetReader {
         user.addWikiPagesOfLikedItemsIds(wikiPage);
 
         dataset.addUser(user);
-        dataset.addPage(wikiPage);
+        dataset.addWikiPage(wikiPage);
     }
 
     public  Dataset readDataset() {
@@ -207,7 +207,45 @@ public class DatasetReader {
                 c.millis();
                 break;
         }
+        updateBabelnetInformations();
+    }
 
+    private void updateBabelnetInformations() {
+        Chrono c = new Chrono("Updating babelnet informations...");
+        dataset.getWikiPages().values().forEach(page -> {
+            Set<String> categories = WikiPageMapping.getCategories(page);
+
+            for (String cat : categories) {
+                BabelCategoryModel catModel = modelFactory.getCategory(cat);
+                page.addCategory(catModel);
+                dataset.addCategory(catModel);
+            }
+
+            Set<String> domains = WikiPageMapping.getDomains(page);
+            for (String dom : domains) {
+                BabelDomainModel domainModel = modelFactory.getDomain(dom);
+                page.addBabelDomain(domainModel);
+                dataset.addDomain(domainModel);
+            }
+        });
+
+//        for (WikiPageModel page : dataset.getWikiPages().values()) {
+//            Set<String> categories = WikiPageMapping.getCategories(page);
+//
+//            for (String cat : categories) {
+//                BabelCategoryModel catModel = modelFactory.getCategory(cat);
+//                page.addCategory(catModel);
+//                dataset.addCategory(catModel);
+//            }
+//
+//            Set<String> domains = WikiPageMapping.getDomains(page);
+//            for (String dom : domains) {
+//                BabelDomainModel domainModel = modelFactory.getDomain(dom);
+//                page.addBabelDomain(domainModel);
+//                dataset.addDomain(domainModel);
+//            }
+//        }
+        c.millis();
     }
 
 //    private  void clean_WikiMID(Dataset dataset) {

@@ -27,7 +27,7 @@ public class ModelFactory {
         return res;
     }
 
-    public BabelDomainModel getDoamin(String id) {
+    public BabelDomainModel getDomain(String id) {
         assert id != null && !id.equals("");
 
         if (!dataset.exixstObj(id)) {

@@ -28,25 +28,26 @@ public class ReadingPhaseExecutor {
         //
 
         Dataset d = Cache.DatasetCache.read(DatasetName.WIKIMID);
-        Clusters c = Cache.ClustersWikiMidCache.readCategories();
-        System.out.println(c.report(d, "BNCAT:EN:Swedish_DJs", 10));
+        System.out.println(d.getWikiPages().get(0));
+//        Clusters c = Cache.ClustersWikiMidCache.readCategories();
+//        System.out.println(c.report(d, "BNCAT:EN:Swedish_DJs", 10));
+////
+////        System.out.println(
+////        );
+////        System.out.println(c.getCluster("37962832"));
+//        WikiPageMapping w = Cache.WikiMappingCache.read();
+////        System.out.println(w.clustersStats());
+//        //
+////        System.out.println(c.clusterInspection(d, "BNCAT:EN:Swedish_people_of_Italian_descent"));
 //
-//        System.out.println(
-//        );
-//        System.out.println(c.getCluster("37962832"));
-        WikiPageMapping w = Cache.WikiMappingCache.read();
-//        System.out.println(w.clustersStats());
-        //
-//        System.out.println(c.clusterInspection(d, "BNCAT:EN:Swedish_people_of_Italian_descent"));
-
-        ClustersMeter cm = new ClustersMeter(d, c, w.getPagesToCategories());
-
-        Chrono cr = new Chrono();
-        System.out.println(cm.clustersJaccardSimilarity("BNCAT:EN:Musical_groups_from_Detroit,_Michigan", "BNCAT:EN:Musical_groups_from_Detroit,_Michigan"));
-        System.out.println(cm.clustersJaccardSimilarity("BNCAT:EN:Musical_groups_from_Detroit,_Michigan", "BNCAT:EN:Song_recordings_produced_by_Muff_Winwood"));
-        System.out.println(cm.clustersJaccardSimilarity("BNCAT:EN:English_pop_music_groups", "BNCAT:EN:People_from_Mableton,_Georgia"));
-        System.out.println(cm.clustersJaccardSimilarity("BNCAT:EN:Living_people", "BNCAT:EN:People_from_Mableton,_Georgia"));
-        cr.millis();
+//        ClustersMeter cm = new ClustersMeter(d, c, w.getPagesToCategories());
+//
+//        Chrono cr = new Chrono();
+//        System.out.println(cm.clustersJaccardSimilarity("BNCAT:EN:Musical_groups_from_Detroit,_Michigan", "BNCAT:EN:Musical_groups_from_Detroit,_Michigan"));
+//        System.out.println(cm.clustersJaccardSimilarity("BNCAT:EN:Musical_groups_from_Detroit,_Michigan", "BNCAT:EN:Song_recordings_produced_by_Muff_Winwood"));
+//        System.out.println(cm.clustersJaccardSimilarity("BNCAT:EN:English_pop_music_groups", "BNCAT:EN:People_from_Mableton,_Georgia"));
+//        System.out.println(cm.clustersJaccardSimilarity("BNCAT:EN:Living_people", "BNCAT:EN:People_from_Mableton,_Georgia"));
+//        cr.millis();
 //        WikiPageMapping d = WikiPageMapping.getInstance();
 //        Clusters clu = new ClusterGenerator(d, w).loadCategoryClusters();
 //        clu.clustersStats(d, "")

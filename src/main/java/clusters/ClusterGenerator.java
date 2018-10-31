@@ -26,25 +26,26 @@ public class ClusterGenerator {
         this.wikiMap = wikiMap;
     }
 
-    public Clusters generateCategoryClusters() {
-        Chrono c = new Chrono("Generating category clusters...");
-
-        Clusters clusters = clusterize(this.wikiMap.getPagesToCategories());
-        Utils.savePrettyJson(clusters, ClusterName.CLUSTERS_CAT.getPath(config.dimension(), config.clusterType()));
-
-        c.millis();
-        return clusters;
-    }
-
-    public Clusters generateDomainClusters() {
-        Chrono c = new Chrono("Generating domain clusters...");
-
-        Clusters clusters = clusterize(this.wikiMap.getPagesToDomain());
-        Utils.savePrettyJson(clusters, ClusterName.CLUSTERS_DOM.getPath(config.dimension(), config.clusterType()));
-
-        c.millis();
-        return clusters;
-    }
+    // TODO: 31/10/18 decommenta 
+//    public Clusters generateCategoryClusters() {
+//        Chrono c = new Chrono("Generating category clusters...");
+//
+//        Clusters clusters = clusterize(this.wikiMap.getPagesToCategories());
+//        Utils.savePrettyJson(clusters, ClusterName.CLUSTERS_CAT.getPath(config.dimension(), config.clusterType()));
+//
+//        c.millis();
+//        return clusters;
+//    }
+//
+//    public Clusters generateDomainClusters() {
+//        Chrono c = new Chrono("Generating domain clusters...");
+//
+//        Clusters clusters = clusterize(this.wikiMap.getPagesToDomain());
+//        Utils.savePrettyJson(clusters, ClusterName.CLUSTERS_DOM.getPath(config.dimension(), config.clusterType()));
+//
+//        c.millis();
+//        return clusters;
+//    }
 
     private Clusters clusterize(Map<Integer, Set<String>> pageToCat) {
         Map<UserModel, Counter<String>> userTocatCounter = ClustersUtils.getUserToCatCounter(dataset, pageToCat);

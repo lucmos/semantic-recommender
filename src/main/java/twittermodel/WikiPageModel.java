@@ -53,7 +53,7 @@ public class WikiPageModel extends ObjectModel {
 
     @Override
     public String toString(){
-        return String.format("(wikiPage: %s)", getIdString());
+        return String.format("(wikiPage: %s {categories: %s, domains: %s})", getIdString(), babelCategories.size(), babelDomains.size());
     }
 
     //    Example of wikiname: WIKI:EN:Teru

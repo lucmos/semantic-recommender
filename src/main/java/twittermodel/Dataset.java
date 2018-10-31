@@ -157,8 +157,16 @@ public class Dataset implements IndexedSerializable {
         users.putIfAbsent(usr.getId(), usr);
     }
 
-    public void addPage(WikiPageModel pg) {
+    public void addWikiPage(WikiPageModel pg) {
         wikiPages.putIfAbsent(pg.getId(), pg);
+    }
+
+    public void addCategory(BabelCategoryModel categoryModel) {
+        babelCategories.putIfAbsent(categoryModel.getId(), categoryModel);
+    }
+
+    public void addDomain(BabelDomainModel domainModel) {
+        babelDomains.putIfAbsent(domainModel.getId(), domainModel);
     }
 
 
