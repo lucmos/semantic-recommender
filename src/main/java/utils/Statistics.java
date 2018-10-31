@@ -71,17 +71,32 @@ public class Statistics {
     }
 
     public String report() {
-        return report("%s");
+        return report("total",
+                "unique",
+                "max",
+                "min",
+                "mean",
+                "median",
+                "variance",
+                "stddev");
     }
 
-    public String report(String pattern) {
-        return String.format("\t" + pattern + ": %.3f\n", "total", sum()) +
-                String.format("\t" + pattern + ": %d\n", "unique", size) +
-                String.format("\t" + pattern + ": %.3f\n", "max", max()) +
-                String.format("\t" + pattern + ": %.3f\n", "min", min()) +
-                String.format("\t" + pattern + ": %.3f\n", "mean", mean()) +
-                String.format("\t" + pattern + ": %.3f\n", "median", median()) +
-                String.format("\t" + pattern + ": %.3f\n", "variance", variance()) +
-                String.format("\t" + pattern + ": %.3f\n", "stddev", stdDev());
+    public String report(
+            String totalString,
+            String uniqueString,
+            String maxString,
+            String minString,
+            String meanString,
+            String medianString,
+            String varianceString,
+            String stddevString) {
+        return String.format("\t%s: %.3f\n", totalString, sum()) +
+                String.format("\t%s: %d\n", uniqueString, size) +
+                String.format("\t%s: %.3f\n", maxString, max()) +
+                String.format("\t%s: %.3f\n", minString, min()) +
+                String.format("\t%s: %.3f\n", meanString, mean()) +
+                String.format("\t%s: %.3f\n", medianString, median()) +
+                String.format("\t%s: %.3f\n", varianceString, variance()) +
+                String.format("\t%s: %.3f\n", stddevString, stdDev());
     }
 }
