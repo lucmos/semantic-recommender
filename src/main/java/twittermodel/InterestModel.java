@@ -56,7 +56,7 @@ public class InterestModel extends ObjectModel {
     /**
      * A wikiPageId that describes the interest
      */
-    private String wikiPageId;
+    private int wikiPageId;
 
 
     InterestModel(int seqId, String idString) {
@@ -69,13 +69,10 @@ public class InterestModel extends ObjectModel {
         this.platform = platform;
     }
 
-    public void setWikiPageId(WikiPageModel wikiPageId)
-    {
+    public void setWikiPageId(WikiPageModel wikiPageId) {
         assert wikiPageId != null;
 
-        this.wikiPageId = wikiPageId.getIdString();
-
-        assert this.wikiPageId != null;
+        this.wikiPageId = wikiPageId.getId();
     }
 
     public PlatformType getPlatform() {
@@ -84,28 +81,23 @@ public class InterestModel extends ObjectModel {
         return platform;
     }
 
-    public String getWikiPageId() {
-        assert wikiPageId != null;
+    public int getWikiPageId() {
+        assert wikiPageId > 0;
 
         return wikiPageId;
     }
 
-    public WikiPageModel getWikiPageModel(Map<String, WikiPageModel> pages) {
+    public WikiPageModel getWikiPageModel(Map<Integer, WikiPageModel> pages) {
         assert pages.containsKey(wikiPageId);
 
         WikiPageModel page = pages.get(wikiPageId);
-        assert page.getIdString().equals(wikiPageId);
+        assert page.getId() == wikiPageId;
 
         return page;
     }
 
     @Override
     public String toString(){
-        return String.format("(interest: %s {wikipage: %s})", getIdString(), getWikiPageId());
+        return String.format("(interest: %s {id: %s, wikipage: %s})", getId(), getIdString(), getWikiPageId());
     }
-
-    public boolean isValid() {
-        return wikiPageId != null;
-    }
-
 }

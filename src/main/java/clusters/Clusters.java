@@ -10,11 +10,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Clusters implements IndexedSerializable {
-    private HashMap<String, String> userToCluster = new HashMap<>();
-    private HashMap<String, Set<String>> clusterToUsers = new HashMap<>();
+    private HashMap<Integer, String> userToCluster = new HashMap<>();
+    private HashMap<String, Set<Integer>> clusterToUsers = new HashMap<>();
 
     public void addUser(UserModel user, String cluster) {
-        String id = user.getIdString();
+        Integer id = user.getId();
 
         assert !userToCluster.containsKey(id);
 
@@ -26,23 +26,23 @@ public class Clusters implements IndexedSerializable {
         clusterToUsers.get(cluster).add(id);
     }
 
-    public Set<String> getUsers(String cluster) {
+    public Set<Integer> getUsers(String cluster) {
         return clusterToUsers.get(cluster);
     }
 
-    public String getCluster(String user) {
+    public String getCluster(Integer user) {
         return userToCluster.get(user);
     }
 
     public String getCluster(UserModel userModel) {
-        return getCluster(userModel.getIdString());
+        return getCluster(userModel.getId());
     }
 
-    public Map<String, Set<String>> getClusterToUsers() {
+    public Map<String, Set<Integer>> getClusterToUsers() {
         return clusterToUsers;
     }
 
-    public Map<String, String> getUserToCluster() {
+    public Map<Integer, String> getUserToCluster() {
         return userToCluster;
     }
 
@@ -80,8 +80,8 @@ public class Clusters implements IndexedSerializable {
     public String clusterInspection(Dataset dataset, String cluster) {
         StringBuilder s = new StringBuilder();
         s.append(String.format("\n[CLUSTER INSPECTION] -> %s\n", cluster));
-        Set<String> users = clusterToUsers.get(cluster);
-        for (String userId : users) {
+        Set<Integer> users = clusterToUsers.get(cluster);
+        for (Integer userId : users) {
             List<String> list = dataset.getUsers().get(userId).getTweetsIds().stream()
                     .map(tweetId ->
                             dataset.getTweets()

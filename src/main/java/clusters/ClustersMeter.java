@@ -16,13 +16,13 @@ public class ClustersMeter {
     private final Dataset dataset;
     private final Map<UserModel, Counter<String>> userToCat;
 
-    public ClustersMeter(Dataset dataset, Clusters clusters, Map<String, Set<String>> pageToCat) {
+    public ClustersMeter(Dataset dataset, Clusters clusters, Map<Integer, Set<String>> pageToCat) {
         this.dataset = dataset;
         this.clusters = clusters;
         this.userToCat = ClustersUtils.getUserToCatCounter(dataset, pageToCat);
     }
 
-    public float usersJaccardSimilarity(String u1, String u2) {
+    public float usersJaccardSimilarity(Integer u1, Integer u2) {
         return usersJaccardSimilarity(dataset.getUser(u1), dataset.getUser(u2));
     }
 
@@ -38,14 +38,14 @@ public class ClustersMeter {
     }
 
     public float clustersJaccardSimilarity(String c1, String c2) {
-        Set<String> cluster1 = clusters.getUsers(c1);
-        Set<String> cluster2 = clusters.getUsers(c2);
+        Set<Integer> cluster1 = clusters.getUsers(c1);
+        Set<Integer> cluster2 = clusters.getUsers(c2);
 
         AtomicDouble sim = new AtomicDouble();
         AtomicInteger i = new AtomicInteger();
 
         cluster1.stream().parallel().forEach(x1 -> cluster2.forEach(x2 -> {
-            if (x1 != x2) { // se sono esattamente gli stessi no!  accade se c1=c2
+            if (!x1.equals(x2)) { // se sono esattamente gli stessi no!  accade se c1=c2
                 sim.addAndGet(usersJaccardSimilarity(x1, x2));
                 i.incrementAndGet();
             }

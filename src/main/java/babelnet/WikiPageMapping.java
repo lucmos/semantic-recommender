@@ -32,7 +32,7 @@ public class WikiPageMapping implements IndexedSerializable {
         }
     }
 
-    private Map<String, String> wikiToSynset = new HashMap<>();
+    private Map<Integer, String> wikiToSynset = new HashMap<>();
     private Map<String, Set<String>> synsetToCategories = new HashMap<>();
     private Map<String, Set<String>> synsetToDomain = new HashMap<>();
 
@@ -59,7 +59,7 @@ public class WikiPageMapping implements IndexedSerializable {
         }
     }
 
-    public Map<String, String> getWikiToSynset() {
+    public Map<Integer, String> getWikiToSynset() {
         return wikiToSynset;
     }
 
@@ -72,20 +72,20 @@ public class WikiPageMapping implements IndexedSerializable {
     }
 
 
-    public Map<String, Set<String>> getPagesToCategories() {
+    public Map<Integer, Set<String>> getPagesToCategories() {
         return mergePagesSynset(synsetToCategories);
     }
 
-    public Map<String, Set<String>> getPagesToDomain() {
+    public Map<Integer, Set<String>> getPagesToDomain() {
         return mergePagesSynset(synsetToDomain);
     }
 
-    public Map<String, Set<String>> mergePagesSynset(Map<String, Set<String>> synsetToCategories) {
-        Map<String, Set<String>> map = new HashMap<>();
+    public Map<Integer, Set<String>> mergePagesSynset(Map<String, Set<String>> synsetToCategories) {
+        Map<Integer, Set<String>> map = new HashMap<>();
 
-        for (Map.Entry<String, String> entry : wikiToSynset.entrySet()) {
+        for (Map.Entry<Integer, String> entry : wikiToSynset.entrySet()) {
             String synKey = entry.getValue();
-            String pageKey = entry.getKey();
+            Integer pageKey = entry.getKey();
 
             if (synsetToCategories.containsKey(synKey)) {
                 map.put(pageKey, synsetToCategories.get(synKey));
@@ -115,7 +115,7 @@ public class WikiPageMapping implements IndexedSerializable {
     }
 
     public String getSynsetID(WikiPageModel pageModel) {
-        String key = pageModel.getIdString();
+        int key = pageModel.getId();
 
         if (!wikiToSynset.containsKey(key)) return null;
 
@@ -126,7 +126,7 @@ public class WikiPageMapping implements IndexedSerializable {
     }
 
     private boolean addSynsetToMap(WikiPageModel page) {
-        if (wikiToSynset.containsKey(page.getIdString())) {
+        if (wikiToSynset.containsKey(page.getId())) {
             return true;
         }
 
@@ -134,7 +134,7 @@ public class WikiPageMapping implements IndexedSerializable {
 
         if (syn != null) {
             String synID = syn.getID().getID();
-            wikiToSynset.put(page.getIdString(), synID);
+            wikiToSynset.put(page.getId(), synID);
 //            System.out.println(synID);
             List<BabelCategory> cat = getCategoriesFromBabelnet(syn);
             if (!cat.isEmpty()) {

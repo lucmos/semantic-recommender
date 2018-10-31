@@ -180,7 +180,7 @@ public class DatasetReader {
                 s.forEach(p -> addRow_friendBased_interest(p, dataset, modelFactory));
                 c.millis();
 
-                clean_WikiMID(dataset);
+//                clean_WikiMID(dataset);
                 break;
 
             case S21:
@@ -210,31 +210,31 @@ public class DatasetReader {
 
     }
 
-    private  void clean_WikiMID(Dataset dataset) {
-        // TODO: 30/10/18 Inutile. 4 interesti con wikipage non usati, non 4 interest senza wikipage... [...] 
-        Chrono c = new Chrono("Cleaning wikimid...");
-        Map<UserModel, Map<TweetModel, InterestModel>> toRemove = new HashMap<>();
-
-        for (UserModel user : dataset.getUsers().values()) {
-            for (String tweetId : user.getTweetsIds()) {
-                TweetModel tweet = user.getTweetModel(dataset.getTweets(), tweetId);
-                InterestModel interest = tweet.getInterestModel(dataset.getInterests());
-
-                if (!interest.isValid()) {
-                    toRemove.putIfAbsent(user, new HashMap<>());
-
-                    Map<TweetModel, InterestModel> m = toRemove.get(user);
-                    m.put(tweet, interest);
-                }
-            }
-        }
-
-        toRemove.forEach((user, y) -> y.forEach((tweet, interest) -> {
-            dataset.removeInterest(interest);
-            dataset.removeTweet(tweet);
-            user.removeTweet(tweet);
-        }));
-
-        c.millis("done (in %s %s)" + String.format(" - [interests deleted: %s]", toRemove.values()));
-    }
+//    private  void clean_WikiMID(Dataset dataset) {
+//        // TODO: 30/10/18 Inutile. 4 interesti con wikipage non usati, non 4 interest senza wikipage... [...]
+//        Chrono c = new Chrono("Cleaning wikimid...");
+//        Map<UserModel, Map<TweetModel, InterestModel>> toRemove = new HashMap<>();
+//
+//        for (UserModel user : dataset.getUsers().values()) {
+//            for (String tweetId : user.getTweetsIds()) {
+//                TweetModel tweet = user.getTweetModel(dataset.getTweets(), tweetId);
+//                InterestModel interest = tweet.getInterestModel(dataset.getInterests());
+//
+//                if (!interest.isValid()) {
+//                    toRemove.putIfAbsent(user, new HashMap<>());
+//
+//                    Map<TweetModel, InterestModel> m = toRemove.get(user);
+//                    m.put(tweet, interest);
+//                }
+//            }
+//        }
+//
+//        toRemove.forEach((user, y) -> y.forEach((tweet, interest) -> {
+//            dataset.removeInterest(interest);
+//            dataset.removeTweet(tweet);
+//            user.removeTweet(tweet);
+//        }));
+//
+//        c.millis("done (in %s %s)" + String.format(" - [interests deleted: %s]", toRemove.values()));
+//    }
 }

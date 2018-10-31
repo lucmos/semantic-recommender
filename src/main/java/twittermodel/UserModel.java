@@ -10,23 +10,23 @@ public class UserModel extends ObjectModel {
     /**
      * The list of user that this user is following
      */
-    private Set<String> followOutIds;
+    private Set<Integer> followOutIds;
 
     /**
      * The list of user that follow this user
      */
-    private Set<String> followInIds;
+    private Set<Integer> followInIds;
 
     /**
      * The list of tweetsIds that this user posted
      */
-    private Set<String> tweetsIds;
+    private Set<Integer> tweetsIds;
 
     /**
      * The list of wikiPagesAboutUserIds associated to this user
      * (taken from the dataset)
      */
-    private Set<String> wikiPagesAboutUserIds;
+    private Set<Integer> wikiPagesAboutUserIds;
 
 
     /**
@@ -34,7 +34,7 @@ public class UserModel extends ObjectModel {
      *
      * Used only for the datsets S2*
      */
-    private Set<String> wikiPagesOfLikedItemsIds;
+    private Set<Integer> wikiPagesOfLikedItemsIds;
 
 
     UserModel(int seqId, String id) {
@@ -55,11 +55,11 @@ public class UserModel extends ObjectModel {
     public void addFollowOut(UserModel outFriend) {
         assert outFriend != null;
 
-        if (!outFriend.getFollowInIds().contains(getIdString())) {
-            assert !this.followOutIds.contains(outFriend.getIdString());
+        if (!outFriend.getFollowInIds().contains(getId())) {
+            assert !this.followOutIds.contains(outFriend.getId());
 
-            outFriend.followInIds.add(getIdString());
-            this.followOutIds.add(outFriend.getIdString());
+            outFriend.followInIds.add(getId());
+            this.followOutIds.add(outFriend.getId());
         }
     }
 
@@ -73,7 +73,7 @@ public class UserModel extends ObjectModel {
         assert tweet != null;
 
         tweet.setAuthorId(this);
-        this.tweetsIds.add(tweet.getIdString());
+        this.tweetsIds.add(tweet.getId());
     }
 
     /**
@@ -82,9 +82,9 @@ public class UserModel extends ObjectModel {
      * @param tweet the tweet to add
      */
     public void removeTweet(TweetModel tweet) {
-        assert tweetsIds.contains(tweet.getIdString());
+        assert tweetsIds.contains(tweet.getId());
 
-        this.tweetsIds.remove(tweet.getIdString());
+        this.tweetsIds.remove(tweet.getId());
     }
 
     /**
@@ -95,50 +95,50 @@ public class UserModel extends ObjectModel {
     public void addWikiPageAboutUser(WikiPageModel wikiPage) {
         assert wikiPage != null;
 
-        this.wikiPagesAboutUserIds.add(wikiPage.getIdString());
+        this.wikiPagesAboutUserIds.add(wikiPage.getId());
     }
 
     public void addWikiPagesOfLikedItemsIds(WikiPageModel wikiPage) {
         assert wikiPage != null;
 
-        this.wikiPagesAboutUserIds.add(wikiPage.getIdString());
+        this.wikiPagesAboutUserIds.add(wikiPage.getId());
     }
 
-    public Set<String> getFollowOutIds() {
+    public Set<Integer> getFollowOutIds() {
         assert followOutIds != null;
 
         return followOutIds;
     }
 
-    public Set<String> getFollowInIds() {
+    public Set<Integer> getFollowInIds() {
         assert followInIds != null;
 
         return followInIds;
     }
 
-    public Set<String> getTweetsIds() {
+    public Set<Integer> getTweetsIds() {
         assert tweetsIds != null;
 
         return tweetsIds;
     }
 
-    public Set<String> getWikiPagesAboutUserIds() {
+    public Set<Integer> getWikiPagesAboutUserIds() {
         assert wikiPagesAboutUserIds != null;
 
         return wikiPagesAboutUserIds;
     }
 
-    public Set<String> getWikiPagesOfLikedItemsIds() {
+    public Set<Integer> getWikiPagesOfLikedItemsIds() {
         assert wikiPagesOfLikedItemsIds != null;
 
         return wikiPagesOfLikedItemsIds;
     }
 
-    public TweetModel getTweetModel(Map<String, TweetModel> tweets, String tweetId) {
+    public TweetModel getTweetModel(Map<Integer, TweetModel> tweets, Integer tweetId) {
         assert tweets.containsKey(tweetId);
 
         TweetModel tweet = tweets.get(tweetId);
-        assert tweet.getIdString().equals(tweetId);
+        assert tweet.getId() == tweetId;
 
         return tweet;
     }

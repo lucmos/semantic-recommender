@@ -20,16 +20,16 @@ public class ClustersUtils {
      *
      * @param pageToCat: may be synToCategory or synToDomain from the wikimapping
      */
-    public static Map<UserModel, Counter<String>> getUserToCatCounter(Dataset dataset, Map<String, Set<String>> pageToCat) {
+    public static Map<UserModel, Counter<String>> getUserToCatCounter(Dataset dataset, Map<Integer, Set<String>> pageToCat) {
         HashMap<UserModel, Counter<String>> userTocatCounter = new HashMap<>();
         System.out.println(dataset);
         for (UserModel user : dataset.getUsers().values()) {
-            for (String tweetID : user.getTweetsIds()) {
+            for (Integer tweetID : user.getTweetsIds()) {
                 TweetModel tweet = user.getTweetModel(dataset.getTweets(), tweetID);
                 WikiPageModel page = tweet.getWikiPageModel(dataset.getInterests(), dataset.getWikiPages());
                 if (page == null) continue; // il synset non aveva associato niente
 
-                Set<String> possibleClusters = pageToCat.get(page.getIdString());
+                Set<String> possibleClusters = pageToCat.get(page.getId());
                 if (possibleClusters == null) {continue;}
 
                 userTocatCounter.putIfAbsent(user, new Counter<>());

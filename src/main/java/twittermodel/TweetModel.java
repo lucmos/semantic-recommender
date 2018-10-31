@@ -12,12 +12,12 @@ public class TweetModel extends ObjectModel {
      * The authorId of the tweet.
      * If this object if associated to an user, this field is written.
      */
-    private String authorId;
+    private int authorId;
 
     /**
      * The interested this tweet is talking about
      */
-    private String interestId;
+    private int interestId;
 
     /**
      * The source from which the interestId has been found
@@ -31,7 +31,7 @@ public class TweetModel extends ObjectModel {
     public void setAuthorId(UserModel authorId) {
         assert authorId != null;
 
-        this.authorId = authorId.getIdString();
+        this.authorId = authorId.getId();
     }
 
     public void setInterestUrl(String interestSource) {
@@ -43,11 +43,11 @@ public class TweetModel extends ObjectModel {
     public void setInterestId(InterestModel interest) {
         assert interest != null;
 
-        this.interestId = interest.getIdString();
+        this.interestId = interest.getId();
     }
 
-    public String getAuthorId() {
-        assert authorId != null && !authorId.equals("");
+    public int getAuthorId() {
+        assert authorId > 0;
 
         return authorId;
     }
@@ -58,22 +58,22 @@ public class TweetModel extends ObjectModel {
         return interestUrl;
     }
 
-    public String getInterestId() {
-        assert interestId != null && !interestId.equals("");
+    public int getInterestId() {
+        assert interestId > 0;
 
         return interestId;
     }
 
-    public InterestModel getInterestModel(Map<String, InterestModel> interests) {
+    public InterestModel getInterestModel(Map<Integer, InterestModel> interests) {
         assert interests.containsKey(getInterestId());
 
         InterestModel interest = interests.get(getInterestId());
-        assert interest.getIdString().equals(getInterestId());
+        assert interest.getId() == getInterestId();
 
         return interest;
     }
 
-    public WikiPageModel getWikiPageModel(Map<String, InterestModel> interests, Map<String, WikiPageModel> pages) {
+    public WikiPageModel getWikiPageModel(Map<Integer, InterestModel> interests, Map<Integer, WikiPageModel> pages) {
         InterestModel i = getInterestModel(interests);
         WikiPageModel p = i.getWikiPageModel(pages);
 

@@ -46,7 +46,7 @@ public class ClusterGenerator {
         return clusters;
     }
 
-    private Clusters clusterize(Map<String, Set<String>> pageToCat) {
+    private Clusters clusterize(Map<Integer, Set<String>> pageToCat) {
         Map<UserModel, Counter<String>> userTocatCounter = ClustersUtils.getUserToCatCounter(dataset, pageToCat);
         switch (config.clusterType()) {
             case MOST_COMMON:
@@ -76,7 +76,7 @@ public class ClusterGenerator {
      * @param userToCounter
      * @return
      */
-    private Map<UserModel, Counter<String>> getUserToCounterTFIDF(Map<String, Set<String>> pageToCat, Map<UserModel, Counter<String>> userToCounter) {
+    private Map<UserModel, Counter<String>> getUserToCounterTFIDF(Map<Integer, Set<String>> pageToCat, Map<UserModel, Counter<String>> userToCounter) {
 
         Counter<String> categories = Counter.fromMultiMap(pageToCat);
 

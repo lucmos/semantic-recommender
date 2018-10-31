@@ -17,10 +17,10 @@ public class Dataset implements IndexedSerializable {
      */
     private OneToOneHash<Integer, String> idMap;
 
-    HashMap<String, InterestModel> interests;
-    HashMap<String, TweetModel> tweets;
-    HashMap<String, UserModel> users;
-    HashMap<String, WikiPageModel> wikiPages;
+    HashMap<Integer, InterestModel> interests;
+    HashMap<Integer, TweetModel> tweets;
+    HashMap<Integer, UserModel> users;
+    HashMap<Integer, WikiPageModel> wikiPages;
 
     @Override
     public String toString() {
@@ -69,86 +69,98 @@ public class Dataset implements IndexedSerializable {
         return index;
     }
 
+    public boolean exixstObj(String id) {
+        return idMap.containsB(id);
+    }
+
+    public String getStringId(int i) {
+        return idMap.getA(i);
+    }
+
+    public int getIntegerId(String s) {
+        return idMap.getB(s);
+    }
+
     public DatasetName getName() {
         return name;
     }
 
 
-    public InterestModel getInterest(String id) { // TODO: 30/10/18 usa solo interest validi? metodo isValid()
+    public InterestModel getInterest(Integer id) {
         assert interests.containsKey(id);
 
         return interests.get(id);
     }
 
-    public TweetModel getTweet(String id) {
+    public TweetModel getTweet(Integer id) {
         assert tweets.containsKey(id);
 
         return tweets.get(id);
     }
 
-    public UserModel getUser(String id) {
+    public UserModel getUser(Integer id) {
         assert users.containsKey(id);
 
         return users.get(id);
     }
 
-    public WikiPageModel getPage(String id) {
+    public WikiPageModel getPage(Integer id) {
         assert wikiPages.containsKey(id);
 
         return wikiPages.get(id);
     }
 
-    public Map<String, InterestModel> getInterests() { // TODO: 30/10/18 usa solo interest validi? metodo isValid()
+    public Map<Integer, InterestModel> getInterests() {
         return interests;
     }
 
-    public Map<String, TweetModel> getTweets() {
+    public Map<Integer, TweetModel> getTweets() {
         return tweets;
     }
 
-    public Map<String, UserModel> getUsers() {
+    public Map<Integer, UserModel> getUsers() {
         return users;
     }
 
-    public Map<String, WikiPageModel> getWikiPages() {
+    public Map<Integer, WikiPageModel> getWikiPages() {
         return wikiPages;
     }
 
     public void addInterest(InterestModel interest) {
-        interests.putIfAbsent(interest.getIdString(), interest);
+        interests.putIfAbsent(interest.getId(), interest);
     }
 
     public void addTweet(TweetModel tw) {
-        tweets.putIfAbsent(tw.getIdString(), tw);
+        tweets.putIfAbsent(tw.getId(), tw);
     }
 
     public void addUser(UserModel usr) {
-        users.putIfAbsent(usr.getIdString(), usr);
+        users.putIfAbsent(usr.getId(), usr);
     }
 
     public void addPage(WikiPageModel pg) {
-        wikiPages.putIfAbsent(pg.getIdString(), pg);
+        wikiPages.putIfAbsent(pg.getId(), pg);
     }
 
 
     public void removeInterest(InterestModel interest) {
-        assert interests.containsKey(interest.getIdString());
-        interests.remove(interest.getIdString());
+        assert interests.containsKey(interest.getId());
+        interests.remove(interest.getId());
     }
 
     public void removeTweet(TweetModel tw) {
-        assert tweets.containsKey(tw.getIdString());
-        tweets.remove(tw.getIdString());
+        assert tweets.containsKey(tw.getId());
+        tweets.remove(tw.getId());
     }
 
     public void removeUser(UserModel usr) {
-        assert users.containsKey(usr.getIdString());
-        users.remove(usr.getIdString());
+        assert users.containsKey(usr.getId());
+        users.remove(usr.getId());
     }
 
     public void removePage(WikiPageModel pg) {
-        assert wikiPages.containsKey(pg.getIdString());
-        wikiPages.remove(pg.getIdString());
+        assert wikiPages.containsKey(pg.getId());
+        wikiPages.remove(pg.getId());
     }
 
     public Config.Dimension getDimension() {

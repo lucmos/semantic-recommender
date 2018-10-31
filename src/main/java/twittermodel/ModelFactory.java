@@ -23,10 +23,11 @@ public class ModelFactory {
     public  UserModel getUser(String id) {
         assert id != null && !id.equals("");
 
-        if (!dataset.users.containsKey(id)) {
-            dataset.users.put(id, new UserModel(dataset.getNextId(id), id));
+        if (!dataset.exixstObj(id)) {
+            int i = dataset.getNextId(id);
+            dataset.users.put(i, new UserModel(i, id));
         }
-        UserModel res = dataset.users.get(id);
+        UserModel res = dataset.users.get(dataset.getIntegerId(id));
 
         assert res != null;
         return res;
@@ -41,10 +42,11 @@ public class ModelFactory {
     public  TweetModel getTweet(String id) {
         assert id != null && !id.equals("");
 
-        if (!dataset.tweets.containsKey(id)) {
-            dataset.tweets.put(id, new TweetModel(dataset.getNextId(id), id));
+        if (!dataset.exixstObj(id)) {
+            int i = dataset.getNextId(id);
+            dataset.tweets.put(i, new TweetModel(i, id));
         }
-        TweetModel res = dataset.tweets.get(id);
+        TweetModel res = dataset.tweets.get(dataset.getIntegerId(id));
 
         assert res != null;
         return res;
@@ -59,10 +61,11 @@ public class ModelFactory {
     public  InterestModel getInterest(String id) {
         assert id != null && !id.equals("");
 
-        if (!dataset.interests.containsKey(id)) {
-            dataset.interests.put(id, new InterestModel(dataset.getNextId(id), id));
+        if (!dataset.exixstObj(id)) {
+            int i = dataset.getNextId(id);
+            dataset.interests.put(i, new InterestModel(i, id));
         }
-        InterestModel res = dataset.interests.get(id);
+        InterestModel res = dataset.interests.get(dataset.getIntegerId(id));
 
         assert res != null;
         return res;
@@ -77,10 +80,11 @@ public class ModelFactory {
     public  WikiPageModel getWikiPage(String name) {
         assert name != null && !name.equals("");
 
-        if (!dataset.wikiPages.containsKey(name)) {
-            dataset.wikiPages.put(name, new WikiPageModel(dataset.getNextId(name), name));
+        if (!dataset.exixstObj(name)) {
+            int i = dataset.getNextId(name);
+            dataset.wikiPages.put(i, new WikiPageModel(i, name));
         }
-        WikiPageModel res = dataset.wikiPages.get(name);
+        WikiPageModel res = dataset.wikiPages.get(dataset.getIntegerId(name));
 
         assert res != null;
         return res;
