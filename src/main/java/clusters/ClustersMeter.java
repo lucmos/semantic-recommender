@@ -1,7 +1,7 @@
 package clusters;
 
 import com.google.common.util.concurrent.AtomicDouble;
-import datasetsreader.Dataset;
+import twittermodel.Dataset;
 import twittermodel.UserModel;
 import utils.Counter;
 

@@ -7,14 +7,12 @@ import java.util.HashMap;
  * If an object with a given identifier already exists, it is simply returned, otherwise it is created.
  */
 public class ModelFactory {
-    private ModelFactory() {
 
+    private final Dataset dataset;
+
+    public ModelFactory(Dataset dataset) {
+        this.dataset = dataset;
     }
-
-    private static HashMap<String, UserModel> users = new HashMap<>();
-    private static HashMap<String, TweetModel> tweets = new HashMap<>();
-    private static HashMap<String, WikiPageModel> wikiPages = new HashMap<>();
-    private static HashMap<String, InterestModel> interests = new HashMap<>();
 
     /**
      * Returns a UserModel with the given id
@@ -22,13 +20,13 @@ public class ModelFactory {
      * @param id the id of the user
      * @return the specified UserModel
      */
-    public static UserModel getUser(String id) {
+    public  UserModel getUser(String id) {
         assert id != null && !id.equals("");
 
-        if (!ModelFactory.users.containsKey(id)) {
-            ModelFactory.users.put(id, new UserModel(id));
+        if (!dataset.users.containsKey(id)) {
+            dataset.users.put(id, new UserModel(dataset.getNextId(id), id));
         }
-        UserModel res = ModelFactory.users.get(id);
+        UserModel res = dataset.users.get(id);
 
         assert res != null;
         return res;
@@ -40,13 +38,13 @@ public class ModelFactory {
      * @param id the id of the tweet
      * @return the specified TweetModel
      */
-    public static TweetModel getTweet(String id) {
+    public  TweetModel getTweet(String id) {
         assert id != null && !id.equals("");
 
-        if (!ModelFactory.tweets.containsKey(id)) {
-            ModelFactory.tweets.put(id, new TweetModel(id));
+        if (!dataset.tweets.containsKey(id)) {
+            dataset.tweets.put(id, new TweetModel(dataset.getNextId(id), id));
         }
-        TweetModel res = ModelFactory.tweets.get(id);
+        TweetModel res = dataset.tweets.get(id);
 
         assert res != null;
         return res;
@@ -58,13 +56,13 @@ public class ModelFactory {
      * @param id the id of the interest
      * @return the specified InterestModel
      */
-    public static InterestModel getInterest(String id) {
+    public  InterestModel getInterest(String id) {
         assert id != null && !id.equals("");
 
-        if (!ModelFactory.interests.containsKey(id)) {
-            ModelFactory.interests.put(id, new InterestModel(id));
+        if (!dataset.interests.containsKey(id)) {
+            dataset.interests.put(id, new InterestModel(dataset.getNextId(id), id));
         }
-        InterestModel res = ModelFactory.interests.get(id);
+        InterestModel res = dataset.interests.get(id);
 
         assert res != null;
         return res;
@@ -76,13 +74,13 @@ public class ModelFactory {
      * @param name the name of the wikipedia page (not the url)
      * @return the specified WikiPageModel
      */
-    public static WikiPageModel getWikiPage(String name) {
+    public  WikiPageModel getWikiPage(String name) {
         assert name != null && !name.equals("");
 
-        if (!ModelFactory.wikiPages.containsKey(name)) {
-            ModelFactory.wikiPages.put(name, new WikiPageModel(name));
+        if (!dataset.wikiPages.containsKey(name)) {
+            dataset.wikiPages.put(name, new WikiPageModel(dataset.getNextId(name), name));
         }
-        WikiPageModel res = ModelFactory.wikiPages.get(name);
+        WikiPageModel res = dataset.wikiPages.get(name);
 
         assert res != null;
         return res;

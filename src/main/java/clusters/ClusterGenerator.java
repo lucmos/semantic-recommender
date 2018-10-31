@@ -2,7 +2,7 @@ package clusters;
 
 import babelnet.WikiPageMapping;
 import constants.ClusterName;
-import datasetsreader.Dataset;
+import twittermodel.Dataset;
 import io.Utils;
 import properties.Config;
 import twittermodel.UserModel;

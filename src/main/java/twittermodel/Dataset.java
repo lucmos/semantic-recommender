@@ -1,25 +1,31 @@
-package datasetsreader;
+package twittermodel;
 
 
 import constants.DatasetName;
 import properties.Config;
-import twittermodel.*;
 import utils.IndexedSerializable;
+import utils.OneToOneHash;
+
 import java.util.*;
 
 public class Dataset implements IndexedSerializable {
     private DatasetName name;
     private Config.Dimension dimension;
 
-    private HashMap<String, InterestModel> interests;
-    private HashMap<String, TweetModel> tweets;
-    private HashMap<String, UserModel> users;
-    private HashMap<String, WikiPageModel> pages;
+    /**
+     * A mapping between an integer identifier and a string one
+     */
+    private OneToOneHash<Integer, String> idMap;
+
+    HashMap<String, InterestModel> interests;
+    HashMap<String, TweetModel> tweets;
+    HashMap<String, UserModel> users;
+    HashMap<String, WikiPageModel> wikiPages;
 
     @Override
     public String toString() {
-        return String.format("(name: %s, users: %s, tweets: %s, interest: %s, pages: %s)",
-                name, users.size(), tweets.size(), interests.size(), pages.size());
+        return String.format("(name: %s, users: %s, tweets: %s, interest: %s, wikiPages: %s)",
+                name, users.size(), tweets.size(), interests.size(), wikiPages.size());
     }
 
     public Dataset(DatasetName name, Config.Dimension limit) {
@@ -29,8 +35,44 @@ public class Dataset implements IndexedSerializable {
         interests = new HashMap<>();
         tweets = new HashMap<>();
         users = new HashMap<>();
-        pages = new HashMap<>();
+        wikiPages = new HashMap<>();
+
+        idMap = new OneToOneHash<>();
     }
+
+    /**
+     * Defines the mapping between the given literal identifier and the generated integer identifier
+     *
+     * @return the mapping, local to each class
+     */
+    private OneToOneHash<Integer, String> getIdMapping() {
+        assert idMap != null;
+
+        return idMap;
+    }
+
+    /**
+     * Finds the next available integer identifier in the current class, and associates it to the literal id
+     * @param idString the literal identifier
+     * @return the integer identifier
+     */
+    public int getNextId(String idString) {
+        assert idString != null && !idString.equals("");
+
+        int index = idMap.size();
+
+        assert !idMap.containsA(index);
+        assert !idMap.containsB(idString);
+
+        idMap.put(index, idString);
+
+        return index;
+    }
+
+    public DatasetName getName() {
+        return name;
+    }
+
 
     public InterestModel getInterest(String id) { // TODO: 30/10/18 usa solo interest validi? metodo isValid()
         assert interests.containsKey(id);
@@ -51,9 +93,9 @@ public class Dataset implements IndexedSerializable {
     }
 
     public WikiPageModel getPage(String id) {
-        assert pages.containsKey(id);
+        assert wikiPages.containsKey(id);
 
-        return pages.get(id);
+        return wikiPages.get(id);
     }
 
     public Map<String, InterestModel> getInterests() { // TODO: 30/10/18 usa solo interest validi? metodo isValid()
@@ -68,8 +110,8 @@ public class Dataset implements IndexedSerializable {
         return users;
     }
 
-    public Map<String, WikiPageModel> getPages() {
-        return pages;
+    public Map<String, WikiPageModel> getWikiPages() {
+        return wikiPages;
     }
 
     public void addInterest(InterestModel interest) {
@@ -85,7 +127,7 @@ public class Dataset implements IndexedSerializable {
     }
 
     public void addPage(WikiPageModel pg) {
-        pages.putIfAbsent(pg.getIdString(), pg);
+        wikiPages.putIfAbsent(pg.getIdString(), pg);
     }
 
 
@@ -105,8 +147,8 @@ public class Dataset implements IndexedSerializable {
     }
 
     public void removePage(WikiPageModel pg) {
-        assert pages.containsKey(pg.getIdString());
-        pages.remove(pg.getIdString());
+        assert wikiPages.containsKey(pg.getIdString());
+        wikiPages.remove(pg.getIdString());
     }
 
     public Config.Dimension getDimension() {

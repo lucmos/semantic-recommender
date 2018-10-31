@@ -1,7 +1,6 @@
 package clusters;
 
-import babelnet.WikiPageMapping;
-import datasetsreader.Dataset;
+import twittermodel.Dataset;
 import twittermodel.TweetModel;
 import twittermodel.UserModel;
 import twittermodel.WikiPageModel;
@@ -27,7 +26,7 @@ public class ClustersUtils {
         for (UserModel user : dataset.getUsers().values()) {
             for (String tweetID : user.getTweetsIds()) {
                 TweetModel tweet = user.getTweetModel(dataset.getTweets(), tweetID);
-                WikiPageModel page = tweet.getWikiPageModel(dataset.getInterests(), dataset.getPages());
+                WikiPageModel page = tweet.getWikiPageModel(dataset.getInterests(), dataset.getWikiPages());
                 if (page == null) continue; // il synset non aveva associato niente
 
                 Set<String> possibleClusters = pageToCat.get(page.getIdString());

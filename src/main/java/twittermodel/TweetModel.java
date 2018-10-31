@@ -24,8 +24,8 @@ public class TweetModel extends ObjectModel {
      */
     private String interestUrl;
 
-    public TweetModel(String id) {
-        super(id);
+    TweetModel(int seqId, String id) {
+        super(seqId, id);
     }
 
     public void setAuthorId(UserModel authorId) {
@@ -83,6 +83,6 @@ public class TweetModel extends ObjectModel {
 
     @Override
     public String toString(){
-        return String.format("(tweet: %s {interestId: %s, interestUrl: %s})", getIdString(), interestId, interestUrl);
+        return String.format("(tweet: #%s {id: %s, interestId: %s, interestUrl: %s})", getId(), getIdString(), interestId, interestUrl);
     }
 }

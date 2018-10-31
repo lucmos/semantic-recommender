@@ -12,7 +12,7 @@ import java.util.Set;
  * @param <K> left key "a"
  * @param <V> right key "b"
  */
-public class OneToOneHash<K, V> implements Map<K,V>, Serializable {
+public class OneToOneHash<K, V>  implements IndexedSerializable {
     private HashMap<K, V> aToB = new HashMap<>();
     private HashMap<V, K> bToA = new HashMap<>();
 
@@ -85,67 +85,16 @@ public class OneToOneHash<K, V> implements Map<K,V>, Serializable {
         return this.aToB + "\n" + this.bToA;
     }
 
-    @Override
     public int size() {
         return aToB.size();
     }
 
-    @Override
     public boolean isEmpty() {
         return aToB.isEmpty();
     }
 
-    @Override
-    public boolean containsKey(Object key) {
-        return aToB.containsKey(key) || bToA.containsKey(key);
-    }
-
-    @Override
-    public boolean containsValue(Object value) {
-        return aToB.containsValue(value) || bToA.containsValue(value);
-    }
-
-    @Override
-    public V get(Object key) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public V put(K keyA, V keyB) {
         this.add(keyA, keyB);
         return null;
-    }
-
-    @Override
-    public V remove(Object key) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void putAll(Map<? extends K, ? extends V> m) {
-        throw new UnsupportedOperationException();
-
-    }
-
-    @Override
-    public void clear() {
-        throw new UnsupportedOperationException();
-
-    }
-
-    @Override
-    public Set<K> keySet() {
-        throw new UnsupportedOperationException();
-
-    }
-
-    @Override
-    public Collection<V> values() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public Set<Entry<K, V>> entrySet() {
-        throw new UnsupportedOperationException();
     }
 }

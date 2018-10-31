@@ -1,11 +1,10 @@
 package executors;
 
 import babelnet.WikiPageMapping;
-import clusters.ClusterGenerator;
 import clusters.Clusters;
 import clusters.ClustersMeter;
 import constants.DatasetName;
-import datasetsreader.Dataset;
+import twittermodel.Dataset;
 
 import io.Cache;
 import io.Utils;

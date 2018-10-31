@@ -1,6 +1,6 @@
 package clusters;
 
-import datasetsreader.Dataset;
+import twittermodel.Dataset;
 import twittermodel.UserModel;
 import utils.Counter;
 import utils.IndexedSerializable;
@@ -86,7 +86,7 @@ public class Clusters implements IndexedSerializable {
                     .map(tweetId ->
                             dataset.getTweets()
                                     .get(tweetId)
-                                    .getWikiPageModel(dataset.getInterests(), dataset.getPages())
+                                    .getWikiPageModel(dataset.getInterests(), dataset.getWikiPages())
                                     .toString())
                     .filter(Objects::nonNull)
                     .collect(Collectors.toList());

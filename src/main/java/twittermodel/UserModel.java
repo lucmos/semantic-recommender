@@ -30,15 +30,15 @@ public class UserModel extends ObjectModel {
 
 
     /**
-     * The list of the wiki pages of the items that the user likes.
+     * The list of the wiki wikiPages of the items that the user likes.
      *
      * Used only for the datsets S2*
      */
     private Set<String> wikiPagesOfLikedItemsIds;
 
 
-    public UserModel(String id) {
-        super(id);
+    UserModel(int seqId, String id) {
+        super(seqId, id);
         this.followOutIds = new HashSet<>();
         this.followInIds = new HashSet<>();
         this.tweetsIds = new HashSet<>();
@@ -88,7 +88,7 @@ public class UserModel extends ObjectModel {
     }
 
     /**
-     * Adds a wikiPage to the list of wikipedia pages related to this user
+     * Adds a wikiPage to the list of wikipedia wikiPages related to this user
      *
      * @param wikiPage the wikipedia page to add
      */
@@ -145,6 +145,6 @@ public class UserModel extends ObjectModel {
 
     @Override
     public String toString() {
-        return String.format("(user: %s {tweets: %s, out: %s, in: %s})", getIdString(), tweetsIds.size(), followOutIds.size(), followInIds.size());
+        return String.format("(user: #%s {id: %s, tweets: %s, out: %s, in: %s})", getId(), getIdString(), tweetsIds.size(), followOutIds.size(), followInIds.size());
     }
 }

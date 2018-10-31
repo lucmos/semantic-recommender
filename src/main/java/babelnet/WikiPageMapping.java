@@ -1,7 +1,7 @@
 package babelnet;
 
 import constants.DatasetName;
-import datasetsreader.Dataset;
+import twittermodel.Dataset;
 import io.Cache;
 import io.Utils;
 import it.uniroma1.lcl.babelnet.BabelNet;
@@ -49,12 +49,12 @@ public class WikiPageMapping implements IndexedSerializable {
             Chrono c = new Chrono(String.format("Generating wikipage mapping for %s...", name));
             final int[] notFound = {0};
 
-            d.getPages().forEach((key, value) -> {
+            d.getWikiPages().forEach((key, value) -> {
                 boolean synFound = addSynsetToMap(value);
                 notFound[0] = synFound ? notFound[0] : notFound[0] + 1;
             });
 
-            String counts = String.format("[synsets not found: %s/%s]", notFound[0], d.getPages().size());
+            String counts = String.format("[synsets not found: %s/%s]", notFound[0], d.getWikiPages().size());
             c.millis(String.format("%s - %s", "done (in %s %s)", counts));
         }
     }

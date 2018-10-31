@@ -59,8 +59,8 @@ public class InterestModel extends ObjectModel {
     private String wikiPageId;
 
 
-    public InterestModel(String idString) {
-        super(idString);
+    InterestModel(int seqId, String idString) {
+        super(seqId, idString);
     }
 
     public void setPlatform(PlatformType platform) {

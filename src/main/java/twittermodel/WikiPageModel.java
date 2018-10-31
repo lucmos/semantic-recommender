@@ -9,8 +9,8 @@ import java.util.regex.Pattern;
 public class WikiPageModel extends ObjectModel {
     private static final int NAME_COMPONENTS_NUMBER = 3;
 
-    public WikiPageModel(String name) {
-        super(name);
+    WikiPageModel(int seqId, String name) {
+        super(seqId, name);
     }
 
     /**

@@ -7,7 +7,7 @@ import constants.ClusterName;
 import constants.DatasetName;
 
 import constants.PathConstants;
-import datasetsreader.Dataset;
+import twittermodel.Dataset;
 import datasetsreader.DatasetReader;
 import properties.Config;
 import utils.Chrono;
@@ -63,7 +63,7 @@ public abstract class Cache {
             for (DatasetName name : DatasetName.values()) {
                 Chrono c = new Chrono(String.format("Reading: %s...", name));
 
-                Dataset d = DatasetReader.readDataset(name);
+                Dataset d = new DatasetReader(name).readDataset();
                 DatasetCache.write(name, d);
 
                 c.millis("done (in %s %s) --> " + name + ": " + d);
