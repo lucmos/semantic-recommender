@@ -1,5 +1,7 @@
 package twittermodel;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -9,8 +11,34 @@ import java.util.regex.Pattern;
 public class WikiPageModel extends ObjectModel {
     private static final int NAME_COMPONENTS_NUMBER = 3;
 
+    private Set<Integer> babelCategories;
+    private Set<Integer> babelDomains;
+
+
     WikiPageModel(int seqId, String name) {
         super(seqId, name);
+        this.babelCategories = new HashSet<>();
+        this.babelDomains = new HashSet<>();
+    }
+
+    public Set<Integer> getBabelCategories() {
+        return babelCategories;
+    }
+
+    public Set<Integer> getBabelDomains() {
+        return babelDomains;
+    }
+
+    public void addCategory(BabelCategoryModel categoryModel) {
+        assert categoryModel != null;
+
+        babelCategories.add(categoryModel.getId());
+    }
+
+    public void addBabelDomain(BabelDomainModel domainModel) {
+        assert domainModel != null;
+
+        babelDomains.add(domainModel.getId());
     }
 
     /**

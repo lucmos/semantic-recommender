@@ -14,6 +14,32 @@ public class ModelFactory {
         this.dataset = dataset;
     }
 
+    public BabelCategoryModel getCategory(String id) {
+        assert id != null && !id.equals("");
+
+        if (!dataset.exixstObj(id)) {
+            int i = dataset.getNextId(id);
+            dataset.babelCategories.put(i, new BabelCategoryModel(i, id));
+        }
+        BabelCategoryModel res = dataset.babelCategories.get(dataset.getIntegerId(id));
+
+        assert res != null;
+        return res;
+    }
+
+    public BabelDomainModel getDoamin(String id) {
+        assert id != null && !id.equals("");
+
+        if (!dataset.exixstObj(id)) {
+            int i = dataset.getNextId(id);
+            dataset.babelDomains.put(i, new BabelDomainModel(i, id));
+        }
+        BabelDomainModel res = dataset.babelDomains.get(dataset.getIntegerId(id));
+
+        assert res != null;
+        return res;
+    }
+
     /**
      * Returns a UserModel with the given id
      *

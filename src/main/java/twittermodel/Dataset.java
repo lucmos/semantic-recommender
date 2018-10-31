@@ -2,9 +2,12 @@ package twittermodel;
 
 
 import constants.DatasetName;
+import it.uniroma1.lcl.babelnet.data.BabelCategory;
 import properties.Config;
+import utils.Counter;
 import utils.IndexedSerializable;
 import utils.OneToOneHash;
+import utils.Statistics;
 
 import java.util.*;
 
@@ -21,6 +24,8 @@ public class Dataset implements IndexedSerializable {
     HashMap<Integer, TweetModel> tweets;
     HashMap<Integer, UserModel> users;
     HashMap<Integer, WikiPageModel> wikiPages;
+    HashMap<Integer, BabelCategoryModel> babelCategories;
+    HashMap<Integer, BabelDomainModel> babelDomains;
 
     @Override
     public String toString() {
@@ -36,6 +41,8 @@ public class Dataset implements IndexedSerializable {
         tweets = new HashMap<>();
         users = new HashMap<>();
         wikiPages = new HashMap<>();
+        babelCategories = new HashMap<>();
+        babelDomains = new HashMap<>();
 
         idMap = new OneToOneHash<>();
     }
@@ -104,6 +111,18 @@ public class Dataset implements IndexedSerializable {
         return users.get(id);
     }
 
+    public BabelCategoryModel getCategory(Integer id) {
+        assert babelCategories.containsKey(id);
+
+        return babelCategories.get(id);
+    }
+
+    public BabelDomainModel getDomain(Integer id) {
+        assert babelDomains.containsKey(id);
+
+        return babelDomains.get(id);
+    }
+
     public WikiPageModel getPage(Integer id) {
         assert wikiPages.containsKey(id);
 
@@ -170,4 +189,28 @@ public class Dataset implements IndexedSerializable {
     public void setDimension(Config.Dimension dimension) {
         this.dimension = dimension;
     }
+
+
+    // TODO: 31/10/18 STATISTICHE CATEGORIE E DOMINI, fallo funzionare con la nuova struttura a oggetti.
+//    public String stats() {
+//        return stats(50);
+//    }
+//
+//    public String stats(int k) {
+//        return String.format("\n[WIKIPAGES MAPPING STATS]\n" +
+//                "\tsynsets found: %s\n", wikiToSynset.size()) +
+//                _stats(synsetToDomain, "domains", k).append(_stats(synsetToCategories, "categories", k));
+//    }
+//
+//    private StringBuilder _stats(Map<String, Set<String>> map, String name, int k) {
+//        StringBuilder s = new StringBuilder(String.format("\n[OCCURRENCES OF THE ~ %s ~ ACROSS SYNSETS]\n", name.toUpperCase()));
+//
+//        Counter<String> elements = Counter.fromMultiMap(map);
+//        Statistics stat = new Statistics(elements);
+//
+//        s.append(stat.report());
+//
+//        s.append(String.format("\n[%s DISTRIBUTION]\n%s\n", name.toUpperCase(), elements.getDistribution(k)));
+//        return s;
+//    }
 }
