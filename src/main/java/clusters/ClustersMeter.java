@@ -16,10 +16,10 @@ public class ClustersMeter {
     private final Dataset dataset;
     private final Map<UserModel, Counter<String>> userToCat;
 
-    public ClustersMeter(Dataset dataset, Clusters clusters, Map<String, Set<String>> synToCat) {
+    public ClustersMeter(Dataset dataset, Clusters clusters, Map<String, Set<String>> pageToCat) {
         this.dataset = dataset;
         this.clusters = clusters;
-        this.userToCat = ClustersUtils.getUserToCatCounter(dataset, synToCat);
+        this.userToCat = ClustersUtils.getUserToCatCounter(dataset, pageToCat);
     }
 
     public float usersJaccardSimilarity(String u1, String u2) {

@@ -29,7 +29,7 @@ public class ClusterGenerator {
     public Clusters generateCategoryClusters() {
         Chrono c = new Chrono("Generating category clusters...");
 
-        Clusters clusters = clusterize(this.wikiMap.getSynsetToCategories());
+        Clusters clusters = clusterize(this.wikiMap.getPagesToCategories());
         Utils.savePrettyJson(clusters, ClusterName.CLUSTERS_CAT.getPath(config.dimension(), config.clusterType()));
 
         c.millis();
@@ -39,22 +39,21 @@ public class ClusterGenerator {
     public Clusters generateDomainClusters() {
         Chrono c = new Chrono("Generating domain clusters...");
 
-        Clusters clusters = clusterize(this.wikiMap.getSynsetToDomain());
+        Clusters clusters = clusterize(this.wikiMap.getPagesToDomain());
         Utils.savePrettyJson(clusters, ClusterName.CLUSTERS_DOM.getPath(config.dimension(), config.clusterType()));
 
         c.millis();
         return clusters;
     }
 
-    private Clusters clusterize(Map<String, Set<String>> synToCat) {
-        Map<UserModel, Counter<String>> userTocatCounter = ClustersUtils.getUserToCatCounter(dataset, synToCat);
-
+    private Clusters clusterize(Map<String, Set<String>> pageToCat) {
+        Map<UserModel, Counter<String>> userTocatCounter = ClustersUtils.getUserToCatCounter(dataset, pageToCat);
         switch (config.clusterType()) {
             case MOST_COMMON:
                 return generateCluster(userTocatCounter);
 
             case TF_IDF:
-                return generateCluster(getUserToCounterTFIDF(synToCat, userTocatCounter));
+                return generateCluster(getUserToCounterTFIDF(pageToCat, userTocatCounter));
 
 
         }
@@ -77,18 +76,18 @@ public class ClusterGenerator {
      * @param userToCounter
      * @return
      */
-    private Map<UserModel, Counter<String>> getUserToCounterTFIDF(Map<String, Set<String>> synToCat, Map<UserModel, Counter<String>> userToCounter) {
+    private Map<UserModel, Counter<String>> getUserToCounterTFIDF(Map<String, Set<String>> pageToCat, Map<UserModel, Counter<String>> userToCounter) {
 
-        Counter<String> categories = Counter.fromMultiMap(synToCat);
+        Counter<String> categories = Counter.fromMultiMap(pageToCat);
 
         HashMap<UserModel, Counter<String>> userToCounterTFIDF = new HashMap<>();
 
 //      numero documenti
-        double documents = synToCat.size();
+        double documents = pageToCat.size();
 
 //      calcolo del document frequency (ogni categoria in quanti documenti è?)
         Counter<String> documentFreq = new Counter<>();
-        for (Set<String> doc : synToCat.values()) {
+        for (Set<String> doc : pageToCat.values()) {
             for (String term : doc) {
                 documentFreq.increment(term);
             }
