@@ -4,11 +4,19 @@ import babelnet.WikiPageMapping;
 import clusters.Clusters;
 import clusters.ClustersMeter;
 import constants.DatasetName;
+import it.uniroma1.lcl.babelnet.data.BabelCategory;
+import twittermodel.BabelCategoryModel;
+import twittermodel.BabelDomainModel;
 import twittermodel.Dataset;
 
 import io.Cache;
 import io.Utils;
+import twittermodel.WikiPageModel;
 import utils.Chrono;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Deprecated
@@ -29,6 +37,18 @@ public class ReadingPhaseExecutor {
 
         Dataset d = Cache.DatasetCache.read(DatasetName.WIKIMID);
         System.out.println(d.getWikiPages().get(0));
+
+        Collection<WikiPageModel> set = d.getWikiPages().values();
+        System.out.println(set.size());
+        System.out.println(new HashSet<>(set).size());
+
+        Collection<BabelCategoryModel> s2 = d.getBabelCategories().values();
+        System.out.println(s2.size());
+        System.out.println(new HashSet<>(s2).size());
+
+        Collection<BabelDomainModel> s3 = d.getBabelDomains().values();
+        System.out.println(s3.size());
+        System.out.println(new HashSet<>(s3).size());
 //        Clusters c = Cache.ClustersWikiMidCache.readCategories();
 //        System.out.println(c.report(d, "BNCAT:EN:Swedish_DJs", 10));
 ////

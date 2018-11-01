@@ -145,6 +145,14 @@ public class Dataset implements IndexedSerializable {
         return wikiPages;
     }
 
+    public HashMap<Integer, BabelCategoryModel> getBabelCategories() {
+        return babelCategories;
+    }
+
+    public HashMap<Integer, BabelDomainModel> getBabelDomains() {
+        return babelDomains;
+    }
+
     public void addInterest(InterestModel interest) {
         interests.putIfAbsent(interest.getId(), interest);
     }
