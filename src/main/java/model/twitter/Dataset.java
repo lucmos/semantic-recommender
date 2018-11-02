@@ -158,25 +158,25 @@ public class Dataset extends ObjectCollection {
 
 
     // TODO: 31/10/18 STATISTICHE CATEGORIE E DOMINI, fallo funzionare con la nuova struttura a oggetti.
-//    public String stats() {
-//        return stats(50);
-//    }
-//
-//    public String stats(int k) {
-//        return String.format("\n[WIKIPAGES MAPPING STATS]\n" +
-//                "\tsynsets found: %s\n", wikiToSynset.size()) +
-//                _stats(synsetToDomain, "domains", k).append(_stats(synsetToCategories, "categories", k));
-//    }
-//
-//    private StringBuilder _stats(Map<String, Set<String>> map, String name, int k) {
-//        StringBuilder s = new StringBuilder(String.format("\n[OCCURRENCES OF THE ~ %s ~ ACROSS SYNSETS]\n", name.toUpperCase()));
-//
-//        Counter<String> elements = Counter.fromMultiMap(map);
-//        Statistics stat = new Statistics(elements);
-//
-//        s.append(stat.report());
-//
-//        s.append(String.format("\n[%s DISTRIBUTION]\n%s\n", name.toUpperCase(), elements.getDistribution(k)));
-//        return s;
-//    }
+    public String stats() {
+        return stats(50);
+    }
+
+    public String stats(int k) {
+        return String.format("\n[WIKIPAGES MAPPING STATS]\n" +
+                "\tsynsets found: %s\n", wikiToSynset.size()) +
+                _stats(synsetToDomain, "domains", k).append(_stats(synsetToCategories, "categories", k));
+    }
+
+    private StringBuilder _stats(Map<String, Set<String>> map, String name, int k) {
+        StringBuilder s = new StringBuilder(String.format("\n[OCCURRENCES OF THE ~ %s ~ ACROSS SYNSETS]\n", name.toUpperCase()));
+
+        Counter<String> elements = Counter.fromMultiMap(map);
+        Statistics stat = new Statistics(elements);
+
+        s.append(stat.report());
+
+        s.append(String.format("\n[%s DISTRIBUTION]\n%s\n", name.toUpperCase(), elements.getDistribution(k)));
+        return s;
+    }
 }

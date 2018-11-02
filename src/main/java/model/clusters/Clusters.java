@@ -79,7 +79,7 @@ public class Clusters extends ObjectCollection {
 
         return "[CLUSTER STATS]\n" +
                 stat.report(
-                        "number of users",
+                        "total number of users",
                         "number of clusters",
                         "greatest cluster size",
                         "smallest cluster size",
@@ -94,12 +94,12 @@ public class Clusters extends ObjectCollection {
         String clustDistr = Counter.fromCollection(usersToCluster.values().stream()
                 .map(x -> clusters_index.get(x).getIdString()).collect(Collectors.toList()))
                 .getDistribution(k);
-        return String.format("[CLUSTERS DISTRIBUTION]\n %s", clustDistr);
+        return String.format("[CLUSTERS SIZE DISTRIBUTION]\n %s", clustDistr);
     }
 
     public String clusterInspection(Dataset dataset, Cluster cluster) {
         StringBuilder s = new StringBuilder();
-        s.append(String.format("[CLUSTER INSPECTION] -> %s\n", cluster));
+        s.append(String.format("[INSPECTION OF USERS IN CLUSTER] -> %s\n", cluster));
         Set<Integer> users = cluster.getUserIds();
         for (Integer userId : users) {
             List<String> list = dataset.getUsers().get(userId).getTweetsIds().stream()
