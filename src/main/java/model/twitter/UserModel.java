@@ -1,11 +1,14 @@
 package model.twitter;
 
 
+import it.uniroma1.lcl.babelnet.data.BabelCategory;
 import model.ObjectModel;
+import utils.Counter;
 
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 public class UserModel extends ObjectModel {
@@ -143,6 +146,44 @@ public class UserModel extends ObjectModel {
         assert tweet.getId() == tweetId;
 
         return tweet;
+    }
+
+    public Set<TweetModel> getTweetsModel(Map<Integer, TweetModel> tweets) {
+        return tweetsIds.stream().map(x -> getTweetModel(tweets, x)).collect(Collectors.toSet());
+    }
+
+    public Counter<BabelCategoryModel> getTweetsCategories(Map<Integer,TweetModel> tweets_index,
+                                                          Map<Integer,InterestModel> interest_index,
+                                                          Map<Integer,WikiPageModel> pages_index,
+                                                          Map<Integer,BabelCategoryModel> cat_index) {
+        Counter<BabelCategoryModel> cats = new Counter<>();
+
+        Set<TweetModel> tweets = getTweetsModel(tweets_index);
+        for (TweetModel t : tweets) {
+            WikiPageModel w = t.getWikiPageModel(interest_index, pages_index);
+            for (BabelCategoryModel cat : w.getCategoriesModel(cat_index)) {
+                cats.increment(cat);
+            }
+        }
+
+        return cats;
+    }
+
+    public Counter<BabelDomainModel> getTweetsDomains(Map<Integer,TweetModel> tweets_index,
+                                                          Map<Integer,InterestModel> interest_index,
+                                                          Map<Integer,WikiPageModel> pages_index,
+                                                          Map<Integer,BabelDomainModel> dom_index) {
+        Counter<BabelDomainModel> cats = new Counter<>();
+
+        Set<TweetModel> tweets = getTweetsModel(tweets_index);
+        for (TweetModel t : tweets) {
+            WikiPageModel w = t.getWikiPageModel(interest_index, pages_index);
+            for (BabelDomainModel cat : w.getDomainsModel(dom_index)) {
+                cats.increment(cat);
+            }
+        }
+
+        return cats;
     }
 
     @Override

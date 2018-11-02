@@ -2,10 +2,12 @@ package clusterization;
 
 import babelnet.WikiPageMapping;
 import io.Config;
+import it.uniroma1.lcl.babelnet.data.BabelCategory;
 import model.*;
 import model.clusters.Cluster;
 import model.clusters.ClusterFactory;
 import model.twitter.*;
+import org.apache.lucene.analysis.da.DanishAnalyzer;
 import utils.Counter;
 
 import java.util.HashMap;
@@ -38,6 +40,30 @@ public class ClustersUtils {
 
             case DOMAINS:
                 return dataset.getBabelDomains().values().stream().map(ObjectModel::getIdString).collect(Collectors.toSet()); // TODO: 02/11/18 guarda tipi hash set qui, per sistemare il counter!
+
+            default:
+                throw new RuntimeException("Invalid clusterization.");
+        }
+    }
+
+    public static Counter<String> getUserToCatCounter(Dataset datasaet, UserModel user) {
+        Counter<String> stringCounter = new Counter<>();
+
+        switch (Config.getInstance().clusterOver()) {
+            case CATEGORIES:
+                Counter<BabelCategoryModel> catCounter = user.getTweetsCategories(datasaet.getTweets(), datasaet.getInterests(), datasaet.getWikiPages(), datasaet.getBabelCategories());
+
+                for (BabelCategoryModel b : catCounter.getMap().keySet()) {
+                    stringCounter.increment(b.getIdString());
+                }
+                return stringCounter;
+
+            case DOMAINS:
+                Counter<BabelDomainModel> domCounter = user.getTweetsDomains(datasaet.getTweets(), datasaet.getInterests(), datasaet.getWikiPages(), datasaet.getBabelDomains());
+                for (BabelDomainModel b : domCounter.getMap().keySet()) {
+                    stringCounter.increment(b.getIdString());
+                }
+                return stringCounter;
 
             default:
                 throw new RuntimeException("Invalid clusterization.");

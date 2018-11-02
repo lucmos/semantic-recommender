@@ -66,19 +66,17 @@ public class ClusterGenerator {
      * @return
      */
     private Map<UserModel, Counter<String>> getUserToCounterTFIDF(Map<UserModel, Counter<String>> userToCounter) {
-
         Set<String> cat = ClustersUtils.getCategories(dataset);
-        Counter<String> catCounter = Counter.fromCollection(cat);
 
         HashMap<UserModel, Counter<String>> userToCounterTFIDF = new HashMap<>();
 
-//      numero documenti
-        double documents = cat.size();
+//      numero documenti/utenti
+        double documents = userToCounter.size();
 
-//      calcolo del document frequency (ogni categoria in quanti documenti è?)
+//      calcolo del document frequency (ogni termine/categoria in quanti documenti/utenti è?)
         Counter<String> documentFreq = new Counter<>();
-        for (WikiPageModel page : dataset.getWikiPages().values()) {
-            for (String term : ClustersUtils.getCategories(dataset, page)) {
+        for (UserModel u : dataset.getUsers().values()) {
+            for (String term : ClustersUtils.getUserToCatCounter(dataset, u).getMap().keySet()) {
                 documentFreq.increment(term);
             }
         }
@@ -87,7 +85,7 @@ public class ClusterGenerator {
         HashMap<String, Double> idfCache = new HashMap<>();
         cat.forEach(i -> idfCache.put(i, Math.log(documents / documentFreq.countDouble(i))));
 
-//        Associa ad ogni utente le categire che gli piacciono associate ad una misura di importanza basata sul tf.idf
+//      Associa ad ogni utente le categorie che gli piacciono associate ad una misura di importanza basata sul tf.idf
         for (Map.Entry<UserModel, Counter<String>> entry : userToCounter.entrySet()) {
             UserModel user = entry.getKey();
 
@@ -98,10 +96,13 @@ public class ClusterGenerator {
                 String categ = e.getKey();
                 double tf = userCatCounter.countDouble(categ) / userCatCounter.totalDouble();
                 double idf = idfCache.get(categ);
+//                System.out.println(user);
+//                System.out.println(categ);
+//                System.out.println(tf);
+//                System.out.println(idf);
+//                System.out.println(tf * idf);
+//                System.out.println();
                 userImpCounter.set(categ, tf * idf);
-//                System.out.println(BabelInfo.format("t: %s, tot: %s\n tf: %s\n idf: %s \n tf*idf: %s",
-//                        userCatCounter.count(cat), userCatCounter.totalDouble(),
-//                        tf, idf, tf * idf));
             }
 
             userToCounterTFIDF.put(user, userImpCounter);
