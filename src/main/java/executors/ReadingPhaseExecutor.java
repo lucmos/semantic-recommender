@@ -92,9 +92,8 @@ public class ReadingPhaseExecutor {
 //        System.out.println(ClustersMeter.cosineSimilarity(map.get((UserModel) c.getUsersToCluster().keySet().toArray()[0]), map.get((UserModel) c.getUsersToCluster().keySet().toArray()[1])));
 ////
 //
-        System.out.println(c);
         System.out.println(c.report(d, cf.getCluster("BNCAT:EN:Swedish_DJs"), 10));
-
+        System.out.println(d.tweeetStats());
         ////
 ////        System.out.println(
 ////        );

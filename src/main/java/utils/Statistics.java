@@ -26,6 +26,29 @@ public class Statistics {
         return arr;
     }
 
+    public double minCount() {
+        return count(min());
+    }
+
+    public double maxCount() {
+        return count(max());
+    }
+
+    public double medianCount() {
+        return count(median());
+    }
+
+
+    public double count(double x) {
+        double count = 0;
+        for (double c : data) {
+            if (c == x) {
+                count++;
+            }
+        }
+        return count;
+    }
+
     public double max() {
         double max = data[0];
         for (double m : data) {
@@ -76,9 +99,12 @@ public class Statistics {
         return report("total",
                 "size",
                 "max",
+                "max count",
                 "min",
-                "mean",
+                "min count",
                 "median",
+                "median count",
+                "mean",
                 "variance",
                 "stddev");
     }
@@ -87,9 +113,12 @@ public class Statistics {
             String totalString,
             String sizeString,
             String maxString,
+            String maxCount,
             String minString,
-            String meanString,
+            String minCount,
             String medianString,
+            String medianCount,
+            String meanString,
             String varianceString,
             String stddevString) {
         NumberFormat nf = new DecimalFormat("##.####");
@@ -97,9 +126,12 @@ public class Statistics {
         return String.format("\t%s: %s\n", totalString, nf.format(sum())) +
                 String.format("\t%s: %s\n", sizeString, nf.format(size)) +
                 String.format("\t%s: %s\n", maxString, nf.format(max())) +
+                String.format("\t%s: %s\n", maxCount, nf.format(maxCount())) +
                 String.format("\t%s: %s\n", minString, nf.format(min())) +
-                String.format("\t%s: %s\n", meanString, nf.format(mean())) +
+                String.format("\t%s: %s\n", minCount, nf.format(minCount())) +
                 String.format("\t%s: %s\n", medianString, nf.format(median())) +
+                String.format("\t%s: %s\n", medianCount, nf.format(medianCount())) +
+                String.format("\t%s: %s\n", meanString, nf.format(mean())) +
                 String.format("\t%s: %s\n", varianceString, nf.format(variance())) +
                 String.format("\t%s: %s\n", stddevString, nf.format(stdDev()));
     }

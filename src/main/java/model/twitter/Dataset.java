@@ -4,7 +4,9 @@ package model.twitter;
 import constants.DatasetName;
 import io.Config;
 import model.ObjectCollection;
+import model.clusters.Cluster;
 import utils.IndexedSerializable;
+import utils.Statistics;
 
 import java.util.*;
 
@@ -157,26 +159,48 @@ public class Dataset extends ObjectCollection {
     }
 
 
+    public String tweeetStats() {
+        double[] tweets_sizes = users.values().stream().mapToDouble(x -> x.getTweetsIds().size()).toArray();
+        Statistics stat = new Statistics(tweets_sizes);
+
+        return "[TWEETS STATS]\n" +
+                stat.report(
+                        "total number of tweets",
+                        "total number of users",
+                        "greatest user per #tweets",
+                        "#greatest users per #tweets",
+                        "smallest user per #tweets",
+                        "#smallest user per #tweets",
+                        "median user per #tweets",
+                        "#median users per #tweets",
+                        "mean user per #tweets",
+                        "#tweets per user variance",
+                        "#tweets per user stddev"
+                );
+    }
+
     // TODO: 31/10/18 STATISTICHE CATEGORIE E DOMINI, fallo funzionare con la nuova struttura a oggetti.
-    public String stats() {
-        return stats(50);
-    }
+//    public String stats() {
+//        return stats(50);
+//    }
 
-    public String stats(int k) {
-        return String.format("\n[WIKIPAGES MAPPING STATS]\n" +
-                "\tsynsets found: %s\n", wikiToSynset.size()) +
-                _stats(synsetToDomain, "domains", k).append(_stats(synsetToCategories, "categories", k));
-    }
 
-    private StringBuilder _stats(Map<String, Set<String>> map, String name, int k) {
-        StringBuilder s = new StringBuilder(String.format("\n[OCCURRENCES OF THE ~ %s ~ ACROSS SYNSETS]\n", name.toUpperCase()));
 
-        Counter<String> elements = Counter.fromMultiMap(map);
-        Statistics stat = new Statistics(elements);
-
-        s.append(stat.report());
-
-        s.append(String.format("\n[%s DISTRIBUTION]\n%s\n", name.toUpperCase(), elements.getDistribution(k)));
-        return s;
-    }
+//    public String stats(int k) {
+//        return String.format("\n[WIKIPAGES MAPPING STATS]\n" +
+//                "\tsynsets found: %s\n", wikiToSynset.size()) +
+//                _stats(synsetToDomain, "domains", k).append(_stats(synsetToCategories, "categories", k));
+//    }
+//
+//    private StringBuilder _stats(Map<String, Set<String>> map, String name, int k) {
+//        StringBuilder s = new StringBuilder(String.format("\n[OCCURRENCES OF THE ~ %s ~ ACROSS SYNSETS]\n", name.toUpperCase()));
+//
+//        Counter<String> elements = Counter.fromMultiMap(map);
+//        Statistics stat = new Statistics(elements);
+//
+//        s.append(stat.report());
+//
+//        s.append(String.format("\n[%s DISTRIBUTION]\n%s\n", name.toUpperCase(), elements.getDistribution(k)));
+//        return s;
+//    }
 }

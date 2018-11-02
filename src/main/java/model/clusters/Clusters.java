@@ -79,14 +79,17 @@ public class Clusters extends ObjectCollection {
 
         return "[CLUSTER STATS]\n" +
                 stat.report(
-                        "total number of users",
-                        "number of clusters",
-                        "greatest cluster size",
-                        "smallest cluster size",
-                        "mean cluster size",
-                        "median cluster size",
-                        "cluster size variance",
-                        "cluster size stddev"
+                        "total #users",
+                        "#clusters",
+                        "greatest |cluster|",
+                        "#greatest clusters",
+                        "smallest |cluster|",
+                        "#smallest clusters",
+                        "median |cluster|",
+                        "#median clusters",
+                        "mean |cluster|",
+                        "|cluster| variance",
+                        "|cluster| stddev"
                         );
     }
 
