@@ -1,5 +1,6 @@
 package executors;
 
+import model.clusters.ClusterFactory;
 import model.clusters.Clusters;
 import clusterization.ClustersMeter;
 import clusterization.ClustersUtils;
@@ -48,7 +49,7 @@ public class ReadingPhaseExecutor {
 //        System.out.println(s3.size());
 //        System.out.println(new HashSet<>(s3).size());
 
-//        Dataset d = Cache.DatasetCache.read(DatasetName.WIKIMID);
+        Dataset d = Cache.DatasetCache.read(DatasetName.WIKIMID);
 //        TwitterFactory m = new TwitterFactory(d);
 //
 //        Map<UserModel, Counter<String>> map = ClustersUtils.getUserToCatCounter(d);
@@ -87,11 +88,12 @@ public class ReadingPhaseExecutor {
 //        UserModel u1 = m.getUser(524289);
 //        UserModel u2 = m.getUser(524311);
         Clusters c = Cache.ClustersWikiMidCache.read();
+        ClusterFactory cf = new ClusterFactory(c);
 //        System.out.println(ClustersMeter.cosineSimilarity(map.get((UserModel) c.getUsersToCluster().keySet().toArray()[0]), map.get((UserModel) c.getUsersToCluster().keySet().toArray()[1])));
 ////
 //
         System.out.println(c);
-//        System.out.println(c.report(d, new TwitterFactory(d).getCategory("BNCAT:EN:Swedish_DJs"), 10));
+        System.out.println(c.report(d, cf.getCluster("BNCAT:EN:Swedish_DJs"), 10));
 
         ////
 ////        System.out.println(

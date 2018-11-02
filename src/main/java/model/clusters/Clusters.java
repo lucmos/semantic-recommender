@@ -1,9 +1,13 @@
 package model.clusters;
 
 import model.ObjectCollection;
+import model.twitter.Dataset;
 import model.twitter.UserModel;
+import utils.Counter;
+import utils.Statistics;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Clusters extends ObjectCollection {
 
@@ -14,11 +18,6 @@ public class Clusters extends ObjectCollection {
     public Clusters() {
         clusters_index = new HashMap<>();
         usersToCluster = new HashMap<>();
-    }
-
-    @Override
-    public String toString() {
-        return String.format("(clusters_index: %s)", clusters_index.size());
     }
 
     public Cluster getCluster(Integer clusterId) {
@@ -48,86 +47,72 @@ public class Clusters extends ObjectCollection {
         usersToCluster.put(user.getId(), cluster.getId());
         cluster.addUser(user);
     }
-    //  // TODO: 02/11/18 problema con id? se tolgo e rimuovo
-//    void removeUser(UserModel user, Cluster cluster) {
-//        assert usersToCluster.containsKey(user.getId());
-//
-//        usersToCluster.remove(user.getId());
-//        cluster.removeUser(user);
-//    }
-//
-//    void removeUser(UserModel userModel) {
-//        Cluster c = usersToCluster.get(userModel.getId());
-//        removeUser(userModel, c);
 
-//    }
+    public int numberOfClusters() {
+        return clusters_index.size();
+    }
 
+    public int numberOfUsers() {
+        return usersToCluster.size();
+    }
 
+    @Override
+    public String toString() {
+        return String.format("(clusters: %s {users: %s})", numberOfClusters(), numberOfUsers());
+    }
 
-//
-//    public String getCluster(Integer user) {
-//        return usersToCluster.get(user);
-//    }
-//
-//    public String getCluster(UserModel userModel) {
-//        return getCluster(userModel.getId());
-//    }
-//
-//    public Map<String, Set<Integer>> getClusterToUsers() {
-//        return clusterToUsers;
-//    }
-//
-//    public Map<Integer, String> getUsersToCluster() {
-//        return usersToCluster;
-//    }
-//
-//    public int numberOfClusters() {
-//        return clusterToUsers.size();
-//    }
-//
-//    public int numberOfUsers() {
-//        return usersToCluster.size();
-//    }
-//
-//    @Override
-//    public String toString() {
-//        return String.format("(clusters_index: %s {users: %s})", numberOfClusters(), numberOfUsers());
-//    }
-//
-//    public String report(Dataset dataset, String cluster, int k) {
-//        return clustersStats() + clustersDistribution(k) + clusterInspection(dataset, cluster);
-//    }
-//
-//    public String clustersStats() {
-//        double[] cluster_sizes = clusterToUsers.values().stream().mapToDouble(Set::size).toArray();
-//        Statistics stat = new Statistics(cluster_sizes);
-//
-//        return "\n[CLUSTER STATS]\n" +
-//                String.format("\t#Users: %s\n", numberOfUsers()) +
-//                stat.report();
-//    }
-//
-//    public String clustersDistribution(int k) {
-//        String clustDistr = Counter.fromMap(usersToCluster).getDistribution(k);
-//        return String.format("\n[CLUSTERS DISTRIBUTION]\n %s\n", clustDistr);
-//    }
-//
-//    public String clusterInspection(Dataset dataset, String cluster) {
-//        StringBuilder s = new StringBuilder();
-//        s.append(String.format("\n[CLUSTER INSPECTION] -> %s\n", cluster));
-//        Set<Integer> users = clusterToUsers.get(cluster);
-//        for (Integer userId : users) {
-//            List<String> list = dataset.getUsers().get(userId).getTweetsIds().stream()
-//                    .map(tweetId ->
-//                            dataset.getTweets()
-//                                    .get(tweetId)
-//                                    .getWikiPageModel(dataset.getInterests(), dataset.getWikiPages())
-//                                    .toString())
-//                    .filter(Objects::nonNull)
-//                    .collect(Collectors.toList());
-//            s.append(String.format("\t%s:\t\t%s\n", userId, list));
-//        }
-//        return s.toString();
-//    }
+    public String report(Dataset dataset) {
+        return report(dataset, new ArrayList<>(clusters_index.values()).get(0), 10);
+    }
+
+    public String report(Dataset dataset, ClusterFactory cf, String cluster, int k) {
+        return report(dataset, cf.getCluster(cluster), k);
+    }
+
+    public String report(Dataset dataset, Cluster cluster, int k) {
+        return String.format("%s\n\n%s\n\n%s", clustersStats(), clustersDistribution(k), clusterInspection(dataset, cluster));
+    }
+
+    public String clustersStats() {
+        double[] cluster_sizes = clusters_index.values().stream().mapToDouble(Cluster::size).toArray();
+        Statistics stat = new Statistics(cluster_sizes);
+
+        return "[CLUSTER STATS]\n" +
+                stat.report(
+                        "number of users",
+                        "number of clusters",
+                        "greatest cluster size",
+                        "smallest cluster size",
+                        "mean cluster size",
+                        "median cluster size",
+                        "cluster size variance",
+                        "cluster size stddev"
+                        );
+    }
+
+    public String clustersDistribution(int k) {
+        String clustDistr = Counter.fromCollection(usersToCluster.values().stream()
+                .map(x -> clusters_index.get(x).getIdString()).collect(Collectors.toList()))
+                .getDistribution(k);
+        return String.format("[CLUSTERS DISTRIBUTION]\n %s", clustDistr);
+    }
+
+    public String clusterInspection(Dataset dataset, Cluster cluster) {
+        StringBuilder s = new StringBuilder();
+        s.append(String.format("[CLUSTER INSPECTION] -> %s\n", cluster));
+        Set<Integer> users = cluster.getUserIds();
+        for (Integer userId : users) {
+            List<String> list = dataset.getUsers().get(userId).getTweetsIds().stream()
+                    .map(tweetId ->
+                            dataset.getTweets()
+                                    .get(tweetId)
+                                    .getWikiPageModel(dataset.getInterests(), dataset.getWikiPages())
+                                    .toString())
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());
+            s.append(String.format("\t%s:\t\t%s\n", userId, list));
+        }
+        return s.toString();
+    }
 }
 

@@ -1,5 +1,7 @@
 package utils;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -72,7 +74,7 @@ public class Statistics {
 
     public String report() {
         return report("total",
-                "unique",
+                "size",
                 "max",
                 "min",
                 "mean",
@@ -83,20 +85,22 @@ public class Statistics {
 
     public String report(
             String totalString,
-            String uniqueString,
+            String sizeString,
             String maxString,
             String minString,
             String meanString,
             String medianString,
             String varianceString,
             String stddevString) {
-        return String.format("\t%s: %.3f\n", totalString, sum()) +
-                String.format("\t%s: %d\n", uniqueString, size) +
-                String.format("\t%s: %.3f\n", maxString, max()) +
-                String.format("\t%s: %.3f\n", minString, min()) +
-                String.format("\t%s: %.3f\n", meanString, mean()) +
-                String.format("\t%s: %.3f\n", medianString, median()) +
-                String.format("\t%s: %.3f\n", varianceString, variance()) +
-                String.format("\t%s: %.3f\n", stddevString, stdDev());
+        NumberFormat nf = new DecimalFormat("##.####");
+
+        return String.format("\t%s: %s\n", totalString, nf.format(sum())) +
+                String.format("\t%s: %s\n", sizeString, nf.format(size)) +
+                String.format("\t%s: %s\n", maxString, nf.format(max())) +
+                String.format("\t%s: %s\n", minString, nf.format(min())) +
+                String.format("\t%s: %s\n", meanString, nf.format(mean())) +
+                String.format("\t%s: %s\n", medianString, nf.format(median())) +
+                String.format("\t%s: %s\n", varianceString, nf.format(variance())) +
+                String.format("\t%s: %s\n", stddevString, nf.format(stdDev()));
     }
 }

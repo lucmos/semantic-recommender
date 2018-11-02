@@ -75,8 +75,8 @@ public class ClusterGenerator {
 
 //      calcolo del document frequency (ogni termine/categoria in quanti documenti/utenti è?)
         Counter<String> documentFreq = new Counter<>();
-        for (UserModel u : dataset.getUsers().values()) {
-            for (String term : ClustersUtils.getUserToCatCounter(dataset, u).getMap().keySet()) {
+        for (UserModel u : userToCounter.keySet()) {
+            for (String term : userToCounter.get(u).getMap().keySet()){
                 documentFreq.increment(term);
             }
         }
@@ -98,7 +98,7 @@ public class ClusterGenerator {
                 double idf = idfCache.get(categ);
 //                System.out.println(user);
 //                System.out.println(categ);
-//                System.out.println(tf);
+//                System.out.println(tf + " " +  userCatCounter.countDouble(categ) + " " +  userCatCounter.totalDouble());
 //                System.out.println(idf);
 //                System.out.println(tf * idf);
 //                System.out.println();

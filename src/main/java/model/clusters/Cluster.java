@@ -27,11 +27,9 @@ public class Cluster extends ObjectModel {
         userIds.add(userModel.getId());
     }
 
-//    void removeUser(UserModel userModel) {
-//        assert userIds.contains(userModel.getId());
-//
-//        userIds.remove(userModel.getId());
-//    }
+    public int size() {
+        return userIds.size();
+    }
 
     public Set<Integer> getUserIds() {
         return userIds;
