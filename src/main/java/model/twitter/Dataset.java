@@ -162,15 +162,15 @@ public class Dataset extends ObjectCollection {
     }
 
     public String report() {
-        return String.format("%s\n\n%s\n\n%s\n\n%s\n\n%s\n\n%s\n\n%s\n\n%s\n\n%s\n\n",
+        return String.format("%s\n\n%s\n\n%s\n\n%s\n\n%s\n\n%s\n\n%s\n\n%s\n\n%s",
                 stats(),
                 tweeetStats(),
                 friendStats(),
                 followInStats(),
                 followOutStats(),
                 categoriesStats(),
-                categoriesDistribution(10),
                 domainsStats(),
+                categoriesDistribution(10),
                 domainsDistribution(10));
     }
 
@@ -367,6 +367,4 @@ public class Dataset extends ObjectCollection {
 
         return String.format("[DOMAINS DISTRIBUTION]\n%s\n", catCounter.getDistribution(k));
     }
-
-    // TODO: 02/11/18 distrubuzione: less_common
 }
