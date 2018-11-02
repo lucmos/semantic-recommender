@@ -1,6 +1,5 @@
 package io;
 
-import properties.Config;
 import utils.Chrono;
 
 import java.io.BufferedReader;

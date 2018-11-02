@@ -1,22 +1,18 @@
 package executors;
 
-import babelnet.WikiPageMapping;
-import clusters.Clusters;
-import clusters.ClustersMeter;
+import model.clusters.Clusters;
+import clusterization.ClustersMeter;
+import clusterization.ClustersUtils;
 import constants.DatasetName;
-import it.uniroma1.lcl.babelnet.data.BabelCategory;
-import twittermodel.BabelCategoryModel;
-import twittermodel.BabelDomainModel;
-import twittermodel.Dataset;
 
 import io.Cache;
 import io.Utils;
-import twittermodel.WikiPageModel;
-import utils.Chrono;
+import model.twitter.Dataset;
+import model.twitter.TwitterFactory;
+import model.twitter.UserModel;
+import utils.Counter;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Map;
 
 
 @Deprecated
@@ -35,23 +31,69 @@ public class ReadingPhaseExecutor {
 //        }
         //
 
-        Dataset d = Cache.DatasetCache.read(DatasetName.WIKIMID);
-        System.out.println(d.getWikiPages().get(0));
 
-        Collection<WikiPageModel> set = d.getWikiPages().values();
-        System.out.println(set.size());
-        System.out.println(new HashSet<>(set).size());
+//        System.out.println(d.getBabelCategories().size());
+//        System.out.println(d);
+//        System.out.println(d.getWikiPages().get(0));
+//
+//        Collection<WikiPageModel> set = d.getWikiPages().values();
+//        System.out.println(set.size());
+//        System.out.println(new HashSet<>(set).size());
+//
+//        Collection<BabelCategoryModel> s2 = d.getBabelCategories().values();
+//        System.out.println(s2.size());
+//        System.out.println(new HashSet<>(s2).size());
+//
+//        Collection<BabelDomainModel> s3 = d.getBabelDomains().values();
+//        System.out.println(s3.size());
+//        System.out.println(new HashSet<>(s3).size());
 
-        Collection<BabelCategoryModel> s2 = d.getBabelCategories().values();
-        System.out.println(s2.size());
-        System.out.println(new HashSet<>(s2).size());
-
-        Collection<BabelDomainModel> s3 = d.getBabelDomains().values();
-        System.out.println(s3.size());
-        System.out.println(new HashSet<>(s3).size());
-//        Clusters c = Cache.ClustersWikiMidCache.readCategories();
-//        System.out.println(c.report(d, "BNCAT:EN:Swedish_DJs", 10));
+//        Dataset d = Cache.DatasetCache.read(DatasetName.WIKIMID);
+//        TwitterFactory m = new TwitterFactory(d);
+//
+//        Map<UserModel, Counter<String>> map = ClustersUtils.getUserToCatCounter(d);
 ////
+////        long a = d.getUsers().values().stream()
+////                .filter(x -> x.getTweetsIds().stream()
+////                        .mapToInt(y -> x.getTweetModel(d.getTweets(), y).getWikiPageModel(d.getInterests(), d.getWikiPages()).getBabelCategories().isEmpty() ? 0 : 1).sum() != 0)
+////                .count();
+////
+////        long b = d.getUsers().values().stream()
+////                .filter(x -> x.getTweetsIds().size() != 0)
+////                .count();
+//
+//        System.out.println(String.format("NUMERO DI UTENTI CHE HANNO ALMENO UNA CATEGORIA: %s", a));
+//        System.out.println(String.format("NUMERO DI UTENTI CHE HANNO ALMENO UN TWEET: %s", b));
+//        System.out.println(d.getUsers().size());
+//        System.out.println(map.size());
+
+//        for (UserModel u : map.keySet()) {
+//            assert d.getUsers().containsKey(u.getId());
+//        }
+//
+//        int o = 0;
+//        for (UserModel u : d.getUsers().values()) {
+//            try {
+//                o++;
+////                assert map.containsKey(u);
+//            } catch (Error e) {
+//                System.out.println(u);
+////                assert false;
+//            }
+//        }
+//        System.out.println("Errore "+ o);
+
+
+//        UserModel u1 = m.getUser(524289);
+//        UserModel u2 = m.getUser(524311);
+        Clusters c = Cache.ClustersWikiMidCache.read();
+//        System.out.println(ClustersMeter.cosineSimilarity(map.get((UserModel) c.getUsersToCluster().keySet().toArray()[0]), map.get((UserModel) c.getUsersToCluster().keySet().toArray()[1])));
+////
+//
+        System.out.println(c);
+//        System.out.println(c.report(d, new TwitterFactory(d).getCategory("BNCAT:EN:Swedish_DJs"), 10));
+
+        ////
 ////        System.out.println(
 ////        );
 ////        System.out.println(c.getCluster("37962832"));

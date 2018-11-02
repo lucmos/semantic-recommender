@@ -1,6 +1,6 @@
 package constants;
 
-import properties.Config;
+import io.Config;
 
 /**
  * This enum gathers the paths of the objects that are generated.

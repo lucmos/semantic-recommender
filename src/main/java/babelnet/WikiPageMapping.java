@@ -6,7 +6,7 @@ import it.uniroma1.lcl.babelnet.data.BabelCategory;
 import it.uniroma1.lcl.babelnet.resources.WikipediaID;
 import it.uniroma1.lcl.jlt.util.Language;
 import it.uniroma1.lcl.kb.Domain;
-import twittermodel.WikiPageModel;
+import model.twitter.WikiPageModel;
 import utils.IndexedSerializable;
 
 import java.util.HashMap;

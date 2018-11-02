@@ -10,6 +10,11 @@ public class Counter<T> {
     public Counter() {
     }
 
+    public static <T> Counter<T> fromCollection(Collection<T> collection) {
+        Counter<T> c = new Counter<>();
+        return c.increment(collection);
+    }
+
     public static <E, N, V extends Collection<N>> Counter<N> fromMultiMap(Map<E, V> map) {
         Counter<N> c = new Counter<>();
         for (V value : map.values()) {

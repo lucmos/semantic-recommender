@@ -1,6 +1,6 @@
 package constants;
 
-import properties.Config;
+import io.Config;
 
 public enum DatasetName {
 

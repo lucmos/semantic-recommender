@@ -2,8 +2,6 @@ package io;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import constants.PathConstants;
-import twittermodel.UserModel;
 import utils.IndexedSerializable;
 
 import java.io.*;
@@ -48,12 +46,8 @@ public final class Utils {
         }
     }
 
-    public static <E extends IndexedSerializable> void saveJson(E obj, String path) {
-        saveJson(obj, path, gsonDefault);
-    }
-
-    public static <E extends IndexedSerializable> void savePrettyJson(E obj, String path) {
-        saveJson(obj, path, gsonPretty);
+    public static <E extends IndexedSerializable> void saveJson(E obj, String path, boolean pretty) {
+        saveJson(obj, path, pretty ? gsonPretty : gsonDefault);
     }
 
     @SuppressWarnings("unchecked")
