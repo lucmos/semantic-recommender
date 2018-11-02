@@ -50,7 +50,11 @@ public class ReadingPhaseExecutor {
 //        System.out.println(new HashSet<>(s3).size());
 
         Dataset d = Cache.DatasetCache.read(DatasetName.WIKIMID);
-        System.out.println(d.report());
+//        System.out.println(d.report());
+        System.out.println(d.domainsDistribution(16));
+        System.out.println(d.domainsDistribution(17));
+        System.out.println(d.domainsDistribution(18));
+        System.out.println(d.domainsDistribution(19));
 //        TwitterFactory m = new TwitterFactory(d);
 //
 //        Map<UserModel, Counter<String>> map = ClustersUtils.getUserToCatCounter(d);

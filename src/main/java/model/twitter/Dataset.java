@@ -11,6 +11,7 @@ import utils.IndexedSerializable;
 import utils.Statistics;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Dataset extends ObjectCollection {
     private DatasetName name;
@@ -131,26 +132,26 @@ public class Dataset extends ObjectCollection {
         babelDomains.putIfAbsent(domainModel.getId(), domainModel);
     }
 
-
-    public void removeInterest(InterestModel interest) {
-        assert interests.containsKey(interest.getId());
-        interests.remove(interest.getId());
-    }
-
-    public void removeTweet(TweetModel tw) {
-        assert tweets.containsKey(tw.getId());
-        tweets.remove(tw.getId());
-    }
-
-    public void removeUser(UserModel usr) {
-        assert users.containsKey(usr.getId());
-        users.remove(usr.getId());
-    }
-
-    public void removePage(WikiPageModel pg) {
-        assert wikiPages.containsKey(pg.getId());
-        wikiPages.remove(pg.getId());
-    }
+// TODO: 02/11/18 cannot remove things, or id becomes not coherent.
+//    public void removeInterest(InterestModel interest) {
+//        assert interests.containsKey(interest.getId());
+//        interests.remove(interest.getId());
+//    }
+//
+//    public void removeTweet(TweetModel tw) {
+//        assert tweets.containsKey(tw.getId());
+//        tweets.remove(tw.getId());
+//    }
+//
+//    public void removeUser(UserModel usr) {
+//        assert users.containsKey(usr.getId());
+//        users.remove(usr.getId());
+//    }
+//
+//    public void removePage(WikiPageModel pg) {
+//        assert wikiPages.containsKey(pg.getId());
+//        wikiPages.remove(pg.getId());
+//    }
 
     public Config.Dimension getDimension() {
         return dimension;
@@ -161,7 +162,29 @@ public class Dataset extends ObjectCollection {
     }
 
     public String report() {
-        return String.format("%s\n\n%s\n\n%s\n\n%s\n\n%s\n\n%s\n\n", tweeetStats(), friendStats(), followInStats(), followOutStats(), categoriesStats(), domainsStats());
+        return String.format("%s\n\n%s\n\n%s\n\n%s\n\n%s\n\n%s\n\n%s\n\n%s\n\n%s\n\n",
+                stats(),
+                tweeetStats(),
+                friendStats(),
+                followInStats(),
+                followOutStats(),
+                categoriesStats(),
+                categoriesDistribution(10),
+                domainsStats(),
+                domainsDistribution(10));
+    }
+
+    public String stats(){
+        return String.format("[STATS DATASET %s]\n" +
+                        "\tunique number of users: %s\n" +
+                        "\tunique number of tweets: %s\n" +
+                        "\tunique number of interests: %s\n" +
+                        "\tunique number of wikipages: %s\n" +
+                        "\tunique number of categories: %s\n" +
+                        "\tunique number of domains: %s\n",
+                name.name().toUpperCase(),
+                users.size(), tweets.size(), interests.size(),
+                wikiPages.size(), babelCategories.size(), babelDomains.size());
     }
 
     public String tweeetStats() {
@@ -243,7 +266,6 @@ public class Dataset extends ObjectCollection {
     }
 
     public String categoriesStats() {
-
         StringBuilder s = new StringBuilder();
 
         double[] catUsers = users.values().stream().mapToDouble(x ->
@@ -251,7 +273,7 @@ public class Dataset extends ObjectCollection {
         Statistics stat = new Statistics(catUsers);
         s.append(stat.report(
                 "CATEGORIES STATS PER USER",
-                "total numer of categories",
+                "total number of categories in users",
                 "total number of users",
                 "greatest #categories per user",
                 "#greatest #categories per users",
@@ -270,7 +292,7 @@ public class Dataset extends ObjectCollection {
         stat = new Statistics(catTweet);
         s.append(stat.report(
                 "CATEGORIES STATS PER TWEET",
-                "total numer of categories",
+                "total number of categories in tweets",
                 "total number of tweets",
                 "greatest #categories per tweet",
                 "#greatest #categories per tweets",
@@ -293,7 +315,7 @@ public class Dataset extends ObjectCollection {
         Statistics stat = new Statistics(domUsers);
         s.append(stat.report(
                 "DOMAINS STATS PER USER",
-                "total numer of domains",
+                "total number of domains in users",
                 "total number of users",
                 "greatest #domains per tweet",
                 "#greatest #domains per tweet",
@@ -312,7 +334,7 @@ public class Dataset extends ObjectCollection {
         stat = new Statistics(domTweet);
         s.append(stat.report(
                 "DOMAINS STATS PER TWEET",
-                "total numer of domains",
+                "total number of domains in tweets",
                 "total number of tweets",
                 "greatest #domains per tweet",
                 "#greatest #domains per tweets",
@@ -326,33 +348,25 @@ public class Dataset extends ObjectCollection {
         return s.toString();
     }
 
-//    public String categoriesDistribution() {
-//        Counter<String> catCounter = Counter.fromCollection(
-//                users.values().stream().map(x -> x.getTweetsModel(tweets)).map(y -> y.).map(y -> y.).to)
-//    }
+    public String categoriesDistribution(int k) {
+        Counter<String> catCounter = new Counter<>();
 
-    // TODO: 31/10/18 STATISTICHE CATEGORIE E DOMINI, fallo funzionare con la nuova struttura a oggetti.
-//    public String stats() {
-//        return stats(50);
-//    }
+        for (WikiPageModel page : wikiPages.values()) {
+            catCounter.increment(page.getCategoriesModel(babelCategories).stream().map(ObjectModel::getIdString).collect(Collectors.toSet()));
+        }
 
-
-
-//    public String stats(int k) {
-//        return String.format("\n[WIKIPAGES MAPPING STATS]\n" +
-//                "\tsynsets found: %s\n", wikiToSynset.size()) +
-//                _stats(synsetToDomain, "domains", k).append(_stats(synsetToCategories, "categories", k));
-//    }
-
-    private StringBuilder _stats(Map<String, Set<String>> map, String name, int k) {
-        StringBuilder s = new StringBuilder(String.format("\n[OCCURRENCES OF THE ~ %s ~ ACROSS SYNSETS]\n", name.toUpperCase()));
-
-        Counter<String> elements = Counter.fromMultiMap(map);
-        Statistics stat = new Statistics(elements);
-
-        s.append(stat.report());
-
-        s.append(String.format("\n[%s DISTRIBUTION]\n%s\n", name.toUpperCase(), elements.getDistribution(k)));
-        return s;
+        return String.format("[CATEGORIES DISTRIBUTION]\n%s\n", catCounter.getDistribution(k));
     }
+
+    public String domainsDistribution(int k) {
+        Counter<String> catCounter = new Counter<>();
+
+        for (WikiPageModel page : wikiPages.values()) {
+            catCounter.increment(page.getDomainsModel(babelDomains).stream().map(ObjectModel::getIdString).collect(Collectors.toSet()));
+        }
+
+        return String.format("[DOMAINS DISTRIBUTION]\n%s\n", catCounter.getDistribution(k));
+    }
+
+    // TODO: 02/11/18 distrubuzione: less_common
 }
