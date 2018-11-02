@@ -96,7 +96,8 @@ public class Statistics {
     }
 
     public String report() {
-        return report("total",
+        return report("stats",
+                "total",
                 "size",
                 "max",
                 "max count",
@@ -110,6 +111,7 @@ public class Statistics {
     }
 
     public String report(
+            String title,
             String totalString,
             String sizeString,
             String maxString,
@@ -123,7 +125,8 @@ public class Statistics {
             String stddevString) {
         NumberFormat nf = new DecimalFormat("##.####");
 
-        return String.format("\t%s: %s\n", totalString, nf.format(sum())) +
+        return String.format("[%s]\n", title.toUpperCase()) +
+                String.format("\t%s: %s\n", totalString, nf.format(sum())) +
                 String.format("\t%s: %s\n", sizeString, nf.format(size)) +
                 String.format("\t%s: %s\n", maxString, nf.format(max())) +
                 String.format("\t%s: %s\n", maxCount, nf.format(maxCount())) +

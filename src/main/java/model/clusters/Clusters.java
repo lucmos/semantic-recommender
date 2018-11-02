@@ -77,8 +77,8 @@ public class Clusters extends ObjectCollection {
         double[] cluster_sizes = clusters_index.values().stream().mapToDouble(Cluster::size).toArray();
         Statistics stat = new Statistics(cluster_sizes);
 
-        return "[CLUSTER STATS]\n" +
-                stat.report(
+        return stat.report(
+                        "cluster stats",
                         "total #users",
                         "#clusters",
                         "greatest |cluster|",

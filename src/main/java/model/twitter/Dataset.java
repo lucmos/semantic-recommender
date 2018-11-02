@@ -4,7 +4,9 @@ package model.twitter;
 import constants.DatasetName;
 import io.Config;
 import model.ObjectCollection;
+import model.ObjectModel;
 import model.clusters.Cluster;
+import utils.Counter;
 import utils.IndexedSerializable;
 import utils.Statistics;
 
@@ -163,8 +165,8 @@ public class Dataset extends ObjectCollection {
         double[] tweets_sizes = users.values().stream().mapToDouble(x -> x.getTweetsIds().size()).toArray();
         Statistics stat = new Statistics(tweets_sizes);
 
-        return "[TWEETS STATS]\n" +
-                stat.report(
+        return stat.report(
+                        "TWEETS STATS",
                         "total number of tweets",
                         "total number of users",
                         "greatest user per #tweets",
@@ -179,6 +181,153 @@ public class Dataset extends ObjectCollection {
                 );
     }
 
+    public String friendStats() {
+        double[] in_sizes = users.values().stream().mapToDouble(x -> {
+            HashSet<Integer> s = new HashSet<>(x.getFollowInIds());
+            s.addAll(x.getFollowOutIds());
+            return s.size();
+        }).toArray();
+        Statistics stat = new Statistics(in_sizes);
+
+        return stat.report("FRIEND (IN/OUT) STATS",
+                "total number of friends",
+                "total number of users",
+                "greatest user per #friends",
+                "#greatest users per #friends",
+                "smallest user per #friends",
+                "#smallest user per #friends",
+                "median user per #friends",
+                "#median users per #friends",
+                "mean user per #friends",
+                "#friends per user variance",
+                "#friends per user stddev");
+    }
+
+    public String followInStats() {
+        double[] in_sizes = users.values().stream().mapToDouble(x -> x.getFollowInIds().size()).toArray();
+        Statistics stat = new Statistics(in_sizes);
+
+        return stat.report("FOLLOW-IN STATS",
+                "total number of followIn",
+                "total number of users",
+                "greatest user per #followIn",
+                "#greatest users per #followIn",
+                "smallest user per #followIn",
+                "#smallest user per #followIn",
+                "median user per #followIn",
+                "#median users per #followIn",
+                "mean user per #followIn",
+                "#followIn per user variance",
+                "#followIn per user stddev");
+    }
+
+    public String followOutStats() {
+        double[] in_sizes = users.values().stream().mapToDouble(x -> x.getFollowOutIds().size()).toArray();
+        Statistics stat = new Statistics(in_sizes);
+
+        return stat.report("FOLLOW-OUT STATS",
+                "total number of followOut",
+                "total number of users",
+                "greatest user per #followOut",
+                "#greatest users per #followOut",
+                "smallest user per #followOut",
+                "#smallest user per #followOut",
+                "median user per #followOut",
+                "#median users per #followOut",
+                "mean user per #followOut",
+                "#followOut per user variance",
+                "#followOut per user stddev");
+    }
+
+    public String categoriesStats() {
+
+        StringBuilder s = new StringBuilder();
+
+        double[] catUsers = users.values().stream().mapToDouble(x ->
+                x.getTweetsCategories(tweets, interests, wikiPages, babelCategories).size()).toArray();
+        Statistics stat = new Statistics(catUsers);
+        s.append(stat.report(
+                "[CATEGORIES STATS PER USER]",
+                "total numer of categories",
+                "total number of users",
+                "greatest user per #categories",
+                "#greatest users per #categories",
+                "smallest user per #categories",
+                "#smallest user per #categories",
+                "median user per #categories",
+                "#median users per #categories",
+                "mean user per #categories",
+                "#categories per user variance",
+                "#categories per user stddev"));
+
+        s.append("\n");
+
+        double[] catTweet = tweets.values().stream().mapToDouble(x ->
+                x.getWikiPageModel(interests, wikiPages).getBabelCategories().size()).toArray();
+        stat = new Statistics(catTweet);
+        s.append(stat.report(
+                "[CATEGORIES STATS PER TWEET]",
+                "total numer of categories",
+                "total number of tweets",
+                "greatest tweet per #categories",
+                "#greatest tweets per #categories",
+                "smallest tweet per #categories",
+                "#smallest tweet per #categories",
+                "median tweet per #categories",
+                "#median tweets per #categories",
+                "mean tweet per #categories",
+                "#categories per tweet variance",
+                "#categories per tweet stddev"));
+        return s.toString();
+    }
+
+    public String domainsStats() {
+
+        StringBuilder s = new StringBuilder();
+
+        double[] domUsers = users.values().stream().mapToDouble(x ->
+                x.getTweetsDomains(tweets, interests, wikiPages, getBabelDomains()).size()).toArray();
+        Statistics stat = new Statistics(domUsers);
+        s.append(stat.report(
+                "[DOMAINS STATS PER USER]",
+                "total numer of domains",
+                "total number of users",
+                "greatest user per #domains",
+                "#greatest users per #domains",
+                "smallest user per #domains",
+                "#smallest user per #domains",
+                "median user per #domains",
+                "#median users per #domains",
+                "mean user per #domains",
+                "#domains per user variance",
+                "#domains per user stddev"));
+
+        s.append("\n");
+
+        double[] domTweet = tweets.values().stream().mapToDouble(x ->
+                x.getWikiPageModel(interests, wikiPages).getBabelDomains().size()).toArray();
+        stat = new Statistics(domTweet);
+        s.append(stat.report(
+                "[DOMAINS STATS PER TWEET]",
+                "total numer of domains",
+                "total number of tweets",
+                "greatest tweet per #domains",
+                "#greatest tweets per #domains",
+                "smallest tweet per #domains",
+                "#smallest tweet per #domains",
+                "median tweet per #domains",
+                "#median tweets per #domains",
+                "mean tweet per #domains",
+                "#domains per tweet variance",
+                "#domains per tweet stddev"));
+        return s.toString();
+    }
+
+//    public String categoriesDistribution() {
+//        Counter<String> catCounter = Counter.fromCollection(
+//                users.values().stream().map(x -> x.getTweetsModel(tweets)).map(y -> y.).map(y -> y.).to)
+//    }
+
     // TODO: 31/10/18 STATISTICHE CATEGORIE E DOMINI, fallo funzionare con la nuova struttura a oggetti.
 //    public String stats() {
 //        return stats(50);
@@ -191,16 +340,16 @@ public class Dataset extends ObjectCollection {
 //                "\tsynsets found: %s\n", wikiToSynset.size()) +
 //                _stats(synsetToDomain, "domains", k).append(_stats(synsetToCategories, "categories", k));
 //    }
-//
-//    private StringBuilder _stats(Map<String, Set<String>> map, String name, int k) {
-//        StringBuilder s = new StringBuilder(String.format("\n[OCCURRENCES OF THE ~ %s ~ ACROSS SYNSETS]\n", name.toUpperCase()));
-//
-//        Counter<String> elements = Counter.fromMultiMap(map);
-//        Statistics stat = new Statistics(elements);
-//
-//        s.append(stat.report());
-//
-//        s.append(String.format("\n[%s DISTRIBUTION]\n%s\n", name.toUpperCase(), elements.getDistribution(k)));
-//        return s;
-//    }
+
+    private StringBuilder _stats(Map<String, Set<String>> map, String name, int k) {
+        StringBuilder s = new StringBuilder(String.format("\n[OCCURRENCES OF THE ~ %s ~ ACROSS SYNSETS]\n", name.toUpperCase()));
+
+        Counter<String> elements = Counter.fromMultiMap(map);
+        Statistics stat = new Statistics(elements);
+
+        s.append(stat.report());
+
+        s.append(String.format("\n[%s DISTRIBUTION]\n%s\n", name.toUpperCase(), elements.getDistribution(k)));
+        return s;
+    }
 }
