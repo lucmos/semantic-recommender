@@ -160,6 +160,9 @@ public class Dataset extends ObjectCollection {
         this.dimension = dimension;
     }
 
+    public String report() {
+        return String.format("%s\n\n%s\n\n%s\n\n%s\n\n%s\n\n%s\n\n", tweeetStats(), friendStats(), followInStats(), followOutStats(), categoriesStats(), domainsStats());
+    }
 
     public String tweeetStats() {
         double[] tweets_sizes = users.values().stream().mapToDouble(x -> x.getTweetsIds().size()).toArray();
@@ -169,13 +172,13 @@ public class Dataset extends ObjectCollection {
                         "TWEETS STATS",
                         "total number of tweets",
                         "total number of users",
-                        "greatest user per #tweets",
-                        "#greatest users per #tweets",
-                        "smallest user per #tweets",
-                        "#smallest user per #tweets",
-                        "median user per #tweets",
-                        "#median users per #tweets",
-                        "mean user per #tweets",
+                        "greatest #tweets per user",
+                        "#greatest #tweets per users",
+                        "smallest #tweets per user",
+                        "#smallest #tweets per user",
+                        "median #tweets per user",
+                        "#median #tweets per users",
+                        "mean #tweets per user",
                         "#tweets per user variance",
                         "#tweets per user stddev"
                 );
@@ -192,13 +195,13 @@ public class Dataset extends ObjectCollection {
         return stat.report("FRIEND (IN/OUT) STATS",
                 "total number of friends",
                 "total number of users",
-                "greatest user per #friends",
-                "#greatest users per #friends",
-                "smallest user per #friends",
-                "#smallest user per #friends",
-                "median user per #friends",
-                "#median users per #friends",
-                "mean user per #friends",
+                "greatest #friends per user",
+                "#greatest #friends per users",
+                "smallest #friends per user",
+                "#smallest #friends per user",
+                "median #friends per user",
+                "#median #friends per users",
+                "mean #friends per user",
                 "#friends per user variance",
                 "#friends per user stddev");
     }
@@ -210,13 +213,13 @@ public class Dataset extends ObjectCollection {
         return stat.report("FOLLOW-IN STATS",
                 "total number of followIn",
                 "total number of users",
-                "greatest user per #followIn",
-                "#greatest users per #followIn",
-                "smallest user per #followIn",
-                "#smallest user per #followIn",
-                "median user per #followIn",
-                "#median users per #followIn",
-                "mean user per #followIn",
+                "greatest #followIn per user",
+                "#greatest #followIn per users",
+                "smallest #followIn per user",
+                "#smallest #followIn per user",
+                "median #followIn per user",
+                "#median #followIn per users",
+                "mean #followIn per user",
                 "#followIn per user variance",
                 "#followIn per user stddev");
     }
@@ -228,13 +231,13 @@ public class Dataset extends ObjectCollection {
         return stat.report("FOLLOW-OUT STATS",
                 "total number of followOut",
                 "total number of users",
-                "greatest user per #followOut",
-                "#greatest users per #followOut",
-                "smallest user per #followOut",
-                "#smallest user per #followOut",
-                "median user per #followOut",
-                "#median users per #followOut",
-                "mean user per #followOut",
+                "greatest #followOut per user",
+                "#greatest #followOut per users",
+                "smallest #followOut per user",
+                "#smallest #followOut per user",
+                "median #followOut per user",
+                "#median #followOut per users",
+                "mean #followOut per user",
                 "#followOut per user variance",
                 "#followOut per user stddev");
     }
@@ -247,16 +250,16 @@ public class Dataset extends ObjectCollection {
                 x.getTweetsCategories(tweets, interests, wikiPages, babelCategories).size()).toArray();
         Statistics stat = new Statistics(catUsers);
         s.append(stat.report(
-                "[CATEGORIES STATS PER USER]",
+                "CATEGORIES STATS PER USER",
                 "total numer of categories",
                 "total number of users",
-                "greatest user per #categories",
-                "#greatest users per #categories",
-                "smallest user per #categories",
-                "#smallest user per #categories",
-                "median user per #categories",
-                "#median users per #categories",
-                "mean user per #categories",
+                "greatest #categories per user",
+                "#greatest #categories per users",
+                "smallest #categories per user",
+                "#smallest #categories per user",
+                "median #categories per user",
+                "#median #categories per users",
+                "mean #categories per user",
                 "#categories per user variance",
                 "#categories per user stddev"));
 
@@ -266,16 +269,16 @@ public class Dataset extends ObjectCollection {
                 x.getWikiPageModel(interests, wikiPages).getBabelCategories().size()).toArray();
         stat = new Statistics(catTweet);
         s.append(stat.report(
-                "[CATEGORIES STATS PER TWEET]",
+                "CATEGORIES STATS PER TWEET",
                 "total numer of categories",
                 "total number of tweets",
-                "greatest tweet per #categories",
-                "#greatest tweets per #categories",
-                "smallest tweet per #categories",
-                "#smallest tweet per #categories",
-                "median tweet per #categories",
-                "#median tweets per #categories",
-                "mean tweet per #categories",
+                "greatest #categories per tweet",
+                "#greatest #categories per tweets",
+                "smallest #categories per tweet",
+                "#smallest #categories per tweet",
+                "median #categories per tweet",
+                "#median #categories per tweets",
+                "mean #categories per tweet",
                 "#categories per tweet variance",
                 "#categories per tweet stddev"));
         return s.toString();
@@ -289,16 +292,16 @@ public class Dataset extends ObjectCollection {
                 x.getTweetsDomains(tweets, interests, wikiPages, getBabelDomains()).size()).toArray();
         Statistics stat = new Statistics(domUsers);
         s.append(stat.report(
-                "[DOMAINS STATS PER USER]",
+                "DOMAINS STATS PER USER",
                 "total numer of domains",
                 "total number of users",
-                "greatest user per #domains",
-                "#greatest users per #domains",
-                "smallest user per #domains",
-                "#smallest user per #domains",
-                "median user per #domains",
-                "#median users per #domains",
-                "mean user per #domains",
+                "greatest #domains per tweet",
+                "#greatest #domains per tweet",
+                "smallest #domains per tweet",
+                "#smallest #domains per tweet",
+                "median #domains per tweet",
+                "#median #domains per tweet",
+                "mean #domains per tweet",
                 "#domains per user variance",
                 "#domains per user stddev"));
 
@@ -308,16 +311,16 @@ public class Dataset extends ObjectCollection {
                 x.getWikiPageModel(interests, wikiPages).getBabelDomains().size()).toArray();
         stat = new Statistics(domTweet);
         s.append(stat.report(
-                "[DOMAINS STATS PER TWEET]",
+                "DOMAINS STATS PER TWEET",
                 "total numer of domains",
                 "total number of tweets",
-                "greatest tweet per #domains",
-                "#greatest tweets per #domains",
-                "smallest tweet per #domains",
-                "#smallest tweet per #domains",
-                "median tweet per #domains",
-                "#median tweets per #domains",
-                "mean tweet per #domains",
+                "greatest #domains per tweet",
+                "#greatest #domains per tweets",
+                "smallest #domains per tweet",
+                "#smallest #domains per tweet",
+                "median #domains per tweet",
+                "#median #domains per tweets",
+                "mean #domains per tweet",
                 "#domains per tweet variance",
                 "#domains per tweet stddev"));
         return s.toString();

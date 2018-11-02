@@ -50,6 +50,7 @@ public class ReadingPhaseExecutor {
 //        System.out.println(new HashSet<>(s3).size());
 
         Dataset d = Cache.DatasetCache.read(DatasetName.WIKIMID);
+        System.out.println(d.report());
 //        TwitterFactory m = new TwitterFactory(d);
 //
 //        Map<UserModel, Counter<String>> map = ClustersUtils.getUserToCatCounter(d);
@@ -87,13 +88,13 @@ public class ReadingPhaseExecutor {
 
 //        UserModel u1 = m.getUser(524289);
 //        UserModel u2 = m.getUser(524311);
-        Clusters c = Cache.ClustersWikiMidCache.read();
-        ClusterFactory cf = new ClusterFactory(c);
-//        System.out.println(ClustersMeter.cosineSimilarity(map.get((UserModel) c.getUsersToCluster().keySet().toArray()[0]), map.get((UserModel) c.getUsersToCluster().keySet().toArray()[1])));
+//        Clusters c = Cache.ClustersWikiMidCache.read();
+//        ClusterFactory cf = new ClusterFactory(c);
+////        System.out.println(ClustersMeter.cosineSimilarity(map.get((UserModel) c.getUsersToCluster().keySet().toArray()[0]), map.get((UserModel) c.getUsersToCluster().keySet().toArray()[1])));
+//////
 ////
-//
-        System.out.println(c.report(d, cf.getCluster("BNCAT:EN:Swedish_DJs"), 10));
-        System.out.println(d.tweeetStats());
+//        System.out.println(c.report(d, cf.getCluster("BNCAT:EN:Swedish_DJs"), 10));
+//        System.out.println(d.tweeetStats());
         ////
 ////        System.out.println(
 ////        );
