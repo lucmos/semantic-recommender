@@ -64,7 +64,7 @@ public class Counter<T> {
             s.append("\t...\n");
         }
 
-        for (T e : least) {
+        for (T e : Lists.reverse(least)) {
             s.append(String.format("\t%s\t\t%s\n", e, count(e)));
         }
 
@@ -111,11 +111,11 @@ public class Counter<T> {
     }
 
     public List<T> leastCommon(int k) {
-        return Lists.reverse(counts.entrySet().stream()
+        return counts.entrySet().stream()
                 .sorted(Map.Entry.comparingByValue())
                 .limit(k)
                 .map(Map.Entry::getKey)
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList());
     }
 
     public T mostCommon() {
