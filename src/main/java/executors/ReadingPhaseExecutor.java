@@ -102,7 +102,7 @@ public class ReadingPhaseExecutor {
 ////        System.out.println(
 ////        );
 ////        System.out.println(c.getCluster("37962832"));
-//        WikiPageMapping w = Cache.WikiMappingCache.read();
+//        BabelnetInterface w = Cache.WikiMappingCache.read();
 ////        System.out.println(w.clustersStats());
 //        //
 ////        System.out.println(c.clusterInspection(d, "BNCAT:EN:Swedish_people_of_Italian_descent"));
@@ -115,7 +115,7 @@ public class ReadingPhaseExecutor {
 //        System.out.println(cm.clustersJaccardSimilarity("BNCAT:EN:English_pop_music_groups", "BNCAT:EN:People_from_Mableton,_Georgia"));
 //        System.out.println(cm.clustersJaccardSimilarity("BNCAT:EN:Living_people", "BNCAT:EN:People_from_Mableton,_Georgia"));
 //        cr.millis();
-//        WikiPageMapping d = WikiPageMapping.getInstance();
+//        BabelnetInterface d = BabelnetInterface.getInstance();
 //        Clusters clu = new ClusterGenerator(d, w).loadCategoryClusters();
 //        clu.clustersStats(d, "")
 //        System.out.println(clu.clustersStats(d, "BNCAT:EN:Films_directed_by_Tony_Kaye_(director)"));

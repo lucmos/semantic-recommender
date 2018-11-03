@@ -1,17 +1,11 @@
 package clusterization;
 
-import babelnet.WikiPageMapping;
 import io.Config;
-import it.uniroma1.lcl.babelnet.data.BabelCategory;
 import model.*;
-import model.clusters.Cluster;
-import model.clusters.ClusterFactory;
 import model.twitter.*;
-import org.apache.lucene.analysis.da.DanishAnalyzer;
 import utils.Counter;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;

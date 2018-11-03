@@ -1,5 +1,5 @@
 package datasetsreader;
-import babelnet.WikiPageMapping;
+import babelnet.BabelnetInterface;
 import constants.DatasetInfo;
 import constants.DatasetName;
 import io.Config;
@@ -213,7 +213,7 @@ public class DatasetReader {
     private void updateBabelnetInformations() {
         Chrono c = new Chrono("Updating babelnet informations...");
         dataset.getWikiPages().values().forEach(page -> {
-            Set<String> categories = WikiPageMapping.getCategories(page);
+            Set<String> categories = BabelnetInterface.getCategories(page);
 
             for (String cat : categories) {
                 BabelCategoryModel catModel = twitterFactory.getCategory(cat);
@@ -221,7 +221,7 @@ public class DatasetReader {
                 dataset.addCategory(catModel);
             }
 
-            Set<String> domains = WikiPageMapping.getDomains(page);
+            Set<String> domains = BabelnetInterface.getDomains(page);
             for (String dom : domains) {
                 BabelDomainModel domainModel = twitterFactory.getDomain(dom);
                 page.addBabelDomain(domainModel);
@@ -230,7 +230,7 @@ public class DatasetReader {
         });
 
 //        for (WikiPageModel page : dataset.getWikiPages().values()) {
-//            Set<String> categories = WikiPageMapping.getCategories(page);
+//            Set<String> categories = BabelnetInterface.getCategories(page);
 //
 //            for (String cat : categories) {
 //                BabelCategoryModel catModel = twitterFactory.getCategory(cat);
@@ -238,7 +238,7 @@ public class DatasetReader {
 //                dataset.addCategory(catModel);
 //            }
 //
-//            Set<String> domains = WikiPageMapping.getDomains(page);
+//            Set<String> domains = BabelnetInterface.getDomains(page);
 //            for (String dom : domains) {
 //                BabelDomainModel domainModel = twitterFactory.getDomain(dom);
 //                page.addBabelDomain(domainModel);

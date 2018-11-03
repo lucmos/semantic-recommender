@@ -15,8 +15,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class WikiPageMapping implements IndexedSerializable {
-    private WikiPageMapping() {
+public class BabelnetInterface implements IndexedSerializable {
+    private BabelnetInterface() {
     }
     public static String getSynset(WikiPageModel pageModel) {
         assert pageModel != null;
