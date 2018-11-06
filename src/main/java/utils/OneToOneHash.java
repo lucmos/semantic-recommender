@@ -10,7 +10,6 @@ import java.util.HashMap;
  * @param <K> left key "a"
  * @param <V> right key "b"
  */
-@Deprecated
 public class OneToOneHash<K, V>  implements IndexedSerializable {
     private HashMap<K, V> aToB = new HashMap<>();
     private HashMap<V, K> bToA = new HashMap<>();

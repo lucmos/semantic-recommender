@@ -3,6 +3,7 @@ package model.twitter;
 
 import constants.DatasetName;
 import io.Config;
+import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import model.ObjectCollection;
@@ -358,24 +359,20 @@ public class Dataset extends ObjectCollection {
         s.append("\n");
 
         stats = new double[users.size()];
+        Counter<Integer> userTocatNum = new Counter<>();
+        for (UserModel u : users.values()) {
+            userTocatNum.add(u.getId(), u.getTweetsCategories(tweets, interests, wikiPages, babelCategories).size());
+            userTocatNum.add(u.getId(), u.getWikiPageAboutUserModel(wikiPages).getBabelCategories().size());
+        }
         int index = 0;
         for (UserModel u : users.values()) {
-            int count = 0;
-
             for (UserModel f : u.getFollowOutUserModels(users)) {
-                for (TweetModel t : f.getTweetsModel(tweets)) {
-                    count += t.getWikiPageModel(interests, wikiPages).getBabelCategories().size();
-                }
-
-                if (f.isFamous()) {
-                    count += f.getWikiPageAboutUserModel(wikiPages).getBabelCategories().size();
-                }
+                stats[index] += userTocatNum.get(f.getId());
             }
-            stats[index] = count;
             index++;
         }
-        stat = new Statistics(stats);
 
+        stat = new Statistics(stats);
         s.append(stat.report(
                 "CATEGORIES STATS PER USER IN HIS FOLLOW-OUT (TWEETS + VIP WIKIPAGE)",
                 "total number of categories in follow-out",
@@ -460,22 +457,17 @@ public class Dataset extends ObjectCollection {
 
         s.append("\n");
 
-
         stats = new double[users.size()];
+        Counter<Integer> userTocatNum = new Counter<>();
+        for (UserModel u : users.values()) {
+            userTocatNum.add(u.getId(), u.getTweetsDomains(tweets, interests, wikiPages, babelDomains).size());
+            userTocatNum.add(u.getId(), u.getWikiPageAboutUserModel(wikiPages).getBabelDomains().size());
+        }
         int index = 0;
         for (UserModel u : users.values()) {
-            int count = 0;
-
             for (UserModel f : u.getFollowOutUserModels(users)) {
-                for (TweetModel t : f.getTweetsModel(tweets)) {
-                    count += t.getWikiPageModel(interests, wikiPages).getBabelDomains().size();
-                }
-
-                if (f.isFamous()) {
-                    count += f.getWikiPageAboutUserModel(wikiPages).getBabelDomains().size();
-                }
+                stats[index] += userTocatNum.get(f.getId());
             }
-            stats[index] = count;
             index++;
         }
 
