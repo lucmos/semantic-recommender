@@ -1,8 +1,9 @@
 package model.twitter;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import model.ObjectModel;
 
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -15,17 +16,19 @@ import java.util.stream.Collectors;
 public class WikiPageModel extends ObjectModel {
     private static final int NAME_COMPONENTS_NUMBER = 3;
 
-    private Set<Integer> babelCategories;
-    private Set<Integer> babelDomains;
+    private IntOpenHashSet babelCategories;
+    private IntOpenHashSet babelDomains;
+    private String simpleName;
 
 
     WikiPageModel(int seqId, String name) {
-        super(seqId, name);
-        this.babelCategories = new HashSet<>();
-        this.babelDomains = new HashSet<>();
+        super(seqId);
+        this.babelCategories = new IntOpenHashSet();
+        this.babelDomains = new IntOpenHashSet();
+        this.simpleName = getSimpleName(name);
     }
 
-    public BabelCategoryModel getCategoryModel(Map<Integer, BabelCategoryModel> categories, Integer catID) {
+    public BabelCategoryModel getCategoryModel(Int2ObjectOpenHashMap<BabelCategoryModel> categories, int catID) {
         assert categories.containsKey(catID);
 
         BabelCategoryModel cat = categories.get(catID);
@@ -34,7 +37,7 @@ public class WikiPageModel extends ObjectModel {
         return cat;
     }
 
-    public BabelDomainModel getDomainModel(Map<Integer, BabelDomainModel> domains, Integer domId) {
+    public BabelDomainModel getDomainModel(Int2ObjectOpenHashMap<BabelDomainModel> domains, int domId) {
         assert domains.containsKey(domId);
 
         BabelDomainModel dom = domains.get(domId);
@@ -43,19 +46,19 @@ public class WikiPageModel extends ObjectModel {
         return dom;
     }
 
-    public Set<BabelCategoryModel> getCategoriesModel(Map<Integer, BabelCategoryModel> categories) {
+    public Set<BabelCategoryModel> getCategoriesModel(Int2ObjectOpenHashMap<BabelCategoryModel> categories) {
         return babelCategories.stream().map(x -> getCategoryModel(categories, x)).collect(Collectors.toSet());
     }
 
-    public Set<BabelDomainModel> getDomainsModel(Map<Integer, BabelDomainModel> domains) {
+    public Set<BabelDomainModel> getDomainsModel(Int2ObjectOpenHashMap<BabelDomainModel> domains) {
         return babelDomains.stream().map(x -> getDomainModel(domains, x)).collect(Collectors.toSet());
     }
 
-    public Set<Integer> getBabelCategories() {
+    public IntOpenHashSet getBabelCategories() {
         return babelCategories;
     }
 
-    public Set<Integer> getBabelDomains() {
+    public IntOpenHashSet getBabelDomains() {
         return babelDomains;
     }
 
@@ -71,26 +74,26 @@ public class WikiPageModel extends ObjectModel {
         babelDomains.add(domainModel.getId());
     }
 
+    @Override
+    public String toString(){
+        return String.format("(wikiPage: %s {categories: %s, domains: %s})", simpleName, babelCategories.size(), babelDomains.size());
+    }
+
+    //    Example of wikiname: WIKI:EN:Teru
+
     /**
      * Rebuilds the url from the name
      * @return the unique url of this page
      */
-    public String getURL() {
-        String[] parts = this.getIdString().split(":");
+    public String getURL(String name) {
+        String[] parts = name.split(":");
         assert parts.length == WikiPageModel.NAME_COMPONENTS_NUMBER;
         return String.format("https://%s.wikipedia.org/wiki/%s", parts[1], parts[2]);
     }
 
-    @Override
-    public String toString(){
-        return String.format("(wikiPage: %s {categories: %s, domains: %s})", getIdString(), babelCategories.size(), babelDomains.size());
-    }
-
-    //    Example of wikiname: WIKI:EN:Teru
     private static final Pattern PATTERN = Pattern.compile("^\\w+:\\w+:((.*))$");
-
-    public String getSimpleName() {
-        Matcher matcher = PATTERN.matcher(getIdString());
+    private String getSimpleName(String name) {
+        Matcher matcher = PATTERN.matcher(name);
         if (matcher.find()) {
 
             String simpleName = matcher.group(1);
@@ -99,5 +102,9 @@ public class WikiPageModel extends ObjectModel {
             return simpleName;
         }
         throw new RuntimeException();
+    }
+
+    public String getSimpleName() {
+        return simpleName;
     }
 }

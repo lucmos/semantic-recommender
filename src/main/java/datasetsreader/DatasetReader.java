@@ -101,7 +101,7 @@ public class DatasetReader {
         WikiPageModel page = twitterFactory.getWikiPage(interest_platform_wikipage.get(2));
 
         InterestModel interest = twitterFactory.getInterest(interest_platform_wikipage.get(0));
-        interest.setPlatform(InterestModel.PlatformType.fromString(interest_platform_wikipage.get(1)));
+        interest.setPlatform(PlatformType.fromString(interest_platform_wikipage.get(1)));
         interest.setWikiPageId(page);
 
         dataset.addWikiPage(page);

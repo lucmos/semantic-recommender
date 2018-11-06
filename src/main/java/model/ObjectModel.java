@@ -1,6 +1,6 @@
 package model;
 
-import utils.IndexedSerializable;
+import io.IndexedSerializable;
 
 /**
  * A generic twitter object.
@@ -14,15 +14,8 @@ public abstract class ObjectModel implements IndexedSerializable {
      */
     private int seqId;
 
-    /**
-     * The literal identifier present in the dataset. If present, it is unique.
-     */
-    private String idString;
-
-
-    public ObjectModel(int seqId, String idString){
-        this.setId(seqId);
-        this.setIdString(idString);
+    public ObjectModel(int seqId){
+        this.seqId = seqId;
     }
 
     @Override
@@ -31,27 +24,13 @@ public abstract class ObjectModel implements IndexedSerializable {
         return seqId == ((ObjectModel) obj).seqId;
     }
 
-    private void setId(int seqId) {
-        assert seqId >= 0;
-
-        this.seqId = seqId;
-    }
-
     public int getId() {
         assert seqId >= 0;
 
         return seqId;
     }
 
-    public String getIdString() {
-        assert idString != null && !idString.equals("");
-
-        return idString;
-    }
-
-    private void setIdString(String idString) {
-        assert idString != null && !idString.equals("");
-
-        this.idString = idString;
+    public String getName(IdMapping idMap) {
+        return idMap.getStringId(getId());
     }
 }

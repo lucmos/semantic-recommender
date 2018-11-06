@@ -3,31 +3,27 @@ package model.twitter;
 
 import constants.DatasetName;
 import io.Config;
+import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import model.ObjectCollection;
-import model.ObjectModel;
-import model.clusters.Cluster;
 import utils.Counter;
-import utils.IndexedSerializable;
 import utils.Statistics;
 
-import java.util.*;
-import java.util.function.BiConsumer;
-import java.util.function.BinaryOperator;
-import java.util.function.Function;
-import java.util.function.Supplier;
-import java.util.stream.Collector;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Dataset extends ObjectCollection {
     private DatasetName name;
     private Config.Dimension dimension;
 
-    HashMap<Integer, InterestModel> interests;
-    HashMap<Integer, TweetModel> tweets;
-    HashMap<Integer, UserModel> users;
-    HashMap<Integer, WikiPageModel> wikiPages;
-    HashMap<Integer, BabelCategoryModel> babelCategories;
-    HashMap<Integer, BabelDomainModel> babelDomains;
+    Int2ObjectOpenHashMap<InterestModel> interests;
+    Int2ObjectOpenHashMap<TweetModel> tweets;
+    Int2ObjectOpenHashMap<UserModel> users;
+    Int2ObjectOpenHashMap<WikiPageModel> wikiPages;
+    Int2ObjectOpenHashMap<BabelCategoryModel> babelCategories;
+    Int2ObjectOpenHashMap<BabelDomainModel> babelDomains;
 
     @Override
     public String toString() {
@@ -39,82 +35,80 @@ public class Dataset extends ObjectCollection {
         this.name = name;
         this.dimension = limit;
 
-        interests = new HashMap<>();
-        tweets = new HashMap<>();
-        users = new HashMap<>();
-        wikiPages = new HashMap<>();
-        babelCategories = new HashMap<>();
-        babelDomains = new HashMap<>();
-
+        interests = new Int2ObjectOpenHashMap<>();
+        tweets = new Int2ObjectOpenHashMap<>();
+        users = new Int2ObjectOpenHashMap<>();
+        wikiPages = new Int2ObjectOpenHashMap<>();
+        babelCategories = new Int2ObjectOpenHashMap<>();
+        babelDomains = new Int2ObjectOpenHashMap<>();
     }
 
     public DatasetName getName() {
         return name;
     }
 
-
-    public InterestModel getInterest(Integer id) {
+    public InterestModel getInterest(int id) {
         assert interests.containsKey(id);
 
         return interests.get(id);
     }
 
-    public TweetModel getTweet(Integer id) {
+    public TweetModel getTweet(int id) {
         assert tweets.containsKey(id);
 
         return tweets.get(id);
     }
 
-    public UserModel getUser(Integer id) {
+    public UserModel getUser(int id) {
         assert users.containsKey(id);
 
         return users.get(id);
     }
 
-    public BabelCategoryModel getCategory(Integer id) {
+    public BabelCategoryModel getCategory(int id) {
         assert babelCategories.containsKey(id);
 
         return babelCategories.get(id);
     }
 
-    public BabelDomainModel getDomain(Integer id) {
+    public BabelDomainModel getDomain(int id) {
         assert babelDomains.containsKey(id);
 
         return babelDomains.get(id);
     }
 
-    public WikiPageModel getPage(Integer id) {
+    public WikiPageModel getPage(int id) {
         assert wikiPages.containsKey(id);
 
         return wikiPages.get(id);
     }
 
-    public Map<Integer, InterestModel> getInterests() {
+    public Int2ObjectOpenHashMap<InterestModel> getInterests() {
         return interests;
     }
 
-    public Map<Integer, TweetModel> getTweets() {
+    public Int2ObjectOpenHashMap<TweetModel> getTweets() {
         return tweets;
     }
 
-    public Map<Integer, UserModel> getUsers() {
+    public Int2ObjectOpenHashMap<UserModel> getUsers() {
         return users;
     }
 
-    public Set<UserModel> getFamousUsers() {
-        return users.values().stream().filter(UserModel::isFamous).collect(Collectors.toSet());
-    }
-
-    public Map<Integer, WikiPageModel> getWikiPages() {
+    public Int2ObjectOpenHashMap<WikiPageModel> getWikiPages() {
         return wikiPages;
     }
 
-    public HashMap<Integer, BabelCategoryModel> getBabelCategories() {
+    public Int2ObjectOpenHashMap<BabelCategoryModel> getBabelCategories() {
         return babelCategories;
     }
 
-    public HashMap<Integer, BabelDomainModel> getBabelDomains() {
+    public Int2ObjectOpenHashMap<BabelDomainModel> getBabelDomains() {
         return babelDomains;
+    }
+
+    public Set<UserModel> getFamousUsers() {
+        return users.values().stream().filter(x -> x.isFamous()).collect(Collectors.toSet());
     }
 
     public void addInterest(InterestModel interest) {
@@ -183,7 +177,7 @@ public class Dataset extends ObjectCollection {
                 domainsDistribution(10));
     }
 
-    public String stats(){
+    public String stats() {
         return String.format("[STATS DATASET %s]\n" +
                         "\tunique number of users: %s\n" +
                         "\tunique number of vip users: %s\n" +
@@ -194,32 +188,32 @@ public class Dataset extends ObjectCollection {
                         "\tunique number of domains: %s\n",
                 name.name().toUpperCase(),
                 users.size(), getFamousUsers().size(),
-                tweets.size(), interests.size(),wikiPages.size(), babelCategories.size(), babelDomains.size());
+                tweets.size(), interests.size(), wikiPages.size(), babelCategories.size(), babelDomains.size());
     }
 
     public String tweeetStats() {
-        double[] tweets_sizes = users.values().stream().mapToDouble(x -> x.getTweetsIds().size()).toArray();
+        double[] tweets_sizes = users.values().parallelStream().mapToDouble(x -> x.getTweetsIds().size()).toArray();
         Statistics stat = new Statistics(tweets_sizes);
 
         return stat.report(
-                        "TWEETS STATS",
-                        "total number of tweets",
-                        "total number of users",
-                        "greatest #tweets per user",
-                        "#greatest #tweets per users",
-                        "smallest #tweets per user",
-                        "#smallest #tweets per user",
-                        "median #tweets per user",
-                        "#median #tweets per users",
-                        "mean #tweets per user",
-                        "#tweets per user variance",
-                        "#tweets per user stddev"
-                );
+                "TWEETS STATS",
+                "total number of tweets",
+                "total number of users",
+                "greatest #tweets per user",
+                "#greatest #tweets per users",
+                "smallest #tweets per user",
+                "#smallest #tweets per user",
+                "median #tweets per user",
+                "#median #tweets per users",
+                "mean #tweets per user",
+                "#tweets per user variance",
+                "#tweets per user stddev"
+        );
     }
 
     public String friendStats() {
-        double[] in_sizes = users.values().stream().mapToDouble(x -> {
-            HashSet<Integer> s = new HashSet<>(x.getFollowInIds());
+        double[] in_sizes = users.values().parallelStream().mapToDouble(x -> {
+            IntOpenHashSet s = new IntOpenHashSet(x.getFollowInIds());
             s.addAll(x.getFollowOutIds());
             return s.size();
         }).toArray();
@@ -240,7 +234,7 @@ public class Dataset extends ObjectCollection {
     }
 
     public String followInStats() {
-        double[] in_sizes = users.values().stream().mapToDouble(x -> x.getFollowInIds().size()).toArray();
+        double[] in_sizes = users.values().parallelStream().mapToDouble(x -> x.getFollowInIds().size()).toArray();
         Statistics stat = new Statistics(in_sizes);
 
         return stat.report("FOLLOW-IN STATS",
@@ -260,7 +254,7 @@ public class Dataset extends ObjectCollection {
     public String followOutStats() {
         StringBuilder s = new StringBuilder();
 
-        double[] stats = users.values().stream().mapToDouble(x -> x.getFollowOutIds().size()).toArray();
+        double[] stats = users.values().parallelStream().mapToDouble(x -> x.getFollowOutIds().size()).toArray();
         Statistics stat = new Statistics(stats);
 
         s.append(stat.report("FOLLOW-OUT STATS",
@@ -278,7 +272,7 @@ public class Dataset extends ObjectCollection {
 
         s.append("\n");
 
-        stats = users.values().stream().mapToDouble(x -> x.getFollowOutUserModels(users).stream().filter(UserModel::isFamous).count()).toArray();
+        stats = users.values().parallelStream().mapToDouble(x -> x.getFollowOutUserModels(users).stream().filter(UserModel::isFamous).count()).toArray();
         stat = new Statistics(stats);
 
         s.append(stat.report("FOLLOW-OUT TO VIP USERS STATS",
@@ -300,7 +294,7 @@ public class Dataset extends ObjectCollection {
     public String categoriesStats() {
         StringBuilder s = new StringBuilder();
 
-        double[] stats = users.values().stream().mapToDouble(x ->
+        double[] stats = users.values().parallelStream().mapToDouble(x ->
                 x.getTweetsCategories(tweets, interests, wikiPages, babelCategories).size()).toArray();
         Statistics stat = new Statistics(stats);
         s.append(stat.report(
@@ -319,7 +313,7 @@ public class Dataset extends ObjectCollection {
 
         s.append("\n");
 
-        stats = tweets.values().stream().mapToDouble(x ->
+        stats = tweets.values().parallelStream().mapToDouble(x ->
                 x.getWikiPageModel(interests, wikiPages).getBabelCategories().size()).toArray();
         stat = new Statistics(stats);
         s.append(stat.report(
@@ -338,7 +332,7 @@ public class Dataset extends ObjectCollection {
 
         s.append("\n");
 
-        stats = users.values().stream().filter(UserModel::isFamous)
+        stats = users.values().parallelStream().filter(UserModel::isFamous)
                 .mapToDouble(x -> {
                     if (x.isFamous()) {
                         return x.getWikiPageAboutUserModel(wikiPages).getBabelCategories().size();
@@ -364,23 +358,14 @@ public class Dataset extends ObjectCollection {
 
         s.append("\n");
 
-        stats = new double[users.size()];
-        int index = 0;
+        Counter<Integer> userTocatNum = new Counter<>();
         for (UserModel u : users.values()) {
-            int count = 0;
-
-            for (UserModel f : u.getFollowOutUserModels(users)) {
-                count += f.getTweetsCategories(tweets, interests, wikiPages, babelCategories).total();
-
-                if (f.isFamous()) {
-                    count += f.getWikiPageAboutUserModel(wikiPages).getBabelCategories().size();
-                }
-            }
-            stats[index] = count;
-            index++;
+            userTocatNum.add(u.getId(), u.getTweetsCategories(tweets, interests, wikiPages, babelCategories).size());
+            userTocatNum.add(u.getId(), u.getWikiPageAboutUserModel(wikiPages).getBabelCategories().size());
         }
-        stat = new Statistics(stats);
+        stats = getUserToDouble(userTocatNum);
 
+        stat = new Statistics(stats);
         s.append(stat.report(
                 "CATEGORIES STATS PER USER IN HIS FOLLOW-OUT (TWEETS + VIP WIKIPAGE)",
                 "total number of categories in follow-out",
@@ -401,7 +386,7 @@ public class Dataset extends ObjectCollection {
 
         StringBuilder s = new StringBuilder();
 
-        double[] stats = users.values().stream().mapToDouble(x ->
+        double[] stats = users.values().parallelStream().mapToDouble(x ->
                 x.getTweetsDomains(tweets, interests, wikiPages, getBabelDomains()).size()).toArray();
         Statistics stat = new Statistics(stats);
         s.append(stat.report(
@@ -420,7 +405,7 @@ public class Dataset extends ObjectCollection {
 
         s.append("\n");
 
-        stats = tweets.values().stream().mapToDouble(x ->
+        stats = tweets.values().parallelStream().mapToDouble(x ->
                 x.getWikiPageModel(interests, wikiPages).getBabelDomains().size()).toArray();
         stat = new Statistics(stats);
         s.append(stat.report(
@@ -439,7 +424,7 @@ public class Dataset extends ObjectCollection {
 
         s.append("\n");
 
-        stats = users.values().stream().filter(UserModel::isFamous)
+        stats = users.values().parallelStream().filter(UserModel::isFamous)
                 .mapToDouble(x -> {
                     if (x.isFamous()) {
                         return x.getWikiPageAboutUserModel(wikiPages).getBabelDomains().size();
@@ -465,24 +450,13 @@ public class Dataset extends ObjectCollection {
 
         s.append("\n");
 
-
-        stats = new double[users.size()];
-        int index = 0;
-
+        Counter<Integer> userTocatNum = new Counter<>();
         for (UserModel u : users.values()) {
-            int count = 0;
-
-            for (UserModel f : u.getFollowOutUserModels(users)) {
-                count += f.getTweetsDomains(tweets, interests, wikiPages, babelDomains).total();
-
-                if (f.isFamous()) {
-                    count += f.getWikiPageAboutUserModel(wikiPages).getDomainsModel(babelDomains).size();
-                }
-            }
-            stats[index] = count;
-            index++;
+            userTocatNum.add(u.getId(), u.getTweetsDomains(tweets, interests, wikiPages, babelDomains).size());
+            userTocatNum.add(u.getId(), u.getWikiPageAboutUserModel(wikiPages).getBabelDomains().size());
         }
-
+        stats = getUserToDouble(userTocatNum);
+        
         stat = new Statistics(stats);
         s.append(stat.report(
                 "DOMAINS STATS PER USER IN HIS FOLLOW-OUT (TWEETS + VIP WIKIPAGE)",
@@ -500,12 +474,22 @@ public class Dataset extends ObjectCollection {
         return s.toString();
     }
 
+    private double[] getUserToDouble(Counter<Integer> userFriendToDouble) {
+        return users.values().parallelStream().mapToDouble(x -> {
+            int count = 0;
+            for (UserModel f : x.getFollowOutUserModels(users)) {
+                count += userFriendToDouble.get(f.getId());
+            }
+            return count;
+        }).toArray();
+    }
+
 
     public String categoriesDistribution(int k) {
         Counter<String> catCounter = new Counter<>();
 
         for (WikiPageModel page : wikiPages.values()) {
-            catCounter.increment(page.getCategoriesModel(babelCategories).stream().map(ObjectModel::getIdString).collect(Collectors.toSet()));
+            catCounter.increment(page.getCategoriesModel(babelCategories).stream().map(x -> getStringId(x.getId())).collect(Collectors.toSet()));
         }
 
         return String.format("[CATEGORIES DISTRIBUTION]\n%s\n", catCounter.getDistribution(k));
@@ -515,7 +499,7 @@ public class Dataset extends ObjectCollection {
         Counter<String> catCounter = new Counter<>();
 
         for (WikiPageModel page : wikiPages.values()) {
-            catCounter.increment(page.getDomainsModel(babelDomains).stream().map(ObjectModel::getIdString).collect(Collectors.toSet()));
+            catCounter.increment(page.getDomainsModel(babelDomains).stream().map(x -> getStringId(x.getId())).collect(Collectors.toSet()));
         }
 
         return String.format("[DOMAINS DISTRIBUTION]\n%s\n", catCounter.getDistribution(k));

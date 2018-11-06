@@ -1,10 +1,8 @@
 package utils;
 
-import java.io.Serializable;
-import java.util.Collection;
+import io.IndexedSerializable;
+
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * An implementation of a 1:1 hashmap, where both the keys and the values can be retrieved in O(1)

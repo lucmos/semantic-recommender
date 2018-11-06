@@ -1,6 +1,8 @@
 package utils;
 
 import com.google.common.collect.Lists;
+import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
+import it.unimi.dsi.fastutil.objects.Object2DoubleOpenHashMap;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -9,7 +11,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Counter<T> {
-    private final Map<T, Double> counts = new HashMap<>();
+    private final Object2DoubleOpenHashMap<T> counts = new Object2DoubleOpenHashMap<>();
 
     public Counter() {
     }
@@ -36,14 +38,14 @@ public class Counter<T> {
     }
 
     public Counter<T> add(T t, double value) {
-        counts.merge(t, value, Double::sum);
+        counts.mergeDouble(t, value, (x, y) -> x + y);
         return this;
 
     }
 
     public Counter<T> add(Counter<T> counter) {
-        for (Map.Entry<T, Double> entry : counter.getMap().entrySet()) {
-            add(entry.getKey(), entry.getValue());
+        for (Object2DoubleMap.Entry<T> entry : counter.getMap().object2DoubleEntrySet()) {
+            add(entry.getKey(), entry.getDoubleValue());
         }
         return this;
     }
@@ -115,7 +117,7 @@ public class Counter<T> {
     }
 
     public List<T> mostCommon(int k) {
-        return counts.entrySet().stream()
+        return counts.object2DoubleEntrySet().stream()
                 .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
                 .limit(k)
                 .map(Map.Entry::getKey)
@@ -123,7 +125,7 @@ public class Counter<T> {
     }
 
     public List<T> leastCommon(int k) {
-        return counts.entrySet().stream()
+        return counts.object2DoubleEntrySet().stream()
                 .sorted(Map.Entry.comparingByValue())
                 .limit(k)
                 .map(Map.Entry::getKey)
@@ -142,7 +144,7 @@ public class Counter<T> {
         return counts.toString();
     }
 
-    public Map<T, Double> getMap() {
+    public Object2DoubleOpenHashMap<T> getMap() {
         return counts;
     }
 }

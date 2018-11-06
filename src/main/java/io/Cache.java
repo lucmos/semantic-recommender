@@ -8,7 +8,6 @@ import constants.DatasetName;
 import model.twitter.Dataset;
 import datasetsreader.DatasetReader;
 import utils.Chrono;
-import utils.IndexedSerializable;
 
 import java.io.File;
 
@@ -29,7 +28,6 @@ public abstract class Cache {
 
         E d;
         try {
-//            d = Utils.restoreObj(path);
             d = Utils.restoreJson(path, classe);
         } catch (Utils.CacheNotPresent e) {
             e.printStackTrace();

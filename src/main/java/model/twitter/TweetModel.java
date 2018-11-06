@@ -1,6 +1,8 @@
 package model.twitter;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import model.ObjectModel;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.Map;
 
@@ -20,13 +22,13 @@ public class TweetModel extends ObjectModel {
      */
     private int interestId;
 
-    /**
-     * The source from which the interestId has been found
-     */
-    private String interestUrl;
+//    /**
+//     * The source from which the interestId has been found
+//     */
+//    private String interestUrl; // TODO: 06/11/18 ignoring interestURL
 
-    TweetModel(int seqId, String id) {
-        super(seqId, id);
+    TweetModel(int seqId) {
+        super(seqId);
     }
 
     public void setAuthorId(UserModel authorId) {
@@ -36,10 +38,10 @@ public class TweetModel extends ObjectModel {
     }
 
     public void setInterestUrl(String interestSource) {
-        assert interestSource != null && !interestSource.equals("");
-
-        this.interestUrl = interestSource;
-    }
+//        assert interestSource != null && !interestSource.equals("");
+//
+//        this.interestUrl = interestSource;
+    }// TODO: 06/11/18 ignoring interestURL
 
     public void setInterestId(InterestModel interest) {
         assert interest != null;
@@ -54,9 +56,10 @@ public class TweetModel extends ObjectModel {
     }
 
     public String getInterestUrl() {
-        assert interestUrl != null;
-
-        return interestUrl;
+//        assert interestUrl != null;
+//
+//        return interestUrl;// TODO: 06/11/18 ignoring interestURL
+        throw new NotImplementedException();
     }
 
     public int getInterestId() {
@@ -65,7 +68,7 @@ public class TweetModel extends ObjectModel {
         return interestId;
     }
 
-    public InterestModel getInterestModel(Map<Integer, InterestModel> interests) {
+    public InterestModel getInterestModel(Int2ObjectOpenHashMap<InterestModel> interests) {
         assert interests.containsKey(getInterestId());
 
         InterestModel interest = interests.get(getInterestId());
@@ -74,7 +77,7 @@ public class TweetModel extends ObjectModel {
         return interest;
     }
 
-    public WikiPageModel getWikiPageModel(Map<Integer, InterestModel> interests, Map<Integer, WikiPageModel> pages) {
+    public WikiPageModel getWikiPageModel(Int2ObjectOpenHashMap<InterestModel> interests, Int2ObjectOpenHashMap<WikiPageModel> pages) {
         WikiPageModel p = getInterestModel(interests).getWikiPageModel(pages);
 
         assert p != null;
@@ -83,6 +86,6 @@ public class TweetModel extends ObjectModel {
 
     @Override
     public String toString(){
-        return String.format("(tweet: #%s {id: %s, interestId: %s, interestUrl: %s})", getId(), getIdString(), interestId, interestUrl);
+        return String.format("(tweet: #%s {interestId: %s})", getId(), interestId);
     }
 }

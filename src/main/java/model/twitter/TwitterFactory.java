@@ -19,7 +19,7 @@ public class TwitterFactory {
 
         if (!dataset.exixstObj(id)) {
             int i = dataset.getNextId(id);
-            dataset.babelCategories.put(i, new BabelCategoryModel(i, id));
+            dataset.babelCategories.put(i, new BabelCategoryModel(i));
         }
         BabelCategoryModel res = dataset.babelCategories.get(dataset.getIntegerId(id));
 
@@ -32,7 +32,7 @@ public class TwitterFactory {
 
         if (!dataset.exixstObj(id)) {
             int i = dataset.getNextId(id);
-            dataset.babelDomains.put(i, new BabelDomainModel(i, id));
+            dataset.babelDomains.put(i, new BabelDomainModel(i));
         }
         BabelDomainModel res = dataset.babelDomains.get(dataset.getIntegerId(id));
 
@@ -46,12 +46,12 @@ public class TwitterFactory {
      * @param id the id of the user
      * @return the specified UserModel
      */
-    public  UserModel getUser(String id) {
+    public UserModel getUser(String id) {
         assert id != null && !id.equals("");
 
         if (!dataset.exixstObj(id)) {
             int i = dataset.getNextId(id);
-            dataset.users.put(i, new UserModel(i, id));
+            dataset.users.put(i, new UserModel(i));
         }
         UserModel res = dataset.users.get(dataset.getIntegerId(id));
 
@@ -74,7 +74,7 @@ public class TwitterFactory {
 
         if (!dataset.exixstObj(id)) {
             int i = dataset.getNextId(id);
-            dataset.tweets.put(i, new TweetModel(i, id));
+            dataset.tweets.put(i, new TweetModel(i));
         }
         TweetModel res = dataset.tweets.get(dataset.getIntegerId(id));
 
@@ -93,7 +93,7 @@ public class TwitterFactory {
 
         if (!dataset.exixstObj(id)) {
             int i = dataset.getNextId(id);
-            dataset.interests.put(i, new InterestModel(i, id));
+            dataset.interests.put(i, new InterestModel(i));
         }
         InterestModel res = dataset.interests.get(dataset.getIntegerId(id));
 

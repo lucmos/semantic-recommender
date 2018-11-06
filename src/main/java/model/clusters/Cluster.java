@@ -1,24 +1,22 @@
 package model.clusters;
 
-import model.ObjectModel;
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
+import model.NamedObjectModel;
 import model.twitter.UserModel;
 
-import java.util.HashSet;
-import java.util.Set;
+public class Cluster extends NamedObjectModel {
 
-public class Cluster extends ObjectModel {
-
-    private Set<Integer> userIds;
+    private IntOpenHashSet userIds;
 
     Cluster(int seqId, String idString) {
         super(seqId, idString);
 
-        this.userIds = new HashSet<>();
+        this.userIds = new IntOpenHashSet();
     }
 
     @Override
     public String toString() {
-        return String.format(("(cluster: %s {users: %s})"), getIdString(), userIds.size());
+        return String.format(("(cluster: %s {users: %s})"), getName(), userIds.size());
     }
 
     void addUser(UserModel userModel) {
@@ -31,7 +29,7 @@ public class Cluster extends ObjectModel {
         return userIds.size();
     }
 
-    public Set<Integer> getUserIds() {
+    public IntOpenHashSet getUserIds() {
         return userIds;
     }
 }

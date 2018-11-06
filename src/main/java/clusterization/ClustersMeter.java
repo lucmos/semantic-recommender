@@ -1,6 +1,7 @@
 package clusterization;
 
 import com.google.common.util.concurrent.AtomicDouble;
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import model.clusters.Cluster;
 import model.clusters.ClusterFactory;
 import model.twitter.Dataset;
@@ -22,7 +23,7 @@ public class ClustersMeter {
         this.userToCat = ClustersUtils.getUserToCatCounter(dataset);
     }
 
-    public float usersJaccardSimilarity(Integer u1, Integer u2) {
+    public float usersJaccardSimilarity(int u1, int u2) {
         return usersJaccardSimilarity(dataset.getUser(u1), dataset.getUser(u2));
     }
 
@@ -37,21 +38,24 @@ public class ClustersMeter {
         return u == 0 ? 0 : intersectionSize(catU1, catU2) / (float) u;
     }
 
-    public float clustersJaccardSimilarity(Cluster c1, Cluster c2) {
-        Set<Integer> cluster1 = c1.getUserIds();
-        Set<Integer> cluster2 = c2.getUserIds();
-
-        AtomicDouble sim = new AtomicDouble();
-        AtomicInteger i = new AtomicInteger();
-
-        cluster1.stream().parallel().forEach(x1 -> cluster2.forEach(x2 -> {
-            if (!x1.equals(x2)) { // se sono esattamente gli stessi no!  accade se c1=c2
-                sim.addAndGet(usersJaccardSimilarity(x1, x2));
-                i.incrementAndGet();
-            }
-        }));
-        return sim.floatValue() / i.intValue();
-    }
+//    public float clustersJaccardSimilarity(Cluster c1, Cluster c2) {
+//        IntOpenHashSet cluster1 = c1.getUserIds();
+//        IntOpenHashSet cluster2 = c2.getUserIds();
+//
+//        AtomicDouble sim = new AtomicDouble();
+//        AtomicInteger i = new AtomicInteger();
+//
+//        cluster1.parallelStream().forEach(x1 -> cluster2.forEach(x -> {}));
+//
+//
+////                x2 -> {
+////            if (!x1.equals(x2)) { // se sono esattamente gli stessi no!  accade se c1=c2
+////                sim.addAndGet(usersJaccardSimilarity(x1, x2));
+////                i.incrementAndGet();
+////            }
+////        }));
+//        return sim.floatValue() / i.intValue();
+//    }
 
     public static double cosineSimilarity(Counter<Cluster> entry1counter,
                                    Counter<Cluster> entry2counter) {

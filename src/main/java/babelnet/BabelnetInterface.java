@@ -1,5 +1,7 @@
 package babelnet;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.uniroma1.lcl.babelnet.BabelNet;
 import it.uniroma1.lcl.babelnet.BabelSynset;
 import it.uniroma1.lcl.babelnet.data.BabelCategory;
@@ -7,7 +9,7 @@ import it.uniroma1.lcl.babelnet.resources.WikipediaID;
 import it.uniroma1.lcl.jlt.util.Language;
 import it.uniroma1.lcl.kb.Domain;
 import model.twitter.WikiPageModel;
-import utils.IndexedSerializable;
+import io.IndexedSerializable;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -38,9 +40,9 @@ public class BabelnetInterface implements IndexedSerializable {
 
 //  caching to improve performances.
 
-    private static Map<Integer, BabelSynset> wikiToSynsetObjCache = new HashMap<>();
-    private static Map<BabelSynset, Set<String>> synsetToCategoriesObjCache = new HashMap<>();
-    private static Map<BabelSynset, Set<String>> synsetToDomainObjCache = new HashMap<>();
+    private static Int2ObjectOpenHashMap<BabelSynset> wikiToSynsetObjCache = new Int2ObjectOpenHashMap<>();
+    private static Object2ObjectOpenHashMap<BabelSynset, Set<String>> synsetToCategoriesObjCache = new Object2ObjectOpenHashMap<>();
+    private static Object2ObjectOpenHashMap<BabelSynset, Set<String>> synsetToDomainObjCache = new Object2ObjectOpenHashMap<>();
 
     private static BabelSynset getSynsetObj(WikiPageModel wikiPage) {
         assert (wikiPage != null);
