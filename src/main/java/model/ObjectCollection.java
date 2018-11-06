@@ -8,7 +8,7 @@ public abstract class ObjectCollection implements IndexedSerializable {
      */
     private IdMapping idMap;
 
-     public ObjectCollection() {
+    public ObjectCollection() {
         idMap = new IdMapping();
     }
 
