@@ -8,6 +8,7 @@ import it.uniroma1.lcl.babelnet.data.BabelCategory;
 import model.ObjectModel;
 import utils.Counter;
 
+import javax.xml.crypto.Data;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -142,19 +143,19 @@ public class UserModel extends ObjectModel {
         return wikiPagesOfLikedItemsIds;
     }
 
-    public Set<UserModel> getFollowOutUserModels(Int2ObjectOpenHashMap<UserModel> users) {
+    public Set<UserModel> getFollowOutUserModels(Dataset dataset) {
         assert followOutIds != null;
 
-        Set<UserModel> fu = followOutIds.stream().map(x -> users.get((int) x)).collect(Collectors.toSet());
+        Set<UserModel> fu = followOutIds.stream().map(x -> dataset.users.get((int) x)).collect(Collectors.toSet());
 
         assert fu.size() == followOutIds.size();
         return fu;
     }
 
-    public WikiPageModel getWikiPageAboutUserModel(Int2ObjectOpenHashMap<WikiPageModel> pages) {
-        assert pages != null;
+    public WikiPageModel getWikiPageAboutUserModel(Dataset dataset) {
+        assert dataset.wikiPages != null;
 
-        WikiPageModel page = pages.get(this.wikiPageAboutUserId);
+        WikiPageModel page = dataset.wikiPages.get(this.wikiPageAboutUserId);
 
         assert page != null;
         return page;
@@ -164,29 +165,26 @@ public class UserModel extends ObjectModel {
         return famous;
     }
 
-    public TweetModel getTweetModel(Int2ObjectOpenHashMap<TweetModel> tweets, int tweetId) {
-        assert tweets.containsKey(tweetId);
+    public TweetModel getTweetModel(Dataset dataset, int tweetId) {
+        assert dataset.tweets.containsKey(tweetId);
 
-        TweetModel tweet = tweets.get(tweetId);
+        TweetModel tweet = dataset.tweets.get(tweetId);
         assert tweet.getId() == tweetId;
 
         return tweet;
     }
 
-    public Set<TweetModel> getTweetsModel(Int2ObjectOpenHashMap<TweetModel> tweets) {
-        return tweetsIds.stream().map(x -> getTweetModel(tweets, x)).collect(Collectors.toSet());
+    public Set<TweetModel> getTweetsModel(Dataset dataset) {
+        return tweetsIds.stream().map(x -> getTweetModel(dataset, x)).collect(Collectors.toSet());
     }
 
-    public Counter<BabelCategoryModel> getTweetsCategories(Int2ObjectOpenHashMap<TweetModel> tweets_index,
-                                                          Int2ObjectOpenHashMap<InterestModel> interest_index,
-                                                          Int2ObjectOpenHashMap<WikiPageModel> pages_index,
-                                                          Int2ObjectOpenHashMap<BabelCategoryModel> cat_index) {
+    public Counter<BabelCategoryModel> getTweetsCategories(Dataset dataset) {
         Counter<BabelCategoryModel> cats = new Counter<>();
 
-        Set<TweetModel> tweets = getTweetsModel(tweets_index);
+        Set<TweetModel> tweets = getTweetsModel(dataset);
         for (TweetModel t : tweets) {
-            WikiPageModel w = t.getWikiPageModel(interest_index, pages_index);
-            for (BabelCategoryModel cat : w.getCategoriesModel(cat_index)) {
+            WikiPageModel w = t.getWikiPageModel(dataset);
+            for (BabelCategoryModel cat : w.getCategoriesModel(dataset)) {
                 cats.increment(cat);
             }
         }
@@ -194,16 +192,13 @@ public class UserModel extends ObjectModel {
         return cats;
     }
 
-    public Counter<BabelDomainModel> getTweetsDomains(Int2ObjectOpenHashMap<TweetModel> tweets_index,
-                                                          Int2ObjectOpenHashMap<InterestModel> interest_index,
-                                                          Int2ObjectOpenHashMap<WikiPageModel> pages_index,
-                                                          Int2ObjectOpenHashMap<BabelDomainModel> dom_index) {
+    public Counter<BabelDomainModel> getTweetsDomains(Dataset dataset) {
         Counter<BabelDomainModel> cats = new Counter<>();
 
-        Set<TweetModel> tweets = getTweetsModel(tweets_index);
+        Set<TweetModel> tweets = getTweetsModel(dataset);
         for (TweetModel t : tweets) {
-            WikiPageModel w = t.getWikiPageModel(interest_index, pages_index);
-            for (BabelDomainModel cat : w.getDomainsModel(dom_index)) {
+            WikiPageModel w = t.getWikiPageModel(dataset);
+            for (BabelDomainModel cat : w.getDomainsModel(dataset)) {
                 cats.increment(cat);
             }
         }

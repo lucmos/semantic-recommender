@@ -68,17 +68,17 @@ public class TweetModel extends ObjectModel {
         return interestId;
     }
 
-    public InterestModel getInterestModel(Int2ObjectOpenHashMap<InterestModel> interests) {
-        assert interests.containsKey(getInterestId());
+    public InterestModel getInterestModel(Dataset dataset) {
+        assert dataset.interests.containsKey(getInterestId());
 
-        InterestModel interest = interests.get(getInterestId());
+        InterestModel interest = dataset.interests.get(getInterestId());
         assert interest.getId() == getInterestId();
 
         return interest;
     }
 
-    public WikiPageModel getWikiPageModel(Int2ObjectOpenHashMap<InterestModel> interests, Int2ObjectOpenHashMap<WikiPageModel> pages) {
-        WikiPageModel p = getInterestModel(interests).getWikiPageModel(pages);
+    public WikiPageModel getWikiPageModel(Dataset dataset) {
+        WikiPageModel p = getInterestModel(dataset).getWikiPageModel(dataset);
 
         assert p != null;
         return p;

@@ -1,10 +1,16 @@
 package executors;
 
+import clusterization.ClustersMeter;
 import constants.DatasetName;
 import io.Cache;
+import io.Config;
 import io.Utils;
 import model.clusters.Clusters;
 import model.twitter.Dataset;
+import model.twitter.TwitterFactory;
+import model.twitter.UserModel;
+import utils.Chrono;
+import utils.Counter;
 
 
 @Deprecated
@@ -13,13 +19,40 @@ public class ReadingPhaseExecutor {
     public static void main(String[] args) throws Utils.CacheNotPresent {
 
 
+//        Counter<Integer> s1 = new Counter<>();
+//        Counter<Integer> s2 = new Counter<>();
+//
+//        for (int a = 0; a < 100000; a = a + 2) {
+//            s1.increment(a);
+//        }
+//
+//        for (int a = 1; a < 100; a++) {
+//            s2.increment(a);
+//        }
+
+//        System.out.println(s1);
+//        System.out.println(s2);
+//        double a = 0;
+//        int times = 1;
+//        Chrono c = new Chrono(String.format("Computing similarity %s times", times));
+//        for(int i = 0; i< times; i++)
+//            a = ClustersMeter.cosineSimilarity(s1, s2);
+//        c.millis();
+//        System.out.println(a);
         Dataset d = Cache.DatasetCache.read(DatasetName.WIKIMID);
+        TwitterFactory f = new TwitterFactory(d);
+
+        UserModel u1 = f.getUser(2394493);
+        UserModel u2 = f.getUser(1775295);
+        UserModel u3 = f.getUser(937894);
+
+        System.out.println();
 //        System.out.println(d.report());
 
-        Clusters c = Cache.ClustersWikiMidCache.read();
-        System.out.println(c.report(d));
+//        Clusters c = Cache.ClustersWikiMidCache.read();
+//        System.out.println(c.report(d));
 //        ClusterFactory cf = new ClusterFactory(c);
-////        System.out.println(ClustersMeter.cosineSimilarity(map.get((UserModel) c.getUsersToCluster().keySet().toArray()[0]), map.get((UserModel) c.getUsersToCluster().keySet().toArray()[1])));
+//        System.out.println(ClustersMeter.cosineSimilarity(u1.getTweetsCategories());
 //////
 ////
 //        System.out.println(c.report(d, cf.getCluster("BNCAT:EN:Swedish_DJs"), 10));

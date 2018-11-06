@@ -98,7 +98,7 @@ public class Clusters extends ObjectCollection {
 
     public String clustersDistribution(int k) {
         String clustDistr = Counter.fromCollection(usersToCluster.values().stream()
-                .map(x -> clusters_index.get((int) x).getName(getIdMapping())).collect(Collectors.toList()))
+                .map(x -> clusters_index.get((int) x).getName(this)).collect(Collectors.toList()))
                 .getDistribution(k);
         return String.format("[CLUSTERS SIZE DISTRIBUTION]\n %s", clustDistr);
     }
@@ -112,7 +112,7 @@ public class Clusters extends ObjectCollection {
                     .map(tweetId ->
                             dataset.getTweets()
                                     .get((int) tweetId)
-                                    .getWikiPageModel(dataset.getInterests(), dataset.getWikiPages())
+                                    .getWikiPageModel(dataset)
                                     .toString())
                     .filter(Objects::nonNull)
                     .collect(Collectors.toList());

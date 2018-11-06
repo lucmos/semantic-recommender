@@ -49,10 +49,10 @@ public class InterestModel extends ObjectModel {
         return wikiPageId;
     }
 
-    public WikiPageModel getWikiPageModel(Int2ObjectOpenHashMap<WikiPageModel> pages) {
-        assert pages.containsKey(wikiPageId);
+    public WikiPageModel getWikiPageModel(Dataset dataset) {
+        assert dataset.wikiPages.containsKey(wikiPageId);
 
-        WikiPageModel page = pages.get(wikiPageId);
+        WikiPageModel page = dataset.wikiPages.get(wikiPageId);
         assert page.getId() == wikiPageId;
 
         return page;

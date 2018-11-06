@@ -17,10 +17,10 @@ public class ClustersUtils {
     public static Set<String> getCategories(Dataset dataset, WikiPageModel page) {
         switch (Config.getInstance().clusterOver()) {
             case CATEGORIES:
-                return page.getCategoriesModel(dataset.getBabelCategories()).stream().map(x -> x.getName(dataset.getIdMapping())).collect(Collectors.toSet());
+                return page.getCategoriesModel(dataset).stream().map(x -> x.getName(dataset)).collect(Collectors.toSet());
 
             case DOMAINS:
-                return page.getDomainsModel(dataset.getBabelDomains()).stream().map(x -> x.getName(dataset.getIdMapping())).collect(Collectors.toSet()); // TODO: 02/11/18 guarda tipi hash set qui, per sistemare il counter!
+                return page.getDomainsModel(dataset).stream().map(x -> x.getName(dataset)).collect(Collectors.toSet()); // TODO: 02/11/18 guarda tipi hash set qui, per sistemare il counter!
 
             default:
                 throw new RuntimeException("Invalid clusterization.");
@@ -30,10 +30,10 @@ public class ClustersUtils {
     public static Set<String> getCategories(Dataset dataset) {
         switch (Config.getInstance().clusterOver()) {
             case CATEGORIES:
-                return dataset.getBabelCategories().values().stream().map(x -> x.getName(dataset.getIdMapping())).collect(Collectors.toSet());
+                return dataset.getBabelCategories().values().stream().map(x -> x.getName(dataset)).collect(Collectors.toSet());
 
             case DOMAINS:
-                return dataset.getBabelDomains().values().stream().map(x -> x.getName(dataset.getIdMapping())).collect(Collectors.toSet()); // TODO: 02/11/18 guarda tipi hash set qui, per sistemare il counter!
+                return dataset.getBabelDomains().values().stream().map(x -> x.getName(dataset)).collect(Collectors.toSet()); // TODO: 02/11/18 guarda tipi hash set qui, per sistemare il counter!
 
             default:
                 throw new RuntimeException("Invalid clusterization.");
@@ -45,17 +45,17 @@ public class ClustersUtils {
 
         switch (Config.getInstance().clusterOver()) {
             case CATEGORIES:
-                Counter<BabelCategoryModel> catCounter = user.getTweetsCategories(datasaet.getTweets(), datasaet.getInterests(), datasaet.getWikiPages(), datasaet.getBabelCategories());
+                Counter<BabelCategoryModel> catCounter = user.getTweetsCategories(datasaet);
 
                 for (BabelCategoryModel b : catCounter.getMap().keySet()) {
-                    stringCounter.increment(b.getName(datasaet.getIdMapping()));
+                    stringCounter.increment(b.getName(datasaet));
                 }
                 return stringCounter;
 
             case DOMAINS:
-                Counter<BabelDomainModel> domCounter = user.getTweetsDomains(datasaet.getTweets(), datasaet.getInterests(), datasaet.getWikiPages(), datasaet.getBabelDomains());
+                Counter<BabelDomainModel> domCounter = user.getTweetsDomains(datasaet);
                 for (BabelDomainModel b : domCounter.getMap().keySet()) {
-                    stringCounter.increment(b.getName(datasaet.getIdMapping()));
+                    stringCounter.increment(b.getName(datasaet));
                 }
                 return stringCounter;
 
@@ -73,18 +73,18 @@ public class ClustersUtils {
         for (UserModel user : dataset.getUsers().values()) {
             for (int tweetID : user.getTweetsIds()) {
 
-                TweetModel tweet = user.getTweetModel(dataset.getTweets(), tweetID);
-                WikiPageModel page = tweet.getWikiPageModel(dataset.getInterests(), dataset.getWikiPages());
+                TweetModel tweet = user.getTweetModel(dataset, tweetID);
+                WikiPageModel page = tweet.getWikiPageModel(dataset);
 
                 Set<String> possibleClusters;
 
                 switch (Config.getInstance().clusterOver()) {
-                    case CATEGORIES: possibleClusters = page.getCategoriesModel(dataset.getBabelCategories()).stream()
-                                .map(x -> x.getName(dataset.getIdMapping())).collect(Collectors.toSet());
+                    case CATEGORIES: possibleClusters = page.getCategoriesModel(dataset).stream()
+                                .map(x -> x.getName(dataset)).collect(Collectors.toSet());
                         break;
 
-                    case DOMAINS: possibleClusters = page.getDomainsModel(dataset.getBabelDomains()).stream()
-                            .map(x -> x.getName(dataset.getIdMapping())).collect(Collectors.toSet());
+                    case DOMAINS: possibleClusters = page.getDomainsModel(dataset).stream()
+                            .map(x -> x.getName(dataset)).collect(Collectors.toSet());
                         break;
 
                     default:
