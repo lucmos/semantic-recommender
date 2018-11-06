@@ -50,8 +50,8 @@ public class ReadingPhaseExecutor {
 //        System.out.println(new HashSet<>(s3).size());
 
         Dataset d = Cache.DatasetCache.read(DatasetName.WIKIMID);
-//        System.out.println(d.report());
-
+        System.out.println(d.report());
+        System.out.println(d.getUsers().values().stream().filter(UserModel::isFamous).count());
 
 //        TwitterFactory m = new TwitterFactory(d);
 //
@@ -90,8 +90,8 @@ public class ReadingPhaseExecutor {
 
 //        UserModel u1 = m.getUser(524289);
 //        UserModel u2 = m.getUser(524311);
-        Clusters c = Cache.ClustersWikiMidCache.read();
-        System.out.println(c.report(d));
+//        Clusters c = Cache.ClustersWikiMidCache.read();
+//        System.out.println(c.report(d));
 //        ClusterFactory cf = new ClusterFactory(c);
 ////        System.out.println(ClustersMeter.cosineSimilarity(map.get((UserModel) c.getUsersToCluster().keySet().toArray()[0]), map.get((UserModel) c.getUsersToCluster().keySet().toArray()[1])));
 //////
