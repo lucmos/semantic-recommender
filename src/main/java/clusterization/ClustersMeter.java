@@ -109,10 +109,20 @@ public class ClustersMeter {
     }
 
     public static <T> int intersectionSize(Set<T> s1, Set<T> s2) {
+        int s1size = s1.size();
+        int s2size = s2.size();
         int i = 0;
-        for (T e1 : s1) {
-            if (s2.contains(e1)) i++;
+
+        if (s1size > s2size) {
+            for (T e2 : s2) {
+                if (s1.contains(e2)) i++;
+            }
+        } else {
+            for (T e1 : s1) {
+                if (s2.contains(e1)) i++;
+            }
         }
+        
         return i;
     }
 
