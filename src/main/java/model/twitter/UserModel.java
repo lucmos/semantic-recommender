@@ -28,10 +28,10 @@ public class UserModel extends ObjectModel {
     private Set<Integer> tweetsIds;
 
     /**
-     * The list of wikiPagesAboutUserIds associated to this user
+     * The wikipage associated to this user
      * (taken from the dataset)
      */
-    private Set<Integer> wikiPagesAboutUserIds;
+    private Integer wikiPageAboutUserId;
 
 
     /**
@@ -47,7 +47,6 @@ public class UserModel extends ObjectModel {
         this.followOutIds = new HashSet<>();
         this.followInIds = new HashSet<>();
         this.tweetsIds = new HashSet<>();
-        this.wikiPagesAboutUserIds = new HashSet<>();
         this.wikiPagesOfLikedItemsIds = new HashSet<>();
     }
 
@@ -99,14 +98,15 @@ public class UserModel extends ObjectModel {
      */
     public void addWikiPageAboutUser(WikiPageModel wikiPage) {
         assert wikiPage != null;
+        assert this.wikiPageAboutUserId == null;
 
-        this.wikiPagesAboutUserIds.add(wikiPage.getId());
+        wikiPageAboutUserId = wikiPage.getId();
     }
 
     public void addWikiPagesOfLikedItemsIds(WikiPageModel wikiPage) {
         assert wikiPage != null;
 
-        this.wikiPagesAboutUserIds.add(wikiPage.getId());
+        this.wikiPagesOfLikedItemsIds.add(wikiPage.getId());
     }
 
     public Set<Integer> getFollowOutIds() {
@@ -127,16 +127,38 @@ public class UserModel extends ObjectModel {
         return tweetsIds;
     }
 
-    public Set<Integer> getWikiPagesAboutUserIds() {
-        assert wikiPagesAboutUserIds != null;
+    public Integer getWikiPageAboutUserId() {
+        assert this.wikiPageAboutUserId != null;
 
-        return wikiPagesAboutUserIds;
+        return this.wikiPageAboutUserId;
     }
 
     public Set<Integer> getWikiPagesOfLikedItemsIds() {
         assert wikiPagesOfLikedItemsIds != null;
 
         return wikiPagesOfLikedItemsIds;
+    }
+
+    public Set<UserModel> getFollowOutUserModels(Map<Integer, UserModel> users) {
+        assert followOutIds != null;
+
+        Set<UserModel> fu = followOutIds.stream().map(users::get).collect(Collectors.toSet());
+
+        assert fu.size() == followOutIds.size();
+        return fu;
+    }
+
+    public WikiPageModel getWikiPageAboutUserModel(Map<Integer, WikiPageModel> pages) {
+        assert pages != null;
+
+        WikiPageModel page = pages.get(this.wikiPageAboutUserId);
+
+        assert page != null;
+        return page;
+    }
+
+    public boolean isFamous() {
+        return this.wikiPageAboutUserId != null;
     }
 
     public TweetModel getTweetModel(Map<Integer, TweetModel> tweets, Integer tweetId) {
