@@ -1,8 +1,8 @@
 package model.twitter;
 
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import model.ObjectModel;
 
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -15,15 +15,15 @@ import java.util.stream.Collectors;
 public class WikiPageModel extends ObjectModel {
     private static final int NAME_COMPONENTS_NUMBER = 3;
 
-    private Set<Integer> babelCategories;
-    private Set<Integer> babelDomains;
+    private IntOpenHashSet babelCategories;
+    private IntOpenHashSet babelDomains;
     private String simpleName;
 
 
     WikiPageModel(int seqId, String name) {
         super(seqId);
-        this.babelCategories = new HashSet<>();
-        this.babelDomains = new HashSet<>();
+        this.babelCategories = new IntOpenHashSet();
+        this.babelDomains = new IntOpenHashSet();
         this.simpleName = getSimpleName(name);
     }
 

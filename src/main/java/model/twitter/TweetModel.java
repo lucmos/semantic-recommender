@@ -40,7 +40,7 @@ public class TweetModel extends ObjectModel {
 //        assert interestSource != null && !interestSource.equals("");
 //
 //        this.interestUrl = interestSource;
-    }
+    }// TODO: 06/11/18 ignoring interestURL
 
     public void setInterestId(InterestModel interest) {
         assert interest != null;
@@ -57,7 +57,7 @@ public class TweetModel extends ObjectModel {
     public String getInterestUrl() {
 //        assert interestUrl != null;
 //
-//        return interestUrl;
+//        return interestUrl;// TODO: 06/11/18 ignoring interestURL
         throw new NotImplementedException();
     }
 

@@ -3,11 +3,11 @@ package model.twitter;
 
 import constants.DatasetName;
 import io.Config;
+import it.unimi.dsi.fastutil.ints.*;
 import model.ObjectCollection;
 import utils.Counter;
 import utils.Statistics;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -17,12 +17,12 @@ public class Dataset extends ObjectCollection {
     private DatasetName name;
     private Config.Dimension dimension;
 
-    HashMap<Integer, InterestModel> interests;
-    HashMap<Integer, TweetModel> tweets;
-    HashMap<Integer, UserModel> users;
-    HashMap<Integer, WikiPageModel> wikiPages;
-    HashMap<Integer, BabelCategoryModel> babelCategories;
-    HashMap<Integer, BabelDomainModel> babelDomains;
+    Int2ObjectOpenHashMap<InterestModel> interests;
+    Int2ObjectOpenHashMap<TweetModel> tweets;
+    Int2ObjectOpenHashMap<UserModel> users;
+    Int2ObjectOpenHashMap<WikiPageModel> wikiPages;
+    Int2ObjectOpenHashMap<BabelCategoryModel> babelCategories;
+    Int2ObjectOpenHashMap<BabelDomainModel> babelDomains;
 
     @Override
     public String toString() {
@@ -34,13 +34,12 @@ public class Dataset extends ObjectCollection {
         this.name = name;
         this.dimension = limit;
 
-        interests = new HashMap<>();
-        tweets = new HashMap<>();
-        users = new HashMap<>();
-        wikiPages = new HashMap<>();
-        babelCategories = new HashMap<>();
-        babelDomains = new HashMap<>();
-
+        interests = new Int2ObjectOpenHashMap<>();
+        tweets = new Int2ObjectOpenHashMap<>();
+        users = new Int2ObjectOpenHashMap<>();
+        wikiPages = new Int2ObjectOpenHashMap<>();
+        babelCategories = new Int2ObjectOpenHashMap<>();
+        babelDomains = new Int2ObjectOpenHashMap<>();
     }
 
     public DatasetName getName() {
@@ -104,11 +103,11 @@ public class Dataset extends ObjectCollection {
         return wikiPages;
     }
 
-    public HashMap<Integer, BabelCategoryModel> getBabelCategories() {
+    public Map<Integer, BabelCategoryModel> getBabelCategories() {
         return babelCategories;
     }
 
-    public HashMap<Integer, BabelDomainModel> getBabelDomains() {
+    public Map<Integer, BabelDomainModel> getBabelDomains() {
         return babelDomains;
     }
 
@@ -178,7 +177,7 @@ public class Dataset extends ObjectCollection {
                 domainsDistribution(10));
     }
 
-    public String stats(){
+    public String stats() {
         return String.format("[STATS DATASET %s]\n" +
                         "\tunique number of users: %s\n" +
                         "\tunique number of vip users: %s\n" +
@@ -189,7 +188,7 @@ public class Dataset extends ObjectCollection {
                         "\tunique number of domains: %s\n",
                 name.name().toUpperCase(),
                 users.size(), getFamousUsers().size(),
-                tweets.size(), interests.size(),wikiPages.size(), babelCategories.size(), babelDomains.size());
+                tweets.size(), interests.size(), wikiPages.size(), babelCategories.size(), babelDomains.size());
     }
 
     public String tweeetStats() {
@@ -197,24 +196,24 @@ public class Dataset extends ObjectCollection {
         Statistics stat = new Statistics(tweets_sizes);
 
         return stat.report(
-                        "TWEETS STATS",
-                        "total number of tweets",
-                        "total number of users",
-                        "greatest #tweets per user",
-                        "#greatest #tweets per users",
-                        "smallest #tweets per user",
-                        "#smallest #tweets per user",
-                        "median #tweets per user",
-                        "#median #tweets per users",
-                        "mean #tweets per user",
-                        "#tweets per user variance",
-                        "#tweets per user stddev"
-                );
+                "TWEETS STATS",
+                "total number of tweets",
+                "total number of users",
+                "greatest #tweets per user",
+                "#greatest #tweets per users",
+                "smallest #tweets per user",
+                "#smallest #tweets per user",
+                "median #tweets per user",
+                "#median #tweets per users",
+                "mean #tweets per user",
+                "#tweets per user variance",
+                "#tweets per user stddev"
+        );
     }
 
     public String friendStats() {
         double[] in_sizes = users.values().stream().mapToDouble(x -> {
-            HashSet<Integer> s = new HashSet<>(x.getFollowInIds());
+            Set<Integer> s = new HashSet<>(x.getFollowInIds());
             s.addAll(x.getFollowOutIds());
             return s.size();
         }).toArray();

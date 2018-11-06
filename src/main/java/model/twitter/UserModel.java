@@ -1,6 +1,8 @@
 package model.twitter;
 
 
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
+import it.unimi.dsi.fastutil.ints.IntSet;
 import it.uniroma1.lcl.babelnet.data.BabelCategory;
 import model.ObjectModel;
 import utils.Counter;
@@ -15,17 +17,17 @@ public class UserModel extends ObjectModel {
     /**
      * The list of user that this user is following
      */
-    private Set<Integer> followOutIds;
+    private IntOpenHashSet followOutIds;
 
     /**
      * The list of user that follow this user
      */
-    private Set<Integer> followInIds;
+    private IntOpenHashSet followInIds;
 
     /**
      * The list of tweetsIds that this user posted
      */
-    private Set<Integer> tweetsIds;
+    private IntOpenHashSet tweetsIds;
 
     /**
      * The wikipage associated to this user
@@ -39,15 +41,15 @@ public class UserModel extends ObjectModel {
      *
      * Used only for the datsets S2*
      */
-    private Set<Integer> wikiPagesOfLikedItemsIds;
+    private IntOpenHashSet wikiPagesOfLikedItemsIds;
 
 
     UserModel(int seqId) {
         super(seqId);
-        this.followOutIds = new HashSet<>();
-        this.followInIds = new HashSet<>();
-        this.tweetsIds = new HashSet<>();
-        this.wikiPagesOfLikedItemsIds = new HashSet<>();
+        this.followOutIds = new IntOpenHashSet();
+        this.followInIds = new IntOpenHashSet();
+        this.tweetsIds = new IntOpenHashSet();
+        this.wikiPagesOfLikedItemsIds = new IntOpenHashSet();
     }
 
     /**

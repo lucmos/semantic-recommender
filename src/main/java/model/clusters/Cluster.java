@@ -1,20 +1,19 @@
 package model.clusters;
 
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import model.NamedObjectModel;
-import model.ObjectModel;
 import model.twitter.UserModel;
 
-import java.util.HashSet;
 import java.util.Set;
 
 public class Cluster extends NamedObjectModel {
 
-    private Set<Integer> userIds;
+    private IntOpenHashSet userIds;
 
     Cluster(int seqId, String idString) {
         super(seqId, idString);
 
-        this.userIds = new HashSet<>();
+        this.userIds = new IntOpenHashSet();
     }
 
     @Override

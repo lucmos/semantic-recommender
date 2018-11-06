@@ -1,5 +1,7 @@
 package model.clusters;
 
+import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import model.ObjectCollection;
 import model.twitter.Dataset;
 import model.twitter.UserModel;
@@ -11,13 +13,13 @@ import java.util.stream.Collectors;
 
 public class Clusters extends ObjectCollection {
 
-    HashMap<Integer, Cluster> clusters_index;
+    Int2ObjectOpenHashMap<Cluster> clusters_index;
 
-    private HashMap<Integer, Integer> usersToCluster;
+    private Int2IntOpenHashMap usersToCluster;
 
     public Clusters() {
-        clusters_index = new HashMap<>();
-        usersToCluster = new HashMap<>();
+        clusters_index = new Int2ObjectOpenHashMap<>();
+        usersToCluster = new Int2IntOpenHashMap();
     }
 
     public Cluster getCluster(Integer clusterId) {
@@ -37,7 +39,7 @@ public class Clusters extends ObjectCollection {
     }
 
 
-    public HashMap<Integer, Integer> getUsersToCluster() {
+    public Map<Integer, Integer> getUsersToCluster() {
         return usersToCluster;
     }
 
