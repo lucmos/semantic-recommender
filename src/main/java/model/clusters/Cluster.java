@@ -1,12 +1,13 @@
 package model.clusters;
 
+import model.NamedObjectModel;
 import model.ObjectModel;
 import model.twitter.UserModel;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class Cluster extends ObjectModel {
+public class Cluster extends NamedObjectModel {
 
     private Set<Integer> userIds;
 
@@ -18,7 +19,7 @@ public class Cluster extends ObjectModel {
 
     @Override
     public String toString() {
-        return String.format(("(cluster: %s {users: %s})"), getIdString(), userIds.size());
+        return String.format(("(cluster: %s {users: %s})"), getName(), userIds.size());
     }
 
     void addUser(UserModel userModel) {

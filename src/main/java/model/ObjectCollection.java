@@ -18,7 +18,7 @@ public abstract class ObjectCollection implements IndexedSerializable {
      *
      * @return the mapping, local to each class
      */
-    private OneToOneHash<Integer, String> getIdMapping() {
+    public OneToOneHash<Integer, String> getIdMapping() {
         assert idMap != null;
 
         return idMap;
@@ -53,5 +53,4 @@ public abstract class ObjectCollection implements IndexedSerializable {
     public int getIntegerId(String s) {
         return idMap.getB(s);
     }
-
 }

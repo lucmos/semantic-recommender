@@ -17,12 +17,14 @@ public class WikiPageModel extends ObjectModel {
 
     private Set<Integer> babelCategories;
     private Set<Integer> babelDomains;
+    private String simpleName;
 
 
     WikiPageModel(int seqId, String name) {
-        super(seqId, name);
+        super(seqId);
         this.babelCategories = new HashSet<>();
         this.babelDomains = new HashSet<>();
+        this.simpleName = getSimpleName(name);
     }
 
     public BabelCategoryModel getCategoryModel(Map<Integer, BabelCategoryModel> categories, Integer catID) {
@@ -71,26 +73,26 @@ public class WikiPageModel extends ObjectModel {
         babelDomains.add(domainModel.getId());
     }
 
+    @Override
+    public String toString(){
+        return String.format("(wikiPage: %s {categories: %s, domains: %s})", simpleName, babelCategories.size(), babelDomains.size());
+    }
+
+    //    Example of wikiname: WIKI:EN:Teru
+
     /**
      * Rebuilds the url from the name
      * @return the unique url of this page
      */
-    public String getURL() {
-        String[] parts = this.getIdString().split(":");
+    public String getURL(String name) {
+        String[] parts = name.split(":");
         assert parts.length == WikiPageModel.NAME_COMPONENTS_NUMBER;
         return String.format("https://%s.wikipedia.org/wiki/%s", parts[1], parts[2]);
     }
 
-    @Override
-    public String toString(){
-        return String.format("(wikiPage: %s {categories: %s, domains: %s})", getIdString(), babelCategories.size(), babelDomains.size());
-    }
-
-    //    Example of wikiname: WIKI:EN:Teru
     private static final Pattern PATTERN = Pattern.compile("^\\w+:\\w+:((.*))$");
-
-    public String getSimpleName() {
-        Matcher matcher = PATTERN.matcher(getIdString());
+    private String getSimpleName(String name) {
+        Matcher matcher = PATTERN.matcher(name);
         if (matcher.find()) {
 
             String simpleName = matcher.group(1);
@@ -99,5 +101,9 @@ public class WikiPageModel extends ObjectModel {
             return simpleName;
         }
         throw new RuntimeException();
+    }
+
+    public String getSimpleName() {
+        return simpleName;
     }
 }

@@ -9,48 +9,10 @@ import java.util.Map;
  * Models an "interest"
  */
 public class InterestModel extends ObjectModel {
-
-    /**
-     * Describes the possible types of platforms
-     */
-    public enum PlatformType implements Serializable {
-        GOOD_READS("GoodReads"),
-        IMDB("IMDb"),
-        SPOTIFY("Spotify");
-
-        private String text;
-
-        PlatformType(String text)
-        {
-            assert text != null && !text.equals("");
-            this.text = text;
-        }
-
-        public String getText() {
-            return this.text;
-        }
-
-        /**
-         * Given a String returns the correspondent PlatformType object
-         * @param text
-         * @return
-         */
-        public static PlatformType fromString(String text) {
-            assert text != null && !text.equals("");
-
-            for (PlatformType b : PlatformType.values()) {
-                if (b.text.equalsIgnoreCase(text)) {
-                    return b;
-                }
-            }
-            throw new RuntimeException("This interest id doesn't exist!");
-        }
-    }
-
     /**
      * The platform where the interested originated
      */
-    private PlatformType platform;
+    private int platform;
 
     /**
      * A wikiPageId that describes the interest
@@ -58,14 +20,14 @@ public class InterestModel extends ObjectModel {
     private int wikiPageId;
 
 
-    InterestModel(int seqId, String idString) {
-        super(seqId, idString);
+    InterestModel(int seqId) {
+        super(seqId);
     }
 
     public void setPlatform(PlatformType platform) {
         assert platform != null;
 
-        this.platform = platform;
+        this.platform = platform.getId();
     }
 
     public void setWikiPageId(WikiPageModel wikiPageId) {
@@ -75,9 +37,9 @@ public class InterestModel extends ObjectModel {
     }
 
     public PlatformType getPlatform() {
-        assert platform != null;
+        assert platform > 0;
 
-        return platform;
+        return PlatformType.fromId(platform);
     }
 
     public int getWikiPageId() {
@@ -97,6 +59,6 @@ public class InterestModel extends ObjectModel {
 
     @Override
     public String toString(){
-        return String.format("(interest: %s {id: %s, wikipage: %s})", getId(), getIdString(), getWikiPageId());
+        return String.format("(interest: %s {wikipage: %s})", getId(), getWikiPageId());
     }
 }

@@ -4,18 +4,13 @@ package model.twitter;
 import constants.DatasetName;
 import io.Config;
 import model.ObjectCollection;
-import model.ObjectModel;
-import model.clusters.Cluster;
 import utils.Counter;
-import utils.IndexedSerializable;
 import utils.Statistics;
 
-import java.util.*;
-import java.util.function.BiConsumer;
-import java.util.function.BinaryOperator;
-import java.util.function.Function;
-import java.util.function.Supplier;
-import java.util.stream.Collector;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Dataset extends ObjectCollection {
@@ -505,7 +500,7 @@ public class Dataset extends ObjectCollection {
         Counter<String> catCounter = new Counter<>();
 
         for (WikiPageModel page : wikiPages.values()) {
-            catCounter.increment(page.getCategoriesModel(babelCategories).stream().map(ObjectModel::getIdString).collect(Collectors.toSet()));
+            catCounter.increment(page.getCategoriesModel(babelCategories).stream().map(x -> getStringId(x.getId())).collect(Collectors.toSet()));
         }
 
         return String.format("[CATEGORIES DISTRIBUTION]\n%s\n", catCounter.getDistribution(k));
@@ -515,7 +510,7 @@ public class Dataset extends ObjectCollection {
         Counter<String> catCounter = new Counter<>();
 
         for (WikiPageModel page : wikiPages.values()) {
-            catCounter.increment(page.getDomainsModel(babelDomains).stream().map(ObjectModel::getIdString).collect(Collectors.toSet()));
+            catCounter.increment(page.getDomainsModel(babelDomains).stream().map(x -> getStringId(x.getId())).collect(Collectors.toSet()));
         }
 
         return String.format("[DOMAINS DISTRIBUTION]\n%s\n", catCounter.getDistribution(k));

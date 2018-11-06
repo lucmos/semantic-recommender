@@ -42,8 +42,8 @@ public class UserModel extends ObjectModel {
     private Set<Integer> wikiPagesOfLikedItemsIds;
 
 
-    UserModel(int seqId, String id) {
-        super(seqId, id);
+    UserModel(int seqId) {
+        super(seqId);
         this.followOutIds = new HashSet<>();
         this.followInIds = new HashSet<>();
         this.tweetsIds = new HashSet<>();
@@ -210,6 +210,6 @@ public class UserModel extends ObjectModel {
 
     @Override
     public String toString() {
-        return String.format("(user: #%s {id: %s, tweets: %s, out: %s, in: %s})", getId(), getIdString(), tweetsIds.size(), followOutIds.size(), followInIds.size());
+        return String.format("(user: #%s {tweets: %s, out: %s, in: %s})", getId(), tweetsIds.size(), followOutIds.size(), followInIds.size());
     }
 }

@@ -95,7 +95,7 @@ public class Clusters extends ObjectCollection {
 
     public String clustersDistribution(int k) {
         String clustDistr = Counter.fromCollection(usersToCluster.values().stream()
-                .map(x -> clusters_index.get(x).getIdString()).collect(Collectors.toList()))
+                .map(x -> clusters_index.get(x).getName(getIdMapping())).collect(Collectors.toList()))
                 .getDistribution(k);
         return String.format("[CLUSTERS SIZE DISTRIBUTION]\n %s", clustDistr);
     }
