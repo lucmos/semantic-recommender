@@ -11,6 +11,11 @@ import utils.IndexedSerializable;
 import utils.Statistics;
 
 import java.util.*;
+import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class Dataset extends ObjectCollection {
@@ -96,6 +101,10 @@ public class Dataset extends ObjectCollection {
         return users;
     }
 
+    public Set<UserModel> getFamousUsers() {
+        return users.values().stream().filter(UserModel::isFamous).collect(Collectors.toSet());
+    }
+
     public Map<Integer, WikiPageModel> getWikiPages() {
         return wikiPages;
     }
@@ -177,14 +186,15 @@ public class Dataset extends ObjectCollection {
     public String stats(){
         return String.format("[STATS DATASET %s]\n" +
                         "\tunique number of users: %s\n" +
+                        "\tunique number of vip users: %s\n" +
                         "\tunique number of tweets: %s\n" +
                         "\tunique number of interests: %s\n" +
                         "\tunique number of wikipages: %s\n" +
                         "\tunique number of categories: %s\n" +
                         "\tunique number of domains: %s\n",
                 name.name().toUpperCase(),
-                users.size(), tweets.size(), interests.size(),
-                wikiPages.size(), babelCategories.size(), babelDomains.size());
+                users.size(), getFamousUsers().size(),
+                tweets.size(), interests.size(),wikiPages.size(), babelCategories.size(), babelDomains.size());
     }
 
     public String tweeetStats() {
@@ -248,10 +258,12 @@ public class Dataset extends ObjectCollection {
     }
 
     public String followOutStats() {
-        double[] in_sizes = users.values().stream().mapToDouble(x -> x.getFollowOutIds().size()).toArray();
-        Statistics stat = new Statistics(in_sizes);
+        StringBuilder s = new StringBuilder();
 
-        return stat.report("FOLLOW-OUT STATS",
+        double[] stats = users.values().stream().mapToDouble(x -> x.getFollowOutIds().size()).toArray();
+        Statistics stat = new Statistics(stats);
+
+        s.append(stat.report("FOLLOW-OUT STATS",
                 "total number of followOut",
                 "total number of users",
                 "greatest #followOut per user",
@@ -262,17 +274,37 @@ public class Dataset extends ObjectCollection {
                 "#median #followOut per users",
                 "mean #followOut per user",
                 "#followOut per user variance",
-                "#followOut per user stddev");
+                "#followOut per user stddev"));
+
+        s.append("\n");
+
+        stats = users.values().stream().mapToDouble(x -> x.getFollowOutUserModels(users).stream().filter(UserModel::isFamous).count()).toArray();
+        stat = new Statistics(stats);
+
+        s.append(stat.report("FOLLOW-OUT TO VIP USERS STATS",
+                "total number of followOut to vip",
+                "total number of users",
+                "greatest #followOut to vip per user",
+                "#greatest #followOut to vip per users",
+                "smallest #followOut to vip per user",
+                "#smallest #followOut to vip per user",
+                "median #followOut to vip per user",
+                "#median #followOut to vip per users",
+                "mean #followOut to vip per user",
+                "#followOut to vip per user variance",
+                "#followOut to vip per user stddev"));
+
+        return s.toString();
     }
 
     public String categoriesStats() {
         StringBuilder s = new StringBuilder();
 
-        double[] catUsers = users.values().stream().mapToDouble(x ->
+        double[] stats = users.values().stream().mapToDouble(x ->
                 x.getTweetsCategories(tweets, interests, wikiPages, babelCategories).size()).toArray();
-        Statistics stat = new Statistics(catUsers);
+        Statistics stat = new Statistics(stats);
         s.append(stat.report(
-                "CATEGORIES STATS PER USER",
+                "CATEGORIES STATS PER USER' TWEETS",
                 "total number of categories in users",
                 "total number of users",
                 "greatest #categories per user",
@@ -287,9 +319,9 @@ public class Dataset extends ObjectCollection {
 
         s.append("\n");
 
-        double[] catTweet = tweets.values().stream().mapToDouble(x ->
+        stats = tweets.values().stream().mapToDouble(x ->
                 x.getWikiPageModel(interests, wikiPages).getBabelCategories().size()).toArray();
-        stat = new Statistics(catTweet);
+        stat = new Statistics(stats);
         s.append(stat.report(
                 "CATEGORIES STATS PER TWEET",
                 "total number of categories in tweets",
@@ -303,6 +335,65 @@ public class Dataset extends ObjectCollection {
                 "mean #categories per tweet",
                 "#categories per tweet variance",
                 "#categories per tweet stddev"));
+
+        s.append("\n");
+
+        stats = users.values().stream().filter(UserModel::isFamous)
+                .mapToDouble(x -> {
+                    if (x.isFamous()) {
+                        return x.getWikiPageAboutUserModel(wikiPages).getBabelCategories().size();
+                    } else {
+                        return 0;
+                    }
+                }).toArray();
+
+        stat = new Statistics(stats);
+        s.append(stat.report(
+                "CATEGORIES STATS PER VIP USER IN HIS WIKIPAGE",
+                "total number of categories in vip wikipages",
+                "total number of vip users",
+                "greatest #categories per user",
+                "#greatest #categories per users",
+                "smallest #categories per user",
+                "#smallest #categories per user",
+                "median #categories per user",
+                "#median #categories per users",
+                "mean #categories per user",
+                "#categories per user variance",
+                "#categories per user stddev"));
+
+        s.append("\n");
+
+        stats = new double[users.size()];
+        int index = 0;
+        for (UserModel u : users.values()) {
+            int count = 0;
+
+            for (UserModel f : u.getFollowOutUserModels(users)) {
+                count += f.getTweetsCategories(tweets, interests, wikiPages, babelCategories).total();
+
+                if (f.isFamous()) {
+                    count += f.getWikiPageAboutUserModel(wikiPages).getBabelCategories().size();
+                }
+            }
+            stats[index] = count;
+            index++;
+        }
+        stat = new Statistics(stats);
+
+        s.append(stat.report(
+                "CATEGORIES STATS PER USER IN HIS FOLLOW-OUT (TWEETS + VIP WIKIPAGE)",
+                "total number of categories in follow-out",
+                "total number of users",
+                "greatest #categories per user",
+                "#greatest #categories per users",
+                "smallest #categories per user",
+                "#smallest #categories per user",
+                "median #categories per user",
+                "#median #categories per users",
+                "mean #categories per user",
+                "#categories per user variance",
+                "#categories per user stddev"));
         return s.toString();
     }
 
@@ -310,9 +401,9 @@ public class Dataset extends ObjectCollection {
 
         StringBuilder s = new StringBuilder();
 
-        double[] domUsers = users.values().stream().mapToDouble(x ->
+        double[] stats = users.values().stream().mapToDouble(x ->
                 x.getTweetsDomains(tweets, interests, wikiPages, getBabelDomains()).size()).toArray();
-        Statistics stat = new Statistics(domUsers);
+        Statistics stat = new Statistics(stats);
         s.append(stat.report(
                 "DOMAINS STATS PER USER",
                 "total number of domains in users",
@@ -329,9 +420,9 @@ public class Dataset extends ObjectCollection {
 
         s.append("\n");
 
-        double[] domTweet = tweets.values().stream().mapToDouble(x ->
+        stats = tweets.values().stream().mapToDouble(x ->
                 x.getWikiPageModel(interests, wikiPages).getBabelDomains().size()).toArray();
-        stat = new Statistics(domTweet);
+        stat = new Statistics(stats);
         s.append(stat.report(
                 "DOMAINS STATS PER TWEET",
                 "total number of domains in tweets",
@@ -345,8 +436,70 @@ public class Dataset extends ObjectCollection {
                 "mean #domains per tweet",
                 "#domains per tweet variance",
                 "#domains per tweet stddev"));
+
+        s.append("\n");
+
+        stats = users.values().stream().filter(UserModel::isFamous)
+                .mapToDouble(x -> {
+                    if (x.isFamous()) {
+                        return x.getWikiPageAboutUserModel(wikiPages).getBabelDomains().size();
+                    } else {
+                        return 0;
+                    }
+                }).toArray();
+
+        stat = new Statistics(stats);
+        s.append(stat.report(
+                "DOMAINS STATS PER VIP USER IN HIS WIKIPAGE",
+                "total number of domains in vip wikipages",
+                "total number of vip users",
+                "greatest #domains per user",
+                "#greatest #domains per users",
+                "smallest #domains per user",
+                "#smallest #domains per user",
+                "median #domains per user",
+                "#median #domains per users",
+                "mean #domains per user",
+                "#domains per user variance",
+                "#domains per user stddev"));
+
+        s.append("\n");
+
+
+        stats = new double[users.size()];
+        int index = 0;
+
+        for (UserModel u : users.values()) {
+            int count = 0;
+
+            for (UserModel f : u.getFollowOutUserModels(users)) {
+                count += f.getTweetsDomains(tweets, interests, wikiPages, babelDomains).total();
+
+                if (f.isFamous()) {
+                    count += f.getWikiPageAboutUserModel(wikiPages).getDomainsModel(babelDomains).size();
+                }
+            }
+            stats[index] = count;
+            index++;
+        }
+
+        stat = new Statistics(stats);
+        s.append(stat.report(
+                "DOMAINS STATS PER USER IN HIS FOLLOW-OUT (TWEETS + VIP WIKIPAGE)",
+                "total number of domains in follow-out",
+                "total number of users",
+                "greatest #domains per user",
+                "#greatest #domains per users",
+                "smallest #domains per user",
+                "#smallest #domains per user",
+                "median #domains per user",
+                "#median #domains per users",
+                "mean #domains per user",
+                "#domains per user variance",
+                "#domains per user stddev"));
         return s.toString();
     }
+
 
     public String categoriesDistribution(int k) {
         Counter<String> catCounter = new Counter<>();
