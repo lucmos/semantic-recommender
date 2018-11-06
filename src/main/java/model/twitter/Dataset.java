@@ -192,7 +192,7 @@ public class Dataset extends ObjectCollection {
     }
 
     public String tweeetStats() {
-        double[] tweets_sizes = users.values().stream().mapToDouble(x -> x.getTweetsIds().size()).toArray();
+        double[] tweets_sizes = users.values().parallelStream().mapToDouble(x -> x.getTweetsIds().size()).toArray();
         Statistics stat = new Statistics(tweets_sizes);
 
         return stat.report(
@@ -212,7 +212,7 @@ public class Dataset extends ObjectCollection {
     }
 
     public String friendStats() {
-        double[] in_sizes = users.values().stream().mapToDouble(x -> {
+        double[] in_sizes = users.values().parallelStream().mapToDouble(x -> {
             IntOpenHashSet s = new IntOpenHashSet(x.getFollowInIds());
             s.addAll(x.getFollowOutIds());
             return s.size();
@@ -234,7 +234,7 @@ public class Dataset extends ObjectCollection {
     }
 
     public String followInStats() {
-        double[] in_sizes = users.values().stream().mapToDouble(x -> x.getFollowInIds().size()).toArray();
+        double[] in_sizes = users.values().parallelStream().mapToDouble(x -> x.getFollowInIds().size()).toArray();
         Statistics stat = new Statistics(in_sizes);
 
         return stat.report("FOLLOW-IN STATS",
@@ -254,7 +254,7 @@ public class Dataset extends ObjectCollection {
     public String followOutStats() {
         StringBuilder s = new StringBuilder();
 
-        double[] stats = users.values().stream().mapToDouble(x -> x.getFollowOutIds().size()).toArray();
+        double[] stats = users.values().parallelStream().mapToDouble(x -> x.getFollowOutIds().size()).toArray();
         Statistics stat = new Statistics(stats);
 
         s.append(stat.report("FOLLOW-OUT STATS",
@@ -272,7 +272,7 @@ public class Dataset extends ObjectCollection {
 
         s.append("\n");
 
-        stats = users.values().stream().mapToDouble(x -> x.getFollowOutUserModels(users).stream().filter(UserModel::isFamous).count()).toArray();
+        stats = users.values().parallelStream().mapToDouble(x -> x.getFollowOutUserModels(users).stream().filter(UserModel::isFamous).count()).toArray();
         stat = new Statistics(stats);
 
         s.append(stat.report("FOLLOW-OUT TO VIP USERS STATS",
@@ -294,7 +294,7 @@ public class Dataset extends ObjectCollection {
     public String categoriesStats() {
         StringBuilder s = new StringBuilder();
 
-        double[] stats = users.values().stream().mapToDouble(x ->
+        double[] stats = users.values().parallelStream().mapToDouble(x ->
                 x.getTweetsCategories(tweets, interests, wikiPages, babelCategories).size()).toArray();
         Statistics stat = new Statistics(stats);
         s.append(stat.report(
@@ -313,7 +313,7 @@ public class Dataset extends ObjectCollection {
 
         s.append("\n");
 
-        stats = tweets.values().stream().mapToDouble(x ->
+        stats = tweets.values().parallelStream().mapToDouble(x ->
                 x.getWikiPageModel(interests, wikiPages).getBabelCategories().size()).toArray();
         stat = new Statistics(stats);
         s.append(stat.report(
@@ -332,7 +332,7 @@ public class Dataset extends ObjectCollection {
 
         s.append("\n");
 
-        stats = users.values().stream().filter(UserModel::isFamous)
+        stats = users.values().parallelStream().filter(UserModel::isFamous)
                 .mapToDouble(x -> {
                     if (x.isFamous()) {
                         return x.getWikiPageAboutUserModel(wikiPages).getBabelCategories().size();
@@ -358,19 +358,12 @@ public class Dataset extends ObjectCollection {
 
         s.append("\n");
 
-        stats = new double[users.size()];
         Counter<Integer> userTocatNum = new Counter<>();
         for (UserModel u : users.values()) {
             userTocatNum.add(u.getId(), u.getTweetsCategories(tweets, interests, wikiPages, babelCategories).size());
             userTocatNum.add(u.getId(), u.getWikiPageAboutUserModel(wikiPages).getBabelCategories().size());
         }
-        int index = 0;
-        for (UserModel u : users.values()) {
-            for (UserModel f : u.getFollowOutUserModels(users)) {
-                stats[index] += userTocatNum.get(f.getId());
-            }
-            index++;
-        }
+        stats = getUserToDouble(userTocatNum);
 
         stat = new Statistics(stats);
         s.append(stat.report(
@@ -393,7 +386,7 @@ public class Dataset extends ObjectCollection {
 
         StringBuilder s = new StringBuilder();
 
-        double[] stats = users.values().stream().mapToDouble(x ->
+        double[] stats = users.values().parallelStream().mapToDouble(x ->
                 x.getTweetsDomains(tweets, interests, wikiPages, getBabelDomains()).size()).toArray();
         Statistics stat = new Statistics(stats);
         s.append(stat.report(
@@ -412,7 +405,7 @@ public class Dataset extends ObjectCollection {
 
         s.append("\n");
 
-        stats = tweets.values().stream().mapToDouble(x ->
+        stats = tweets.values().parallelStream().mapToDouble(x ->
                 x.getWikiPageModel(interests, wikiPages).getBabelDomains().size()).toArray();
         stat = new Statistics(stats);
         s.append(stat.report(
@@ -431,7 +424,7 @@ public class Dataset extends ObjectCollection {
 
         s.append("\n");
 
-        stats = users.values().stream().filter(UserModel::isFamous)
+        stats = users.values().parallelStream().filter(UserModel::isFamous)
                 .mapToDouble(x -> {
                     if (x.isFamous()) {
                         return x.getWikiPageAboutUserModel(wikiPages).getBabelDomains().size();
@@ -457,20 +450,13 @@ public class Dataset extends ObjectCollection {
 
         s.append("\n");
 
-        stats = new double[users.size()];
         Counter<Integer> userTocatNum = new Counter<>();
         for (UserModel u : users.values()) {
             userTocatNum.add(u.getId(), u.getTweetsDomains(tweets, interests, wikiPages, babelDomains).size());
             userTocatNum.add(u.getId(), u.getWikiPageAboutUserModel(wikiPages).getBabelDomains().size());
         }
-        int index = 0;
-        for (UserModel u : users.values()) {
-            for (UserModel f : u.getFollowOutUserModels(users)) {
-                stats[index] += userTocatNum.get(f.getId());
-            }
-            index++;
-        }
-
+        stats = getUserToDouble(userTocatNum);
+        
         stat = new Statistics(stats);
         s.append(stat.report(
                 "DOMAINS STATS PER USER IN HIS FOLLOW-OUT (TWEETS + VIP WIKIPAGE)",
@@ -486,6 +472,16 @@ public class Dataset extends ObjectCollection {
                 "#domains per user variance",
                 "#domains per user stddev"));
         return s.toString();
+    }
+
+    private double[] getUserToDouble(Counter<Integer> userFriendToDouble) {
+        return users.values().parallelStream().mapToDouble(x -> {
+            int count = 0;
+            for (UserModel f : x.getFollowOutUserModels(users)) {
+                count += userFriendToDouble.get(f.getId());
+            }
+            return count;
+        }).toArray();
     }
 
 
