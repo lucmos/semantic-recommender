@@ -35,9 +35,21 @@ public class Counter<T> {
         return c;
     }
 
-    public Counter<T> increment(T t) {
-        counts.merge(t, 1d, Double::sum);
+    public Counter<T> add(T t, double value) {
+        counts.merge(t, value, Double::sum);
         return this;
+
+    }
+
+    public Counter<T> add(Counter<T> counter) {
+        for (Map.Entry<T, Double> entry : counter.getMap().entrySet()) {
+            add(entry.getKey(), entry.getValue());
+        }
+        return this;
+    }
+
+    public Counter<T> increment(T t) {
+        return add(t, 1);
     }
 
     public Counter<T> increment(Collection<T> coll) {
