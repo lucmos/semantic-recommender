@@ -3,13 +3,11 @@ package executors;
 import clusterization.ClustersMeter;
 import constants.DatasetName;
 import io.Cache;
-import io.Config;
 import io.Utils;
-import model.clusters.Clusters;
+import model.twitter.BabelCategoryModel;
 import model.twitter.Dataset;
 import model.twitter.TwitterFactory;
 import model.twitter.UserModel;
-import utils.Chrono;
 import utils.Counter;
 
 
@@ -42,11 +40,25 @@ public class ReadingPhaseExecutor {
         Dataset d = Cache.DatasetCache.read(DatasetName.WIKIMID);
         TwitterFactory f = new TwitterFactory(d);
 
-        UserModel u1 = f.getUser(2394493);
-        UserModel u2 = f.getUser(1775295);
-        UserModel u3 = f.getUser(937894);
+        UserModel u1 = f.getUser(1591641);
+        UserModel u2 = f.getUser(718480);
+        UserModel u3 = f.getUser(1265112);
 
         System.out.println();
+        Counter<BabelCategoryModel> c1 = u1.getTweetsCategories(d);
+        Counter<BabelCategoryModel> c2 = u2.getTweetsCategories(d);
+        Counter<BabelCategoryModel> c3 = u3.getTweetsCategories(d);
+
+        System.out.println(c1);
+        System.out.println(c2);
+        System.out.println(c3);
+
+        double a = ClustersMeter.cosineSimilarity(c1, c2);
+        double b = ClustersMeter.cosineSimilarity(c1, c3);
+        double c = ClustersMeter.cosineSimilarity(c2, c3);
+        System.out.println(a);
+        System.out.println(b);
+        System.out.println(c);
 //        System.out.println(d.report());
 
 //        Clusters c = Cache.ClustersWikiMidCache.read();
