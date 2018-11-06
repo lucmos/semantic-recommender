@@ -51,7 +51,10 @@ public class ReadingPhaseExecutor {
 
         Dataset d = Cache.DatasetCache.read(DatasetName.WIKIMID);
         System.out.println(d.report());
-        System.out.println(d.getUsers().values().stream().filter(UserModel::isFamous).count());
+
+
+
+//        System.out.println(d.getUsers().values().stream().filter(x -> x.isFamous(d.getWikiPages())).count());
 
 //        TwitterFactory m = new TwitterFactory(d);
 //

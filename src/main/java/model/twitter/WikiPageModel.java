@@ -1,5 +1,6 @@
 package model.twitter;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import model.ObjectModel;
 
@@ -27,7 +28,7 @@ public class WikiPageModel extends ObjectModel {
         this.simpleName = getSimpleName(name);
     }
 
-    public BabelCategoryModel getCategoryModel(Map<Integer, BabelCategoryModel> categories, Integer catID) {
+    public BabelCategoryModel getCategoryModel(Int2ObjectOpenHashMap<BabelCategoryModel> categories, int catID) {
         assert categories.containsKey(catID);
 
         BabelCategoryModel cat = categories.get(catID);
@@ -36,7 +37,7 @@ public class WikiPageModel extends ObjectModel {
         return cat;
     }
 
-    public BabelDomainModel getDomainModel(Map<Integer, BabelDomainModel> domains, Integer domId) {
+    public BabelDomainModel getDomainModel(Int2ObjectOpenHashMap<BabelDomainModel> domains, int domId) {
         assert domains.containsKey(domId);
 
         BabelDomainModel dom = domains.get(domId);
@@ -45,19 +46,19 @@ public class WikiPageModel extends ObjectModel {
         return dom;
     }
 
-    public Set<BabelCategoryModel> getCategoriesModel(Map<Integer, BabelCategoryModel> categories) {
+    public Set<BabelCategoryModel> getCategoriesModel(Int2ObjectOpenHashMap<BabelCategoryModel> categories) {
         return babelCategories.stream().map(x -> getCategoryModel(categories, x)).collect(Collectors.toSet());
     }
 
-    public Set<BabelDomainModel> getDomainsModel(Map<Integer, BabelDomainModel> domains) {
+    public Set<BabelDomainModel> getDomainsModel(Int2ObjectOpenHashMap<BabelDomainModel> domains) {
         return babelDomains.stream().map(x -> getDomainModel(domains, x)).collect(Collectors.toSet());
     }
 
-    public Set<Integer> getBabelCategories() {
+    public IntOpenHashSet getBabelCategories() {
         return babelCategories;
     }
 
-    public Set<Integer> getBabelDomains() {
+    public IntOpenHashSet getBabelDomains() {
         return babelDomains;
     }
 

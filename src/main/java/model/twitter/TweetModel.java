@@ -1,5 +1,6 @@
 package model.twitter;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import model.ObjectModel;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -67,7 +68,7 @@ public class TweetModel extends ObjectModel {
         return interestId;
     }
 
-    public InterestModel getInterestModel(Map<Integer, InterestModel> interests) {
+    public InterestModel getInterestModel(Int2ObjectOpenHashMap<InterestModel> interests) {
         assert interests.containsKey(getInterestId());
 
         InterestModel interest = interests.get(getInterestId());
@@ -76,7 +77,7 @@ public class TweetModel extends ObjectModel {
         return interest;
     }
 
-    public WikiPageModel getWikiPageModel(Map<Integer, InterestModel> interests, Map<Integer, WikiPageModel> pages) {
+    public WikiPageModel getWikiPageModel(Int2ObjectOpenHashMap<InterestModel> interests, Int2ObjectOpenHashMap<WikiPageModel> pages) {
         WikiPageModel p = getInterestModel(interests).getWikiPageModel(pages);
 
         assert p != null;

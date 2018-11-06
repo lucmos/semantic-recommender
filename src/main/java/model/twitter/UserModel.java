@@ -1,6 +1,7 @@
 package model.twitter;
 
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import it.uniroma1.lcl.babelnet.data.BabelCategory;
@@ -33,7 +34,7 @@ public class UserModel extends ObjectModel {
      * The wikipage associated to this user
      * (taken from the dataset)
      */
-    private Integer wikiPageAboutUserId;
+    private int wikiPageAboutUserId;
 
 
     /**
@@ -43,6 +44,7 @@ public class UserModel extends ObjectModel {
      */
     private IntOpenHashSet wikiPagesOfLikedItemsIds;
 
+    private boolean famous;
 
     UserModel(int seqId) {
         super(seqId);
@@ -100,9 +102,10 @@ public class UserModel extends ObjectModel {
      */
     public void addWikiPageAboutUser(WikiPageModel wikiPage) {
         assert wikiPage != null;
-        assert this.wikiPageAboutUserId == null;
+        assert !famous;
 
         wikiPageAboutUserId = wikiPage.getId();
+        famous = true;
     }
 
     public void addWikiPagesOfLikedItemsIds(WikiPageModel wikiPage) {
@@ -111,46 +114,44 @@ public class UserModel extends ObjectModel {
         this.wikiPagesOfLikedItemsIds.add(wikiPage.getId());
     }
 
-    public Set<Integer> getFollowOutIds() {
+    public IntOpenHashSet getFollowOutIds() {
         assert followOutIds != null;
 
         return followOutIds;
     }
 
-    public Set<Integer> getFollowInIds() {
+    public IntOpenHashSet getFollowInIds() {
         assert followInIds != null;
 
         return followInIds;
     }
 
-    public Set<Integer> getTweetsIds() {
+    public IntOpenHashSet getTweetsIds() {
         assert tweetsIds != null;
 
         return tweetsIds;
     }
 
-    public Integer getWikiPageAboutUserId() {
-        assert this.wikiPageAboutUserId != null;
-
+    public int getWikiPageAboutUserId() {
         return this.wikiPageAboutUserId;
     }
 
-    public Set<Integer> getWikiPagesOfLikedItemsIds() {
+    public IntOpenHashSet getWikiPagesOfLikedItemsIds() {
         assert wikiPagesOfLikedItemsIds != null;
 
         return wikiPagesOfLikedItemsIds;
     }
 
-    public Set<UserModel> getFollowOutUserModels(Map<Integer, UserModel> users) {
+    public Set<UserModel> getFollowOutUserModels(Int2ObjectOpenHashMap<UserModel> users) {
         assert followOutIds != null;
 
-        Set<UserModel> fu = followOutIds.stream().map(users::get).collect(Collectors.toSet());
+        Set<UserModel> fu = followOutIds.stream().map(x -> users.get((int) x)).collect(Collectors.toSet());
 
         assert fu.size() == followOutIds.size();
         return fu;
     }
 
-    public WikiPageModel getWikiPageAboutUserModel(Map<Integer, WikiPageModel> pages) {
+    public WikiPageModel getWikiPageAboutUserModel(Int2ObjectOpenHashMap<WikiPageModel> pages) {
         assert pages != null;
 
         WikiPageModel page = pages.get(this.wikiPageAboutUserId);
@@ -160,10 +161,10 @@ public class UserModel extends ObjectModel {
     }
 
     public boolean isFamous() {
-        return this.wikiPageAboutUserId != null;
+        return famous;
     }
 
-    public TweetModel getTweetModel(Map<Integer, TweetModel> tweets, Integer tweetId) {
+    public TweetModel getTweetModel(Int2ObjectOpenHashMap<TweetModel> tweets, int tweetId) {
         assert tweets.containsKey(tweetId);
 
         TweetModel tweet = tweets.get(tweetId);
@@ -172,14 +173,14 @@ public class UserModel extends ObjectModel {
         return tweet;
     }
 
-    public Set<TweetModel> getTweetsModel(Map<Integer, TweetModel> tweets) {
+    public Set<TweetModel> getTweetsModel(Int2ObjectOpenHashMap<TweetModel> tweets) {
         return tweetsIds.stream().map(x -> getTweetModel(tweets, x)).collect(Collectors.toSet());
     }
 
-    public Counter<BabelCategoryModel> getTweetsCategories(Map<Integer,TweetModel> tweets_index,
-                                                          Map<Integer,InterestModel> interest_index,
-                                                          Map<Integer,WikiPageModel> pages_index,
-                                                          Map<Integer,BabelCategoryModel> cat_index) {
+    public Counter<BabelCategoryModel> getTweetsCategories(Int2ObjectOpenHashMap<TweetModel> tweets_index,
+                                                          Int2ObjectOpenHashMap<InterestModel> interest_index,
+                                                          Int2ObjectOpenHashMap<WikiPageModel> pages_index,
+                                                          Int2ObjectOpenHashMap<BabelCategoryModel> cat_index) {
         Counter<BabelCategoryModel> cats = new Counter<>();
 
         Set<TweetModel> tweets = getTweetsModel(tweets_index);
@@ -193,10 +194,10 @@ public class UserModel extends ObjectModel {
         return cats;
     }
 
-    public Counter<BabelDomainModel> getTweetsDomains(Map<Integer,TweetModel> tweets_index,
-                                                          Map<Integer,InterestModel> interest_index,
-                                                          Map<Integer,WikiPageModel> pages_index,
-                                                          Map<Integer,BabelDomainModel> dom_index) {
+    public Counter<BabelDomainModel> getTweetsDomains(Int2ObjectOpenHashMap<TweetModel> tweets_index,
+                                                          Int2ObjectOpenHashMap<InterestModel> interest_index,
+                                                          Int2ObjectOpenHashMap<WikiPageModel> pages_index,
+                                                          Int2ObjectOpenHashMap<BabelDomainModel> dom_index) {
         Counter<BabelDomainModel> cats = new Counter<>();
 
         Set<TweetModel> tweets = getTweetsModel(tweets_index);

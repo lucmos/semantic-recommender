@@ -1,10 +1,8 @@
 package utils;
 
-import java.io.Serializable;
-import java.util.Collection;
+import io.IndexedSerializable;
+
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * An implementation of a 1:1 hashmap, where both the keys and the values can be retrieved in O(1)
@@ -12,6 +10,7 @@ import java.util.Set;
  * @param <K> left key "a"
  * @param <V> right key "b"
  */
+@Deprecated
 public class OneToOneHash<K, V>  implements IndexedSerializable {
     private HashMap<K, V> aToB = new HashMap<>();
     private HashMap<V, K> bToA = new HashMap<>();

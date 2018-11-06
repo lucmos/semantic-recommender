@@ -46,7 +46,7 @@ public class TwitterFactory {
      * @param id the id of the user
      * @return the specified UserModel
      */
-    public  UserModel getUser(String id) {
+    public UserModel getUser(String id) {
         assert id != null && !id.equals("");
 
         if (!dataset.exixstObj(id)) {

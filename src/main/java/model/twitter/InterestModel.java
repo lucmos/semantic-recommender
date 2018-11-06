@@ -1,5 +1,6 @@
 package model.twitter;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import model.ObjectModel;
 
 import java.io.Serializable;
@@ -48,7 +49,7 @@ public class InterestModel extends ObjectModel {
         return wikiPageId;
     }
 
-    public WikiPageModel getWikiPageModel(Map<Integer, WikiPageModel> pages) {
+    public WikiPageModel getWikiPageModel(Int2ObjectOpenHashMap<WikiPageModel> pages) {
         assert pages.containsKey(wikiPageId);
 
         WikiPageModel page = pages.get(wikiPageId);

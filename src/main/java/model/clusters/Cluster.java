@@ -4,8 +4,6 @@ import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import model.NamedObjectModel;
 import model.twitter.UserModel;
 
-import java.util.Set;
-
 public class Cluster extends NamedObjectModel {
 
     private IntOpenHashSet userIds;
@@ -31,7 +29,7 @@ public class Cluster extends NamedObjectModel {
         return userIds.size();
     }
 
-    public Set<Integer> getUserIds() {
+    public IntOpenHashSet getUserIds() {
         return userIds;
     }
 }

@@ -2,6 +2,7 @@ package model.clusters;
 
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import model.ObjectCollection;
 import model.twitter.Dataset;
 import model.twitter.UserModel;
@@ -22,7 +23,7 @@ public class Clusters extends ObjectCollection {
         usersToCluster = new Int2IntOpenHashMap();
     }
 
-    public Cluster getCluster(Integer clusterId) {
+    public Cluster getCluster(int clusterId) {
         assert clusters_index.containsKey(clusterId);
 
         return clusters_index.get(clusterId);
@@ -34,12 +35,12 @@ public class Clusters extends ObjectCollection {
         return getCluster(usersToCluster.get(userModel.getId()));
     }
 
-    public Map<Integer, Cluster> getClusters() {
+    public Int2ObjectOpenHashMap<Cluster> getClusters() {
         return clusters_index;
     }
 
 
-    public Map<Integer, Integer> getUsersToCluster() {
+    public Int2IntOpenHashMap getUsersToCluster() {
         return usersToCluster;
     }
 
@@ -97,7 +98,7 @@ public class Clusters extends ObjectCollection {
 
     public String clustersDistribution(int k) {
         String clustDistr = Counter.fromCollection(usersToCluster.values().stream()
-                .map(x -> clusters_index.get(x).getName(getIdMapping())).collect(Collectors.toList()))
+                .map(x -> clusters_index.get((int) x).getName(getIdMapping())).collect(Collectors.toList()))
                 .getDistribution(k);
         return String.format("[CLUSTERS SIZE DISTRIBUTION]\n %s", clustDistr);
     }
@@ -105,12 +106,12 @@ public class Clusters extends ObjectCollection {
     public String clusterInspection(Dataset dataset, Cluster cluster) {
         StringBuilder s = new StringBuilder();
         s.append(String.format("[INSPECTION OF USERS IN CLUSTER] -> %s\n", cluster));
-        Set<Integer> users = cluster.getUserIds();
-        for (Integer userId : users) {
+        IntOpenHashSet users = cluster.getUserIds();
+        for (int userId : users) {
             List<String> list = dataset.getUsers().get(userId).getTweetsIds().stream()
                     .map(tweetId ->
                             dataset.getTweets()
-                                    .get(tweetId)
+                                    .get((int) tweetId)
                                     .getWikiPageModel(dataset.getInterests(), dataset.getWikiPages())
                                     .toString())
                     .filter(Objects::nonNull)

@@ -1,16 +1,15 @@
 package model;
 
-import utils.IndexedSerializable;
-import utils.OneToOneHash;
+import io.IndexedSerializable;
 
 public abstract class ObjectCollection implements IndexedSerializable {
     /**
      * A mapping between an integer identifier and a string one
      */
-    private OneToOneHash<Integer, String> idMap;
+    private IdMapping idMap;
 
      public ObjectCollection() {
-        idMap = new OneToOneHash<>();
+        idMap = new IdMapping();
     }
 
     /**
@@ -18,7 +17,7 @@ public abstract class ObjectCollection implements IndexedSerializable {
      *
      * @return the mapping, local to each class
      */
-    public OneToOneHash<Integer, String> getIdMapping() {
+    public IdMapping getIdMapping() {
         assert idMap != null;
 
         return idMap;
@@ -34,8 +33,8 @@ public abstract class ObjectCollection implements IndexedSerializable {
 
         int seqId = idMap.size();
 
-        assert !idMap.containsA(seqId);
-        assert !idMap.containsB(idString);
+        assert !idMap.containsIntId(seqId);
+        assert !idMap.containsStringId(idString);
 
         idMap.put(seqId, idString);
 
@@ -43,14 +42,18 @@ public abstract class ObjectCollection implements IndexedSerializable {
     }
 
     public boolean exixstObj(String id) {
-        return idMap.containsB(id);
+        return idMap.containsStringId(id);
+    }
+
+    public boolean exixstObj(int id) {
+        return idMap.containsIntId(id);
     }
 
     public String getStringId(int i) {
-        return idMap.getA(i);
+        return idMap.getStringId(i);
     }
 
     public int getIntegerId(String s) {
-        return idMap.getB(s);
+        return idMap.getIntId(s);
     }
 }

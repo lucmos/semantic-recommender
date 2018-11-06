@@ -3,13 +3,13 @@ package model.twitter;
 
 import constants.DatasetName;
 import io.Config;
-import it.unimi.dsi.fastutil.ints.*;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import model.ObjectCollection;
 import utils.Counter;
 import utils.Statistics;
 
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -46,69 +46,68 @@ public class Dataset extends ObjectCollection {
         return name;
     }
 
-
-    public InterestModel getInterest(Integer id) {
+    public InterestModel getInterest(int id) {
         assert interests.containsKey(id);
 
         return interests.get(id);
     }
 
-    public TweetModel getTweet(Integer id) {
+    public TweetModel getTweet(int id) {
         assert tweets.containsKey(id);
 
         return tweets.get(id);
     }
 
-    public UserModel getUser(Integer id) {
+    public UserModel getUser(int id) {
         assert users.containsKey(id);
 
         return users.get(id);
     }
 
-    public BabelCategoryModel getCategory(Integer id) {
+    public BabelCategoryModel getCategory(int id) {
         assert babelCategories.containsKey(id);
 
         return babelCategories.get(id);
     }
 
-    public BabelDomainModel getDomain(Integer id) {
+    public BabelDomainModel getDomain(int id) {
         assert babelDomains.containsKey(id);
 
         return babelDomains.get(id);
     }
 
-    public WikiPageModel getPage(Integer id) {
+    public WikiPageModel getPage(int id) {
         assert wikiPages.containsKey(id);
 
         return wikiPages.get(id);
     }
 
-    public Map<Integer, InterestModel> getInterests() {
+    public Int2ObjectOpenHashMap<InterestModel> getInterests() {
         return interests;
     }
 
-    public Map<Integer, TweetModel> getTweets() {
+    public Int2ObjectOpenHashMap<TweetModel> getTweets() {
         return tweets;
     }
 
-    public Map<Integer, UserModel> getUsers() {
+    public Int2ObjectOpenHashMap<UserModel> getUsers() {
         return users;
     }
 
-    public Set<UserModel> getFamousUsers() {
-        return users.values().stream().filter(UserModel::isFamous).collect(Collectors.toSet());
-    }
-
-    public Map<Integer, WikiPageModel> getWikiPages() {
+    public Int2ObjectOpenHashMap<WikiPageModel> getWikiPages() {
         return wikiPages;
     }
 
-    public Map<Integer, BabelCategoryModel> getBabelCategories() {
+    public Int2ObjectOpenHashMap<BabelCategoryModel> getBabelCategories() {
         return babelCategories;
     }
 
-    public Map<Integer, BabelDomainModel> getBabelDomains() {
+    public Int2ObjectOpenHashMap<BabelDomainModel> getBabelDomains() {
         return babelDomains;
+    }
+
+    public Set<UserModel> getFamousUsers() {
+        return users.values().stream().filter(x -> x.isFamous()).collect(Collectors.toSet());
     }
 
     public void addInterest(InterestModel interest) {
@@ -213,7 +212,7 @@ public class Dataset extends ObjectCollection {
 
     public String friendStats() {
         double[] in_sizes = users.values().stream().mapToDouble(x -> {
-            Set<Integer> s = new HashSet<>(x.getFollowInIds());
+            IntOpenHashSet s = new IntOpenHashSet(x.getFollowInIds());
             s.addAll(x.getFollowOutIds());
             return s.size();
         }).toArray();
@@ -364,7 +363,9 @@ public class Dataset extends ObjectCollection {
             int count = 0;
 
             for (UserModel f : u.getFollowOutUserModels(users)) {
-                count += f.getTweetsCategories(tweets, interests, wikiPages, babelCategories).total();
+                for (TweetModel t : f.getTweetsModel(tweets)) {
+                    count += t.getWikiPageModel(interests, wikiPages).getBabelCategories().size();
+                }
 
                 if (f.isFamous()) {
                     count += f.getWikiPageAboutUserModel(wikiPages).getBabelCategories().size();
@@ -462,15 +463,16 @@ public class Dataset extends ObjectCollection {
 
         stats = new double[users.size()];
         int index = 0;
-
         for (UserModel u : users.values()) {
             int count = 0;
 
             for (UserModel f : u.getFollowOutUserModels(users)) {
-                count += f.getTweetsDomains(tweets, interests, wikiPages, babelDomains).total();
+                for (TweetModel t : f.getTweetsModel(tweets)) {
+                    count += t.getWikiPageModel(interests, wikiPages).getBabelDomains().size();
+                }
 
                 if (f.isFamous()) {
-                    count += f.getWikiPageAboutUserModel(wikiPages).getDomainsModel(babelDomains).size();
+                    count += f.getWikiPageAboutUserModel(wikiPages).getBabelDomains().size();
                 }
             }
             stats[index] = count;

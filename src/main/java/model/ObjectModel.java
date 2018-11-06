@@ -1,7 +1,6 @@
 package model;
 
-import utils.IndexedSerializable;
-import utils.OneToOneHash;
+import io.IndexedSerializable;
 
 /**
  * A generic twitter object.
@@ -31,7 +30,7 @@ public abstract class ObjectModel implements IndexedSerializable {
         return seqId;
     }
 
-    public String getName(OneToOneHash<Integer, String> idMap) {
-        return idMap.getA(getId());
+    public String getName(IdMapping idMap) {
+        return idMap.getStringId(getId());
     }
 }

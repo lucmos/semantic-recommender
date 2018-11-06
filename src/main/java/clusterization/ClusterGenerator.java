@@ -1,6 +1,7 @@
 package clusterization;
 
 import io.Config;
+import it.unimi.dsi.fastutil.objects.Object2DoubleOpenHashMap;
 import model.clusters.ClusterFactory;
 import model.twitter.Dataset;
 import model.twitter.UserModel;
@@ -92,7 +93,7 @@ public class ClusterGenerator {
             Counter<String> userCatCounter = entry.getValue();
             Counter<String> userImpCounter = new Counter<>();
 
-            for (Map.Entry<String, Double> e : userCatCounter.getMap().entrySet()) {
+            for (Object2DoubleOpenHashMap.Entry<String> e : userCatCounter.getMap().object2DoubleEntrySet()) {
                 String categ = e.getKey();
                 double tf = userCatCounter.countDouble(categ) / userCatCounter.totalDouble();
                 double idf = idfCache.get(categ);

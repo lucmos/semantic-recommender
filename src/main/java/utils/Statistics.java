@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Statistics {
-    double[] data;
-    int size;
+    private double[] data;
+    private int size;
 
     public Statistics(double[] data) {
         this.data = data;

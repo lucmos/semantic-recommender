@@ -71,7 +71,7 @@ public class ClustersUtils {
         HashMap<UserModel, Counter<String>> userTocatCounter = new HashMap<>();
 
         for (UserModel user : dataset.getUsers().values()) {
-            for (Integer tweetID : user.getTweetsIds()) {
+            for (int tweetID : user.getTweetsIds()) {
 
                 TweetModel tweet = user.getTweetModel(dataset.getTweets(), tweetID);
                 WikiPageModel page = tweet.getWikiPageModel(dataset.getInterests(), dataset.getWikiPages());
