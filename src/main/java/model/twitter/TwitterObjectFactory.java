@@ -6,11 +6,11 @@ import model.twitter.*;
  * Creates twitter objects.
  * If an object with a given identifier already exists, it is simply returned, otherwise it is created.
  */
-public class TwitterFactory {
+public class TwitterObjectFactory {
 
     private final Dataset dataset;
 
-    public TwitterFactory(Dataset dataset) {
+    public TwitterObjectFactory(Dataset dataset) {
         this.dataset = dataset;
     }
 
@@ -119,4 +119,10 @@ public class TwitterFactory {
         assert res != null;
         return res;
     }
+
+    /**
+     * Return the static field dataset
+     * @return a dataset
+     */
+    public Dataset getDataset(){return dataset;}
 }

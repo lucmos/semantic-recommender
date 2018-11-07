@@ -1,19 +1,10 @@
 package executors;
 
-import model.clusters.ClusterFactory;
-import model.clusters.Clusters;
-import clusterization.ClustersMeter;
-import clusterization.ClustersUtils;
 import constants.DatasetName;
 
 import io.Cache;
 import io.Utils;
 import model.twitter.Dataset;
-import model.twitter.TwitterFactory;
-import model.twitter.UserModel;
-import utils.Counter;
-
-import java.util.Map;
 
 
 @Deprecated
@@ -56,7 +47,7 @@ public class ReadingPhaseExecutor {
 
 //        System.out.println(d.getUsers().values().stream().filter(x -> x.isFamous(d.getWikiPages())).count());
 
-//        TwitterFactory m = new TwitterFactory(d);
+//        TwitterObjectFactory m = new TwitterObjectFactory(d);
 //
 //        Map<UserModel, Counter<String>> map = ClustersUtils.getUserToCatCounter(d);
 ////

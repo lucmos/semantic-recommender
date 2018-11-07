@@ -65,6 +65,12 @@ public class Dataset extends ObjectCollection {
         return users.get(id);
     }
 
+    public UserModel getUser(String id){
+        assert id!= null && id!="";
+        int intId = getIntegerId(id);
+        return getUser(intId);
+    }
+
     public BabelCategoryModel getCategory(int id) {
         assert babelCategories.containsKey(id);
 
