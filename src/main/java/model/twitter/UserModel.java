@@ -1,6 +1,7 @@
 package model.twitter;
 
 
+import constants.DatasetName;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
@@ -36,6 +37,11 @@ public class UserModel extends ObjectModel {
      */
     private int wikiPageAboutUserId;
 
+    /**
+     * The origin dataset of the user
+     */
+    private DatasetName datasetName;
+
 
     /**
      * The list of the wiki wikiPages of the items that the user likes.
@@ -46,12 +52,14 @@ public class UserModel extends ObjectModel {
 
     private boolean famous;
 
-    UserModel(int seqId) {
+    UserModel(int seqId, DatasetName datasetName) {
         super(seqId);
         this.followOutIds = new IntOpenHashSet();
         this.followInIds = new IntOpenHashSet();
         this.tweetsIds = new IntOpenHashSet();
         this.wikiPagesOfLikedItemsIds = new IntOpenHashSet();
+
+        this.datasetName = datasetName;
     }
 
     /**
@@ -130,6 +138,10 @@ public class UserModel extends ObjectModel {
         assert tweetsIds != null;
 
         return tweetsIds;
+    }
+
+    public DatasetName getDatasetName() {
+        return datasetName;
     }
 
     public int getWikiPageAboutUserId() {

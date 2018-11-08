@@ -1,5 +1,6 @@
 package model.twitter;
 
+import constants.DatasetName;
 import model.twitter.*;
 
 /**
@@ -46,12 +47,12 @@ public class TwitterObjectFactory {
      * @param id the id of the user
      * @return the specified UserModel
      */
-    public UserModel getUser(String id) {
+    public UserModel getUser(String id, DatasetName dn) {
         assert id != null && !id.equals("");
 
         if (!dataset.exixstObj(id)) {
             int i = dataset.getNextId(id);
-            dataset.users.put(i, new UserModel(i));
+            dataset.users.put(i, new UserModel(i, dn));
         }
         UserModel res = dataset.users.get(dataset.getIntegerId(id));
 
@@ -59,8 +60,8 @@ public class TwitterObjectFactory {
         return res;
     }
 
-    public UserModel getUser(int i) {
-        return getUser(dataset.getStringId(i));
+    public UserModel getUser(int i, DatasetName dn) {
+        return getUser(dataset.getStringId(i), dn);
     }
 
     /**

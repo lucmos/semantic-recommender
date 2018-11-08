@@ -33,11 +33,11 @@ public class DatasetReader {
      * @param user_to_friend the couple that should be added to the dataset, where the user follows the friend
      * @param dataset        the object that stores all the informations
      */
-    public static  void addRow_friendBased_dataset(List<String> user_to_friend, Dataset dataset, TwitterObjectFactory twitterObjectFactory) {
+    public static  void addRow_friendBased_dataset(List<String> user_to_friend, Dataset dataset, TwitterObjectFactory twitterObjectFactory, DatasetName dn) {
         assert user_to_friend.size() == 2;
 
-        UserModel user = twitterObjectFactory.getUser(user_to_friend.get(0));
-        UserModel followed = twitterObjectFactory.getUser(user_to_friend.get(1));
+        UserModel user = twitterObjectFactory.getUser(user_to_friend.get(0), dn);
+        UserModel followed = twitterObjectFactory.getUser(user_to_friend.get(1), dn);
 
         user.addFollowOut(followed);
 
@@ -51,10 +51,10 @@ public class DatasetReader {
      * @param user_to_wikipage the couple of a user and the wikipedia page which represents it
      * @param dataset          the object that stores all the informations
      */
-    public static  void addRow_friendBased_interest(List<String> user_to_wikipage, Dataset dataset, TwitterObjectFactory twitterObjectFactory) {
+    public static  void addRow_friendBased_interest(List<String> user_to_wikipage, Dataset dataset, TwitterObjectFactory twitterObjectFactory, DatasetName dn) {
         assert user_to_wikipage.size() == 2;
 
-        UserModel user = twitterObjectFactory.getUser(user_to_wikipage.get(0));
+        UserModel user = twitterObjectFactory.getUser(user_to_wikipage.get(0), dn);
         WikiPageModel wikiPage = twitterObjectFactory.getWikiPage(user_to_wikipage.get(1));
 
         user.addWikiPageAboutUser(wikiPage);
@@ -70,10 +70,10 @@ public class DatasetReader {
      *                                        the url of the tweet
      * @param dataset                         the object that stores all the informations
      */
-    public static  void addRow_messageBased_dataset(List<String> user_tweet_interest_interestUrl, Dataset dataset, TwitterObjectFactory twitterObjectFactory) {
+    public static  void addRow_messageBased_dataset(List<String> user_tweet_interest_interestUrl, Dataset dataset, TwitterObjectFactory twitterObjectFactory, DatasetName dn) {
         assert user_tweet_interest_interestUrl.size() == 4;
 
-        UserModel user = twitterObjectFactory.getUser(user_tweet_interest_interestUrl.get(0));
+        UserModel user = twitterObjectFactory.getUser(user_tweet_interest_interestUrl.get(0), dn);
 
         InterestModel interest = twitterObjectFactory.getInterest(user_tweet_interest_interestUrl.get(2));
 
@@ -114,10 +114,10 @@ public class DatasetReader {
      * @param user    the id of the user to add
      * @param dataset the object that stores all the informations
      */
-    public static  void addRow_S21(List<String> user, Dataset dataset, TwitterObjectFactory twitterObjectFactory) {
+    public static  void addRow_S21(List<String> user, Dataset dataset, TwitterObjectFactory twitterObjectFactory, DatasetName dn) {
         assert user.size() == 1;
 
-        UserModel u = twitterObjectFactory.getUser(user.get(0));
+        UserModel u = twitterObjectFactory.getUser(user.get(0), dn);
 
         dataset.addUser(u);
     }
@@ -129,10 +129,10 @@ public class DatasetReader {
      * @param user_to_wikipage the couple of the user id and of the wikipedia page id
      * @param dataset          the object that stores all the informations
      */
-    public static  void addRow_S22_S23(List<String> user_to_wikipage, Dataset dataset, TwitterObjectFactory twitterObjectFactory) {
+    public static  void addRow_S22_S23(List<String> user_to_wikipage, Dataset dataset, TwitterObjectFactory twitterObjectFactory, DatasetName dn) {
         assert user_to_wikipage.size() == 2;
 
-        UserModel user = twitterObjectFactory.getUser(user_to_wikipage.get(0));
+        UserModel user = twitterObjectFactory.getUser(user_to_wikipage.get(0), dn);
         WikiPageModel wikiPage = twitterObjectFactory.getWikiPage(user_to_wikipage.get(1));
 
         user.addWikiPagesOfLikedItemsIds(wikiPage);
@@ -167,17 +167,17 @@ public class DatasetReader {
 
                 s = TsvFileReader.readText(DatasetInfo.WIKIMID_MESSAGE_BASED_DATASET.getPath());
                 c = new Chrono("Building objects...");
-                s.forEach(p -> addRow_messageBased_dataset(p, dataset, twitterObjectFactory));
+                s.forEach(p -> addRow_messageBased_dataset(p, dataset, twitterObjectFactory, DatasetName.WIKIMID));
                 c.millis();
 
                 s = TsvFileReader.readText(DatasetInfo.WIKIMID_FRIEND_BASED_DATASET.getPath());
                 c = new Chrono("Building objects...");
-                s.forEach(p -> addRow_friendBased_dataset(p, dataset, twitterObjectFactory));
+                s.forEach(p -> addRow_friendBased_dataset(p, dataset, twitterObjectFactory, DatasetName.WIKIMID));
                 c.millis();
 
                 s = TsvFileReader.readText(DatasetInfo.WIKIMID_FRIEND_BASED_INTEREST_INFO.getPath());
                 c = new Chrono("Building objects...");
-                s.forEach(p -> addRow_friendBased_interest(p, dataset, twitterObjectFactory));
+                s.forEach(p -> addRow_friendBased_interest(p, dataset, twitterObjectFactory, DatasetName.WIKIMID));
                 c.millis();
 
 //                clean_WikiMID(dataset);
@@ -187,7 +187,7 @@ public class DatasetReader {
                 s = TsvFileReader.readText(DatasetInfo.S21_DATASET.getPath());
 
                 c = new Chrono("Building objects...");
-                s.forEach(p -> addRow_S21(p, dataset, twitterObjectFactory));
+                s.forEach(p -> addRow_S21(p, dataset, twitterObjectFactory,DatasetName.S21));
                 c.millis();
 
                 break;
@@ -195,7 +195,7 @@ public class DatasetReader {
                 s = TsvFileReader.readText(DatasetInfo.S22_DATASET.getPath());
 
                 c = new Chrono("Building objects...");
-                s.forEach(p -> addRow_S22_S23(p, dataset, twitterObjectFactory));
+                s.forEach(p -> addRow_S22_S23(p, dataset, twitterObjectFactory, DatasetName.S22));
                 c.millis();
 
                 break;
@@ -203,7 +203,7 @@ public class DatasetReader {
                 s = TsvFileReader.readText(DatasetInfo.S23_DATASET.getPath());
 
                 c = new Chrono("Building objects...");
-                s.forEach(p -> addRow_S22_S23(p, dataset, twitterObjectFactory));
+                s.forEach(p -> addRow_S22_S23(p, dataset, twitterObjectFactory, DatasetName.S23));
                 c.millis();
                 break;
         }
