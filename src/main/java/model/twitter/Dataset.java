@@ -367,7 +367,8 @@ public class Dataset extends ObjectCollection {
         Counter<Integer> userTocatNum = new Counter<>();
         for (UserModel u : users.values()) {
             userTocatNum.add(u.getId(), u.getTweetsCategories(tweets, interests, wikiPages, babelCategories).size());
-            userTocatNum.add(u.getId(), u.getWikiPageAboutUserModel(wikiPages).getBabelCategories().size());
+            if(u.isFamous())
+                userTocatNum.add(u.getId(), u.getWikiPageAboutUserModel(wikiPages).getBabelCategories().size());
         }
         stats = getUserToDouble(userTocatNum);
 
@@ -459,7 +460,8 @@ public class Dataset extends ObjectCollection {
         Counter<Integer> userTocatNum = new Counter<>();
         for (UserModel u : users.values()) {
             userTocatNum.add(u.getId(), u.getTweetsDomains(tweets, interests, wikiPages, babelDomains).size());
-            userTocatNum.add(u.getId(), u.getWikiPageAboutUserModel(wikiPages).getBabelDomains().size());
+            if(u.isFamous())
+                userTocatNum.add(u.getId(), u.getWikiPageAboutUserModel(wikiPages).getBabelDomains().size());
         }
         stats = getUserToDouble(userTocatNum);
         
