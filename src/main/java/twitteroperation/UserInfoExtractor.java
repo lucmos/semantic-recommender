@@ -28,7 +28,7 @@ public class UserInfoExtractor
             Twitter twitter = new TwitterFactory().getInstance();
             for (Map.Entry<Integer, UserModel> entry: users.entrySet()) {
                 System.out.println(entry.getKey());
-                long userId = Integer.parseInt(entry.getValue().getName(dataset.getIdMapping()));
+                long userId = Integer.parseInt(entry.getValue().getName(dataset));
                 IDs ids = twitter.getFriendsIDs(userId,-1);
                 System.out.println(userId+" follows "+ ids.getIDs().length+ " users");
                 int c=0;
@@ -58,7 +58,7 @@ public class UserInfoExtractor
             Twitter twitter = new TwitterFactory().getInstance();
             for (Map.Entry<Integer, UserModel> entry: users.entrySet()) {
                 System.out.println(entry.getKey());
-                long userId = Integer.parseInt(entry.getValue().getName(dataset.getIdMapping()));   //userId è lo user di s22
+                long userId = Integer.parseInt(entry.getValue().getName(dataset));   //userId è lo user di s22
 //                IDs ids = twitter.getUserListStatuses(userId,-1);
 //                https://github.com/Twitter4J/Twitter4J/blob/master/twitter4j-examples/src/main/java/twitter4j/examples/timeline/GetUserTimeline.java
 //                System.out.println(ids);
