@@ -35,27 +35,28 @@ public class ReadingPhaseExecutor {
 //        c.millis();
 //        System.out.println(a);
         Dataset d = Cache.DatasetCache.read(DatasetName.WIKIMID);
-        TwitterFactory f = new TwitterFactory(d);
-
-        UserModel u1 = f.getUser(1591641);
-        UserModel u2 = f.getUser(718480);
-        UserModel u3 = f.getUser(1265112);
-
-        System.out.println();
-        Counter<BabelCategoryModel> c1 = u1.getTweetsCategories(d);
-        Counter<BabelCategoryModel> c2 = u2.getTweetsCategories(d);
-        Counter<BabelCategoryModel> c3 = u3.getTweetsCategories(d);
-
-        System.out.println(c1);
-        System.out.println(c2);
-        System.out.println(c3);
-
-        double a = ClustersMeter.cosineSimilarity(c1, c2);
-        double b = ClustersMeter.cosineSimilarity(c1, c3);
-        double c = ClustersMeter.cosineSimilarity(c2, c3);
-        System.out.println(a);
-        System.out.println(b);
-        System.out.println(c);
+        System.out.println(d.report());
+//        TwitterFactory f = new TwitterFactory(d);
+//
+//        UserModel u1 = f.getUser(1591641);
+//        UserModel u2 = f.getUser(718480);
+//        UserModel u3 = f.getUser(1265112);
+//
+//        System.out.println();
+//        Counter<BabelCategoryModel> c1 = u1.getTweetsCategories(d);
+//        Counter<BabelCategoryModel> c2 = u2.getTweetsCategories(d);
+//        Counter<BabelCategoryModel> c3 = u3.getTweetsCategories(d);
+//
+//        System.out.println(c1);
+//        System.out.println(c2);
+//        System.out.println(c3);
+//
+//        double a = ClustersMeter.cosineSimilarity(c1, c2);
+//        double b = ClustersMeter.cosineSimilarity(c1, c3);
+//        double c = ClustersMeter.cosineSimilarity(c2, c3);
+//        System.out.println(a);
+//        System.out.println(b);
+//        System.out.println(c);
 //        System.out.println(d.report());
 
 //        Clusters c = Cache.ClustersWikiMidCache.read();
