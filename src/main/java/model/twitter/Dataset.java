@@ -65,6 +65,12 @@ public class Dataset extends ObjectCollection {
         return users.get(id);
     }
 
+    public UserModel getUser(String id){
+        assert id!= null && id!="";
+        int intId = getIntegerId(id);
+        return getUser(intId);
+    }
+
     public BabelCategoryModel getCategory(int id) {
         assert babelCategories.containsKey(id);
 
@@ -360,8 +366,9 @@ public class Dataset extends ObjectCollection {
 
         Counter<Integer> userTocatNum = new Counter<>();
         for (UserModel u : users.values()) {
-            userTocatNum.add(u.getId(), u.getTweetsCategories(this).size());
-            userTocatNum.add(u.getId(), u.getWikiPageAboutUserModel(this).getBabelCategories().size());
+            userTocatNum.add(u.getId(), u.getTweetsCategories(tweets, interests, wikiPages, babelCategories).size());
+            if(u.isFamous())
+                userTocatNum.add(u.getId(), u.getWikiPageAboutUserModel(wikiPages).getBabelCategories().size());
         }
         stats = getUserToDouble(userTocatNum);
 
@@ -452,8 +459,9 @@ public class Dataset extends ObjectCollection {
 
         Counter<Integer> userTocatNum = new Counter<>();
         for (UserModel u : users.values()) {
-            userTocatNum.add(u.getId(), u.getTweetsDomains(this).size());
-            userTocatNum.add(u.getId(), u.getWikiPageAboutUserModel(this).getBabelDomains().size());
+            userTocatNum.add(u.getId(), u.getTweetsDomains(tweets, interests, wikiPages, babelDomains).size());
+            if(u.isFamous())
+                userTocatNum.add(u.getId(), u.getWikiPageAboutUserModel(wikiPages).getBabelDomains().size());
         }
         stats = getUserToDouble(userTocatNum);
         

@@ -27,19 +27,23 @@ public class Statistics {
     }
 
     public double minCount() {
+        if(data.length == 0 ) return -1;
         return count(min());
     }
 
     public double maxCount() {
+        if(data.length == 0 ) return -1;
         return count(max());
     }
 
     public double medianCount() {
+        if(data.length == 0 ) return -1;
         return count(median());
     }
 
 
     public double count(double x) {
+        if(data.length == 0 ) return -1;
         double count = 0;
         for (double c : data) {
             if (c == x) {
@@ -50,6 +54,7 @@ public class Statistics {
     }
 
     public double max() {
+        if(data.length == 0 ) return -1;
         double max = data[0];
         for (double m : data) {
             if (m > max) max = m;
@@ -58,6 +63,7 @@ public class Statistics {
     }
 
     public double min() {
+        if(data.length == 0 ) return -1;
         double min = data[0];
         for (double m : data) {
             if (m < min) min = m;
@@ -66,6 +72,7 @@ public class Statistics {
     }
 
     public double sum() {
+        if(data.length == 0 ) return -1;
         double sum = 0.0;
         for(double a : data)
             sum += a;
@@ -73,10 +80,12 @@ public class Statistics {
     }
 
     public double mean() {
+        if(data.length == 0 ) return -1;
         return sum()/size;
     }
 
     public double variance() {
+        if(data.length == 0 ) return -1;
         double mean = mean();
         double temp = 0;
         for(double a :data)
@@ -85,10 +94,12 @@ public class Statistics {
     }
 
     public double stdDev() {
+        if(data.length == 0 ) return -1;
         return Math.sqrt(variance());
     }
 
     public double median() {
+        if(data.length == 0 ) return -1;
         Arrays.sort(data);
         if (data.length % 2 == 0)
             return (data[(data.length / 2) - 1] + data[data.length / 2]) / 2.0;

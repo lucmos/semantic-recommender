@@ -1,16 +1,17 @@
 package model.twitter;
 
+import constants.DatasetName;
 import model.twitter.*;
 
 /**
  * Creates twitter objects.
  * If an object with a given identifier already exists, it is simply returned, otherwise it is created.
  */
-public class TwitterFactory {
+public class TwitterObjectFactory {
 
     private final Dataset dataset;
 
-    public TwitterFactory(Dataset dataset) {
+    public TwitterObjectFactory(Dataset dataset) {
         this.dataset = dataset;
     }
 
@@ -46,12 +47,12 @@ public class TwitterFactory {
      * @param id the id of the user
      * @return the specified UserModel
      */
-    public UserModel getUser(String id) {
+    public UserModel getUser(String id, DatasetName dn) {
         assert id != null && !id.equals("");
 
         if (!dataset.exixstObj(id)) {
             int i = dataset.getNextId(id);
-            dataset.users.put(i, new UserModel(i));
+            dataset.users.put(i, new UserModel(i, dn));
         }
         UserModel res = dataset.users.get(dataset.getIntegerId(id));
 
@@ -59,8 +60,8 @@ public class TwitterFactory {
         return res;
     }
 
-    public UserModel getUser(int i) {
-        return getUser(dataset.getStringId(i));
+    public UserModel getUser(int i, DatasetName dn) {
+        return getUser(dataset.getStringId(i), dn);
     }
 
     /**
@@ -119,4 +120,10 @@ public class TwitterFactory {
         assert res != null;
         return res;
     }
+
+    /**
+     * Return the static field dataset
+     * @return a dataset
+     */
+    public Dataset getDataset(){return dataset;}
 }

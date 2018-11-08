@@ -6,9 +6,6 @@ import io.Cache;
 import io.Utils;
 import model.twitter.BabelCategoryModel;
 import model.twitter.Dataset;
-import model.twitter.TwitterFactory;
-import model.twitter.UserModel;
-import utils.Counter;
 
 
 @Deprecated
