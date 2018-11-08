@@ -28,30 +28,30 @@ public class WikiPageModel extends ObjectModel {
         this.simpleName = getSimpleName(name);
     }
 
-    public BabelCategoryModel getCategoryModel(Int2ObjectOpenHashMap<BabelCategoryModel> categories, int catID) {
-        assert categories.containsKey(catID);
+    public BabelCategoryModel getCategoryModel(Dataset dataset, int catID) {
+        assert dataset.babelCategories.containsKey(catID);
 
-        BabelCategoryModel cat = categories.get(catID);
+        BabelCategoryModel cat = dataset.babelCategories.get(catID);
         assert cat.getId() == catID;
 
         return cat;
     }
 
-    public BabelDomainModel getDomainModel(Int2ObjectOpenHashMap<BabelDomainModel> domains, int domId) {
-        assert domains.containsKey(domId);
+    public BabelDomainModel getDomainModel(Dataset dataset, int domId) {
+        assert dataset.babelDomains.containsKey(domId);
 
-        BabelDomainModel dom = domains.get(domId);
+        BabelDomainModel dom = dataset.babelDomains.get(domId);
         assert dom.getId() == domId;
 
         return dom;
     }
 
-    public Set<BabelCategoryModel> getCategoriesModel(Int2ObjectOpenHashMap<BabelCategoryModel> categories) {
-        return babelCategories.stream().map(x -> getCategoryModel(categories, x)).collect(Collectors.toSet());
+    public Set<BabelCategoryModel> getCategoriesModel(Dataset dataset) {
+        return babelCategories.stream().map(x -> getCategoryModel(dataset, x)).collect(Collectors.toSet());
     }
 
-    public Set<BabelDomainModel> getDomainsModel(Int2ObjectOpenHashMap<BabelDomainModel> domains) {
-        return babelDomains.stream().map(x -> getDomainModel(domains, x)).collect(Collectors.toSet());
+    public Set<BabelDomainModel> getDomainsModel(Dataset dataset) {
+        return babelDomains.stream().map(x -> getDomainModel(dataset, x)).collect(Collectors.toSet());
     }
 
     public IntOpenHashSet getBabelCategories() {

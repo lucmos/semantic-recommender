@@ -1,9 +1,10 @@
 package executors;
 
+import clusterization.ClustersMeter;
 import constants.DatasetName;
-
 import io.Cache;
 import io.Utils;
+import model.twitter.BabelCategoryModel;
 import model.twitter.Dataset;
 
 
@@ -12,82 +13,55 @@ public class ReadingPhaseExecutor {
 
     public static void main(String[] args) throws Utils.CacheNotPresent {
 
-//        for (DatasetName name : DatasetName.values()) {
-//           Chrono c = new Chrono("Reading... " + name);
+
+//        Counter<Integer> s1 = new Counter<>();
+//        Counter<Integer> s2 = new Counter<>();
 //
-////            Dataset d = DatasetReader.readDataset(name, Dimension.COMPLETE);
-////            Cache.write(name, d);
-//
-////            Dataset d = Cache.DatasetCache.read(name, Dimension.SMALL);
-//            c.millis();
-//        }
-        //
-
-
-//        System.out.println(d.getBabelCategories().size());
-//        System.out.println(d);
-//        System.out.println(d.getWikiPages().get(0));
-//
-//        Collection<WikiPageModel> set = d.getWikiPages().values();
-//        System.out.println(set.size());
-//        System.out.println(new HashSet<>(set).size());
-//
-//        Collection<BabelCategoryModel> s2 = d.getBabelCategories().values();
-//        System.out.println(s2.size());
-//        System.out.println(new HashSet<>(s2).size());
-//
-//        Collection<BabelDomainModel> s3 = d.getBabelDomains().values();
-//        System.out.println(s3.size());
-//        System.out.println(new HashSet<>(s3).size());
-
-        Dataset d = Cache.DatasetCache.read(DatasetName.S23);
-        System.out.println(d.report());
-
-
-
-//        System.out.println(d.getUsers().values().stream().filter(x -> x.isFamous(d.getWikiPages())).count());
-
-//        TwitterObjectFactory m = new TwitterObjectFactory(d);
-//
-//        Map<UserModel, Counter<String>> map = ClustersUtils.getUserToCatCounter(d);
-////
-////        long a = d.getUsers().values().stream()
-////                .filter(x -> x.getTweetsIds().stream()
-////                        .mapToInt(y -> x.getTweetModel(d.getTweets(), y).getWikiPageModel(d.getInterests(), d.getWikiPages()).getBabelCategories().isEmpty() ? 0 : 1).sum() != 0)
-////                .count();
-////
-////        long b = d.getUsers().values().stream()
-////                .filter(x -> x.getTweetsIds().size() != 0)
-////                .count();
-//
-//        System.out.println(String.format("NUMERO DI UTENTI CHE HANNO ALMENO UNA CATEGORIA: %s", a));
-//        System.out.println(String.format("NUMERO DI UTENTI CHE HANNO ALMENO UN TWEET: %s", b));
-//        System.out.println(d.getUsers().size());
-//        System.out.println(map.size());
-
-//        for (UserModel u : map.keySet()) {
-//            assert d.getUsers().containsKey(u.getId());
+//        for (int a = 0; a < 100000; a = a + 2) {
+//            s1.increment(a);
 //        }
 //
-//        int o = 0;
-//        for (UserModel u : d.getUsers().values()) {
-//            try {
-//                o++;
-////                assert map.containsKey(u);
-//            } catch (Error e) {
-//                System.out.println(u);
-////                assert false;
-//            }
+//        for (int a = 1; a < 100; a++) {
+//            s2.increment(a);
 //        }
-//        System.out.println("Errore "+ o);
 
+//        System.out.println(s1);
+//        System.out.println(s2);
+//        double a = 0;
+//        int times = 1;
+//        Chrono c = new Chrono(String.format("Computing similarity %s times", times));
+//        for(int i = 0; i< times; i++)
+//            a = ClustersMeter.cosineSimilarity(s1, s2);
+//        c.millis();
+//        System.out.println(a);
+        Dataset d = Cache.DatasetCache.read(DatasetName.WIKIMID);
+        TwitterFactory f = new TwitterFactory(d);
 
-//        UserModel u1 = m.getUser(524289);
-//        UserModel u2 = m.getUser(524311);
+        UserModel u1 = f.getUser(1591641);
+        UserModel u2 = f.getUser(718480);
+        UserModel u3 = f.getUser(1265112);
+
+        System.out.println();
+        Counter<BabelCategoryModel> c1 = u1.getTweetsCategories(d);
+        Counter<BabelCategoryModel> c2 = u2.getTweetsCategories(d);
+        Counter<BabelCategoryModel> c3 = u3.getTweetsCategories(d);
+
+        System.out.println(c1);
+        System.out.println(c2);
+        System.out.println(c3);
+
+        double a = ClustersMeter.cosineSimilarity(c1, c2);
+        double b = ClustersMeter.cosineSimilarity(c1, c3);
+        double c = ClustersMeter.cosineSimilarity(c2, c3);
+        System.out.println(a);
+        System.out.println(b);
+        System.out.println(c);
+//        System.out.println(d.report());
+
 //        Clusters c = Cache.ClustersWikiMidCache.read();
 //        System.out.println(c.report(d));
 //        ClusterFactory cf = new ClusterFactory(c);
-////        System.out.println(ClustersMeter.cosineSimilarity(map.get((UserModel) c.getUsersToCluster().keySet().toArray()[0]), map.get((UserModel) c.getUsersToCluster().keySet().toArray()[1])));
+//        System.out.println(ClustersMeter.cosineSimilarity(u1.getTweetsCategories());
 //////
 ////
 //        System.out.println(c.report(d, cf.getCluster("BNCAT:EN:Swedish_DJs"), 10));

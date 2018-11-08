@@ -57,41 +57,39 @@ public class ClustersMeter {
 //        return sim.floatValue() / i.intValue();
 //    }
 
-    public static double cosineSimilarity(Counter<Cluster> entry1counter,
-                                   Counter<Cluster> entry2counter) {
+    public static <T> float jaccardSimilarity(Set<T> s1, Set<T> s2) {
+        int u = unionSize(s1, s2);
+        return u == 0 ? 0 : intersectionSize(s1, s2) / (float) u;
+    }
 
-        //Set<Cluster> entry1categories = entry1.getValue().getMap().keySet();
-        Set<Cluster> entry2categories = entry2counter.getMap().keySet();
+    public static <T> double cosineSimilarity(Counter<T> entry1counter,
+                                   Counter<T> entry2counter) {
+
+        //Set<T> entry1categories = entry1.getValue().getMap().keySet();
+        Set<T> entry2categories = entry2counter.getMap().keySet();
 
         double numeratore = 0;
 
-        double sommeEntry1 = 0; // Già che lo scorro una volta, ne approfitto e calcolo parte della norm
-        double sommeEntry2 = 0;
-        for (Cluster category : entry1counter.getMap().keySet()) {
+        double squaredSumsEntry1 = 0; // Già che lo scorro una volta, ne approfitto e calcolo parte della norm
+        double squaredSumsEntry2 = 0;
+        for (T category : entry1counter.getMap().keySet()) {
 
             double entry1count = entry1counter.count(category);
-            sommeEntry1 += Math.pow(entry1count, 2);
+            squaredSumsEntry1 += Math.pow(entry1count, 2);
 
             if (entry2categories.contains(category))
                 numeratore += entry1count * entry2counter.count(category);
         }
 
-        for (Cluster category : entry2counter.getMap().keySet()) {
+        for (T category : entry2counter.getMap().keySet()) {
             double entry2count = entry2counter.count(category);
-            sommeEntry2 += Math.pow(entry2count, 2);
+            squaredSumsEntry2 += Math.pow(entry2count, 2);
         }
 
-        double denominatore = Math.sqrt(sommeEntry1) * Math.sqrt(sommeEntry2);
+        double denominatore = Math.sqrt(squaredSumsEntry1) * Math.sqrt(squaredSumsEntry2);
 
         return numeratore / denominatore;
     }
-
-
-    private static double computeNorm(Counter<Cluster> counter) {
-        // TODO: 01/11/2018 Parallel?
-        return Math.sqrt(counter.getMap().values().stream().map(value -> Math.pow(value, 2)).count());
-    }
-
 
     public static <T> int unionSize(Set<T> s1, Set<T> s2) {
         int s1size = s1.size();
@@ -109,13 +107,22 @@ public class ClustersMeter {
     }
 
     public static <T> int intersectionSize(Set<T> s1, Set<T> s2) {
+        int s1size = s1.size();
+        int s2size = s2.size();
         int i = 0;
-        for (T e1 : s1) {
-            if (s2.contains(e1)) i++;
+
+        if (s1size > s2size) {
+            for (T e2 : s2) {
+                if (s1.contains(e2)) i++;
+            }
+        } else {
+            for (T e1 : s1) {
+                if (s2.contains(e1)) i++;
+            }
         }
+
         return i;
     }
-
 
     public static <T> Set<T> union(Set<T> s1, Set<T> s2) {
         Set<T> u = new HashSet<>(s1);

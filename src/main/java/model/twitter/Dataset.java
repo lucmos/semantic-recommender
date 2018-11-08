@@ -114,7 +114,7 @@ public class Dataset extends ObjectCollection {
     }
 
     public Set<UserModel> getFamousUsers() {
-        return users.values().stream().filter(x -> x.isFamous()).collect(Collectors.toSet());
+        return users.values().stream().filter(UserModel::isFamous).collect(Collectors.toSet());
     }
 
     public void addInterest(InterestModel interest) {
@@ -278,7 +278,7 @@ public class Dataset extends ObjectCollection {
 
         s.append("\n");
 
-        stats = users.values().parallelStream().mapToDouble(x -> x.getFollowOutUserModels(users).stream().filter(UserModel::isFamous).count()).toArray();
+        stats = users.values().parallelStream().mapToDouble(x -> x.getFollowOutUserModels(this).stream().filter(UserModel::isFamous).count()).toArray();
         stat = new Statistics(stats);
 
         s.append(stat.report("FOLLOW-OUT TO VIP USERS STATS",
@@ -301,7 +301,7 @@ public class Dataset extends ObjectCollection {
         StringBuilder s = new StringBuilder();
 
         double[] stats = users.values().parallelStream().mapToDouble(x ->
-                x.getTweetsCategories(tweets, interests, wikiPages, babelCategories).size()).toArray();
+                x.getTweetsCategories(this).size()).toArray();
         Statistics stat = new Statistics(stats);
         s.append(stat.report(
                 "CATEGORIES STATS PER USER' TWEETS",
@@ -320,7 +320,7 @@ public class Dataset extends ObjectCollection {
         s.append("\n");
 
         stats = tweets.values().parallelStream().mapToDouble(x ->
-                x.getWikiPageModel(interests, wikiPages).getBabelCategories().size()).toArray();
+                x.getWikiPageModel(this).getBabelCategories().size()).toArray();
         stat = new Statistics(stats);
         s.append(stat.report(
                 "CATEGORIES STATS PER TWEET",
@@ -341,7 +341,7 @@ public class Dataset extends ObjectCollection {
         stats = users.values().parallelStream().filter(UserModel::isFamous)
                 .mapToDouble(x -> {
                     if (x.isFamous()) {
-                        return x.getWikiPageAboutUserModel(wikiPages).getBabelCategories().size();
+                        return x.getWikiPageAboutUserModel(this).getBabelCategories().size();
                     } else {
                         return 0;
                     }
@@ -394,7 +394,7 @@ public class Dataset extends ObjectCollection {
         StringBuilder s = new StringBuilder();
 
         double[] stats = users.values().parallelStream().mapToDouble(x ->
-                x.getTweetsDomains(tweets, interests, wikiPages, getBabelDomains()).size()).toArray();
+                x.getTweetsDomains(this).size()).toArray();
         Statistics stat = new Statistics(stats);
         s.append(stat.report(
                 "DOMAINS STATS PER USER",
@@ -413,7 +413,7 @@ public class Dataset extends ObjectCollection {
         s.append("\n");
 
         stats = tweets.values().parallelStream().mapToDouble(x ->
-                x.getWikiPageModel(interests, wikiPages).getBabelDomains().size()).toArray();
+                x.getWikiPageModel(this).getBabelDomains().size()).toArray();
         stat = new Statistics(stats);
         s.append(stat.report(
                 "DOMAINS STATS PER TWEET",
@@ -434,7 +434,7 @@ public class Dataset extends ObjectCollection {
         stats = users.values().parallelStream().filter(UserModel::isFamous)
                 .mapToDouble(x -> {
                     if (x.isFamous()) {
-                        return x.getWikiPageAboutUserModel(wikiPages).getBabelDomains().size();
+                        return x.getWikiPageAboutUserModel(this).getBabelDomains().size();
                     } else {
                         return 0;
                     }
@@ -485,7 +485,7 @@ public class Dataset extends ObjectCollection {
     private double[] getUserToDouble(Counter<Integer> userFriendToDouble) {
         return users.values().parallelStream().mapToDouble(x -> {
             int count = 0;
-            for (UserModel f : x.getFollowOutUserModels(users)) {
+            for (UserModel f : x.getFollowOutUserModels(this)) {
                 count += userFriendToDouble.get(f.getId());
             }
             return count;
@@ -497,7 +497,7 @@ public class Dataset extends ObjectCollection {
         Counter<String> catCounter = new Counter<>();
 
         for (WikiPageModel page : wikiPages.values()) {
-            catCounter.increment(page.getCategoriesModel(babelCategories).stream().map(x -> getStringId(x.getId())).collect(Collectors.toSet()));
+            catCounter.increment(page.getCategoriesModel(this).stream().map(x -> getStringId(x.getId())).collect(Collectors.toSet()));
         }
 
         return String.format("[CATEGORIES DISTRIBUTION]\n%s\n", catCounter.getDistribution(k));
@@ -507,7 +507,7 @@ public class Dataset extends ObjectCollection {
         Counter<String> catCounter = new Counter<>();
 
         for (WikiPageModel page : wikiPages.values()) {
-            catCounter.increment(page.getDomainsModel(babelDomains).stream().map(x -> getStringId(x.getId())).collect(Collectors.toSet()));
+            catCounter.increment(page.getDomainsModel(this).stream().map(x -> getStringId(x.getId())).collect(Collectors.toSet()));
         }
 
         return String.format("[DOMAINS DISTRIBUTION]\n%s\n", catCounter.getDistribution(k));

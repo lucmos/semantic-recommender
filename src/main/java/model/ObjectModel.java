@@ -30,7 +30,7 @@ public abstract class ObjectModel implements IndexedSerializable {
         return seqId;
     }
 
-    public String getName(IdMapping idMap) {
-        return idMap.getStringId(getId());
+    public String getName(ObjectCollection dataset) {
+        return dataset.getIdMapping().getStringId(getId());
     }
 }
