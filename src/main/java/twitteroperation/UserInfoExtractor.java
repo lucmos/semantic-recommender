@@ -7,6 +7,7 @@ import model.twitter.Dataset;
 import model.twitter.TwitterObjectFactory;
 import model.twitter.UserModel;
 import twitter4j.*;
+import twitter4j.api.TweetsResources;
 import twitter4j.conf.ConfigurationBuilder;
 
 import java.util.ArrayList;
@@ -31,13 +32,15 @@ public class UserInfoExtractor
                 IDs ids = twitter.getFriendsIDs(userId,-1);
                 System.out.println(userId+" follows "+ ids.getIDs().length+ " users");
                 int c=0;
-                for (long i : ids.getIDs()) {//i sono tutti i suoi following
+                for (long i : ids.getIDs()) {
                     if (clusterizedDataset.exixstObj(i+"")) {
-                        System.out.println(c);
+                        System.out.println("Utente numero "+c);
                         c++;
                         UserModel followed = clusterizedDataset.getUser(i+"");
+                        System.out.println(followed);
                         TwitterObjectFactory tof = new TwitterObjectFactory(clusterizedDataset);
-                        UserModel following = tof.getUser(userId+"");
+                        UserModel following = tof.getUser(userId+"", dataset.getName());
+                        System.out.println(following);
                         following.addFollowOut(followed);
                     }
                 }
@@ -50,14 +53,15 @@ public class UserInfoExtractor
     }
 
     public void getUsersTweetter(Dataset dataset) throws TwitterException {
-        try{
+//        try{
             Map<Integer, UserModel> users = dataset.getUsers();
             Twitter twitter = new TwitterFactory().getInstance();
             for (Map.Entry<Integer, UserModel> entry: users.entrySet()) {
                 System.out.println(entry.getKey());
                 long userId = Integer.parseInt(entry.getValue().getName(dataset.getIdMapping()));   //userId è lo user di s22
-                IDs ids = twitter.getFriendsIDs(userId,-1);
-                System.out.println(userId+" follows "+ ids.getIDs().length+ " users");
+//                IDs ids = twitter.getUserListStatuses(userId,-1);
+//                https://github.com/Twitter4J/Twitter4J/blob/master/twitter4j-examples/src/main/java/twitter4j/examples/timeline/GetUserTimeline.java
+//                System.out.println(ids);
 //                int c=0;
 //                for (long i : ids.getIDs()) {//i sono tutti i suoi following
 //                    if (clusterizedDataset.exixstObj(i+"")) {
@@ -69,12 +73,12 @@ public class UserInfoExtractor
 ////                        following.addFollowOut(followed);
 //                    }
 //                }
-            }}
-        catch (TwitterException e){
-            e.printStackTrace();
-            System.out.println("Failed to get outgoing friendships: "+ e.getMessage());
-            System.exit((-1));
-        }
+            }
+//        catch (TwitterException e){
+//            e.printStackTrace();
+//            System.out.println("Failed to get outgoing friendships: "+ e.getMessage());
+//            System.exit((-1));
+//        }
     }
     public static void main(String[] args) throws Utils.CacheNotPresent, TwitterException {
         UserInfoExtractor userInfoExtractor = new UserInfoExtractor();
@@ -93,6 +97,7 @@ public class UserInfoExtractor
 //        cfg.setTweetModeExtended(true);
 
         userInfoExtractor.getUsersFollowing(d22, wikimid);
+//        userInfoExtractor.getUsersTweetter(d22);
 
 
     }

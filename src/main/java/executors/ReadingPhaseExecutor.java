@@ -40,7 +40,7 @@ public class ReadingPhaseExecutor {
 //        System.out.println(s3.size());
 //        System.out.println(new HashSet<>(s3).size());
 
-        Dataset d = Cache.DatasetCache.read(DatasetName.WIKIMID);
+        Dataset d = Cache.DatasetCache.read(DatasetName.S23);
         System.out.println(d.report());
 
 
