@@ -96,7 +96,7 @@ public class Config {
 
     public enum Dimension
     {
-        SMALL("small", 100000),
+        SMALL("small", 1000),
         COMPLETE("complete", -1);
 
         private String name;
