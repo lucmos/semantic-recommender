@@ -7,7 +7,7 @@ import io.IndexedSerializable;
  * It always has an integer identifier
  * It may have a literal identifier
  */
-public abstract class ObjectModel implements IndexedSerializable {
+public abstract class ObjectModel implements IndexedSerializable, Comparable<ObjectModel> {
     /**
      * The integer identifier. It is globally unique inside the same class
      * and automatically generated.
@@ -32,5 +32,10 @@ public abstract class ObjectModel implements IndexedSerializable {
 
     public String getName(ObjectCollection dataset) {
         return dataset.getIdMapping().getStringId(getId());
+    }
+
+    @Override
+    public int compareTo(ObjectModel objectModel) {
+        return seqId - objectModel.seqId;
     }
 }
