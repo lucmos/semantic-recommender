@@ -100,7 +100,7 @@ public class Clusters extends ObjectCollection {
         String clustDistr = Counter.fromCollection(usersToCluster.values().stream()
                 .map(x -> clusters_index.get((int) x).getName(this)).collect(Collectors.toList()))
                 .getDistribution(k);
-        return String.format("[CLUSTERS SIZE DISTRIBUTION]\n %s", clustDistr);
+        return String.format("[EXPORT_PATH SIZE DISTRIBUTION]\n %s", clustDistr);
     }
 
     public String clusterInspection(Dataset dataset, Cluster cluster) {

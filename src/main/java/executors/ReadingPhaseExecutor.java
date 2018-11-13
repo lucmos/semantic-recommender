@@ -85,7 +85,7 @@ public class ReadingPhaseExecutor {
 //        System.out.println(cm.clustersJaccardSimilarity("BNCAT:EN:Living_people", "BNCAT:EN:People_from_Mableton,_Georgia"));
 //        cr.millis();
 //        BabelnetInterface d = BabelnetInterface.getInstance();
-//        Clusters clu = new ClusterGenerator(d, w).loadCategoryClusters();
+//        Clusters clu = new _ClusterGenerator(d, w).loadCategoryClusters();
 //        clu.clustersStats(d, "")
 //        System.out.println(clu.clustersStats(d, "BNCAT:EN:Films_directed_by_Tony_Kaye_(director)"));
 //        System.out.println(d);

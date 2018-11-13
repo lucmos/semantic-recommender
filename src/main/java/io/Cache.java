@@ -1,8 +1,7 @@
 package io;
 
-import clusterization.ClusterGenerator;
-import model.clusters.Clusters;
-import constants.ClustersPath;
+import clusterization.JavaExport;
+import constants.JavaExportPath;
 import constants.DatasetName;
 
 import model.twitter.Dataset;
@@ -74,41 +73,28 @@ public abstract class Cache {
     public static class ClustersWikiMidCache extends Cache {
 
         public static void main(String[] args) throws Utils.CacheNotPresent {
-            ClustersWikiMidCache.regenCache();
+            ClustersWikiMidCache.export();
         }
 
-        public static void regenCache() throws Utils.CacheNotPresent {
-            Dataset d = Cache.DatasetCache.read(DatasetName.WIKIMID);
+        public static void export() throws Utils.CacheNotPresent {
 
-            Config.getInstance().setClusterOver(Config.ClusterOver.CATEGORIES);
-            ClusterGenerator gen = new ClusterGenerator(d);
-            Clusters clu  = gen.generate();
-            write(clu);
+            for (DatasetName name : DatasetName.values()) {
+                for (Config.ClusterOver over : Config.ClusterOver.values()) {
+                    for (Config.Dimension dimension : Config.Dimension.values()) {
+                        Config.getInstance().setClusterOver(over);
+                        Config.getInstance().setDimension(dimension);
 
-            Config.getInstance().setClusterOver(Config.ClusterOver.DOMAINS);
-            gen = new ClusterGenerator(d);
-            clu  = gen.generate();
-            write(clu);
-        }
+                        Dataset d = Cache.DatasetCache.read(name);
+                        JavaExport exp = new JavaExport(d);
 
-        public static void write(Clusters mapping) {
-            ClustersPath path = ClustersPath.CLUSTERS;
+                        String path = JavaExportPath.EXPORT_PATH.getPath(name, over, dimension);
+                        Cache.writeToCache(exp, path, path, true);
 
-            Config.Dimension dim = Config.getInstance().dimension();
-            Config.ClusterMethod type = Config.getInstance().clusterMethod();
-            Config.ClusterOver over = Config.getInstance().clusterOver();
+                    }
+                }
 
-            Cache.writeToCache(mapping, path.getPath(over, type, dim), path.getPath(over, type, dim), true);
-        }
+            }
 
-        public static Clusters read() throws Utils.CacheNotPresent {
-            ClustersPath path = ClustersPath.CLUSTERS;
-
-            Config.Dimension dim = Config.getInstance().dimension();
-            Config.ClusterMethod type = Config.getInstance().clusterMethod();
-            Config.ClusterOver over = Config.getInstance().clusterOver();
-
-            return Cache.readFromCache(Clusters.class, path.getPath(over, type, dim), path.getPath(over, type, dim));
         }
     }
 }
