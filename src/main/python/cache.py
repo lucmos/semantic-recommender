@@ -1,5 +1,5 @@
 import utils
-from constants import Dataset, ImportPath
+from constants import Dataset, JavaExportPath
 from config import Config
 
 
@@ -16,14 +16,21 @@ class Cache:
 
     class JavaExport:
 
+        USER_CAT_COUNTER = "user2catdom_counter"
+        CATEGORIES = "all_catdom"
+
         @staticmethod
         def read(datasetName):
             i = Config.get_instance()
 
-            path = ImportPath.get_path(
+            path = JavaExportPath.get_path(
                 datasetName.name, i.cluster_over(), i.dimension())
             print(path)
-            return utils.load_json(path)
+            data = utils.load_json(path)
+
+            key = Cache.JavaExport.USER_CAT_COUNTER
+            data[key] = {x: y["counts"] for x, y in data[key].items()}
+            return data, data[Cache.JavaExport.USER_CAT_COUNTER], data[Cache.JavaExport.CATEGORIES]
 
 
 if __name__ == "__main__":

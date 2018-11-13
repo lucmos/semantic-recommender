@@ -1,12 +1,12 @@
 from enum import Enum
 
 
-class ImportPath:
-    _IMPORT_PATH = "results/python_export/export_{}_{}_{}.json"
+class JavaExportPath:
+    _IMPORT_PATH = "results/java_export/export_{}_{}_{}.json"
 
     @staticmethod
     def get_path(name, cluster_over, dimension):
-        return ImportPath._IMPORT_PATH.format(name, cluster_over, dimension)
+        return JavaExportPath._IMPORT_PATH.format(name, cluster_over, dimension)
 
 
 class Dimension:

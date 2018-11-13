@@ -4,7 +4,7 @@ import io.Config;
 
 public enum JavaExportPath {
 
-    EXPORT_PATH("results/python_export/export_%s_%s_%s.json");
+    EXPORT_PATH("results/java_export/export_%s_%s_%s.json");
 
     private String path;
 
