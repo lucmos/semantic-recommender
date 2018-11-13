@@ -1,6 +1,6 @@
 package io;
 
-import clusterization.ClusterGenerator;
+import clusterization._ClusterGenerator;
 import model.clusters.Clusters;
 import constants.ClustersPath;
 import constants.DatasetName;
@@ -81,12 +81,12 @@ public abstract class Cache {
             Dataset d = Cache.DatasetCache.read(DatasetName.WIKIMID);
 
             Config.getInstance().setClusterOver(Config.ClusterOver.CATEGORIES);
-            ClusterGenerator gen = new ClusterGenerator(d);
+            _ClusterGenerator gen = new _ClusterGenerator(d);
             Clusters clu  = gen.generate();
             write(clu);
 
             Config.getInstance().setClusterOver(Config.ClusterOver.DOMAINS);
-            gen = new ClusterGenerator(d);
+            gen = new _ClusterGenerator(d);
             clu  = gen.generate();
             write(clu);
         }

@@ -1,5 +1,9 @@
 package clusterization;
 
+import de.lmu.ifi.dbs.elki.algorithm.clustering.kmeans.KMeans;
+import de.lmu.ifi.dbs.elki.algorithm.clustering.kmeans.KMeansLloyd;
+import de.lmu.ifi.dbs.elki.algorithm.clustering.kmeans.initialization.RandomlyGeneratedInitialMeans;
+import de.lmu.ifi.dbs.elki.math.random.RandomFactory;
 import io.Config;
 import model.twitter.Dataset;
 
@@ -14,7 +18,11 @@ public class ApacheClusterGenerator {
     }
 
     public void clusterize() {
-//        
+//        RandomlyGeneratedInitialMeans init = new RandomlyGeneratedInitialMeans(RandomFactory.DEFAULT);
+//        KMeansLloyd<UserClusterable> a = new KMeansLloyd<>(2, 0, init);
+//        a.run()
+////
+//        new Database
     }
 
 

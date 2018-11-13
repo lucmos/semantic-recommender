@@ -46,12 +46,14 @@ public class ClustersMeter {
     public float usersJaccardSimilarity(UserModel u1, UserModel u2) {
 //        assert userToCat.containsKey(u1);
 //        assert userToCat.containsKey(u2);
+        if (!userToCat.containsKey(u1) || !userToCat.containsKey(u2)) {
+            return 0;
+        }
 
         Set<String> catU1 = userToCat.get(u1).getMap().keySet();
         Set<String> catU2 = userToCat.get(u2).getMap().keySet();
 
-        int u = unionSize(catU1, catU2);
-        return u == 0 ? 0 : intersectionSize(catU1, catU2) / (float) u;
+        return jaccardSimilarity(catU1, catU2);
     }
 
     public float usersCosineSimilarity(int u1, int u2) {
@@ -59,6 +61,10 @@ public class ClustersMeter {
     }
 
     public float usersCosineSimilarity(UserModel u1, UserModel u2) {
+        if (!userToCat.containsKey(u1) || !userToCat.containsKey(u2)) {
+            return 0;
+        }
+
         return cosineSimilarity(userToCat.get(u1), userToCat.get(u2));
     }
 
@@ -82,6 +88,14 @@ public class ClustersMeter {
 //    }
 
     public static <T> float jaccardSimilarity(Set<T> s1, Set<T> s2) {
+//        assert s1 != null;
+//        assert s2 != null;
+//
+//        // TODO: 13/11/18 decidi cosa fare se un dato utente NON ha categorie!
+//        if (s1.isEmpty() || s2.isEmpty()) {
+//            return 0;
+//        }
+
         int u = unionSize(s1, s2);
         return u == 0 ? 0 : intersectionSize(s1, s2) / (float) u;
     }
@@ -89,6 +103,13 @@ public class ClustersMeter {
 
     public static <T> float cosineSimilarity(Counter<T> entry1counter,
                                    Counter<T> entry2counter) {
+//        assert entry1counter != null;
+//        assert entry2counter != null;
+//
+//        // TODO: 13/11/18 decidi cosa fare se un dato utente NON ha categorie!
+//        if (entry1counter.getMap().isEmpty() || entry2counter.getMap().isEmpty()) {
+//            return 0;
+//        }
 
         //Set<T> entry1categories = entry1.getValue().getMap().keySet();
         Set<T> entry2categories = entry2counter.getMap().keySet();

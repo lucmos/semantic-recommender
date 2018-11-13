@@ -14,13 +14,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class ClusterGenerator {
+@Deprecated
+public class _ClusterGenerator {
 
     private final Config config;
     private final Dataset dataset;
 
 
-    public ClusterGenerator(Dataset dataset) {
+    public _ClusterGenerator(Dataset dataset) {
         this.config = Config.getInstance();
         this.dataset = dataset;
     }
