@@ -15,6 +15,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
+
+@Deprecated
 public class ClustersMeter {
 
     private final Dataset dataset;

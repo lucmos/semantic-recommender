@@ -1,6 +1,14 @@
 from enum import Enum
 
 
+class ImportPath:
+    _IMPORT_PATH = "results/python_export/export_{}_{}_{}.json"
+
+    @staticmethod
+    def get_path(name, cluster_over, dimension):
+        return ImportPath._IMPORT_PATH.format(name, cluster_over, dimension)
+
+
 class Dimension:
     @staticmethod
     def COMPLETE():
@@ -17,19 +25,19 @@ class Dimension:
 class Dataset:
     @staticmethod
     def WIKIMID():
-        return Dataset("wikimid", "datasets/bin/wikimid_{}.bin")
+        return Dataset("WIKIMID", "datasets/bin/wikimid_{}.bin")
 
     @staticmethod
     def S21():
-        return Dataset("s21", "datasets/bin/S21_{}.bin")
+        return Dataset("S21", "datasets/bin/S21_{}.bin")
 
     @staticmethod
     def S22():
-        return Dataset("s22", "datasets/bin/S22_preferences_{}.bin")
+        return Dataset("S22", "datasets/bin/S22_preferences_{}.bin")
 
     @staticmethod
     def S23():
-        return Dataset("s23", "datasets/bin/S23_{}.bin")
+        return Dataset("S23", "datasets/bin/S23_{}.bin")
 
     def __init__(self, name, path):
         self.name = name
@@ -40,7 +48,6 @@ class Dataset:
 
 
 class Clusters:
-
     @staticmethod
     def CLUSTERS():
         return Clusters("results/clusters_{}_{}_{}.json")

@@ -5,8 +5,8 @@ import org.apache.commons.lang3.StringUtils;
 import static java.lang.Math.round;
 
 public class Chrono {
-    private static final String defaultInitialMessage = "Running...";
-    private static final String defaultFinalMessage = "done (in %s %s)";
+    public static final String defaultInitialMessage = "Running...";
+    public static final String defaultFinalMessage = "done (in %s %s)";
 
     private static int nestedChronos;
     private static int nestedNewLines;

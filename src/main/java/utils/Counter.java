@@ -1,16 +1,18 @@
 package utils;
 
 import com.google.common.collect.Lists;
+import io.IndexedSerializable;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
 import it.unimi.dsi.fastutil.objects.Object2DoubleOpenHashMap;
 
+import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class Counter<T> {
+public class Counter<T> implements IndexedSerializable {
     private final Object2DoubleOpenHashMap<T> counts = new Object2DoubleOpenHashMap<>();
 
     public Counter() {

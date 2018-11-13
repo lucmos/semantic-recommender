@@ -18,7 +18,7 @@ import java.util.function.IntUnaryOperator;
 import java.util.stream.IntStream;
 
 @Deprecated
-public class UserDistanceMatrix implements DistanceMatrix {
+public class UserDistanceMatrix {
 
     public static void main(String[] args) throws Utils.CacheNotPresent {
         Dataset d = Cache.DatasetCache.read(DatasetName.WIKIMID);
