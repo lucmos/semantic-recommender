@@ -2,47 +2,57 @@ import time
 
 
 class Chrono:
-    _idd = 0
-    _indent = []
+    _nestedChronos = 0
+    _nestedNewLines = 0
 
     """
     A class that implements a simple timer for the elapsed time, measured in millis.
     """
 
-    def __init__(self, initial_message="Starting...", indicator=True):
-        """
-        Creates the chronometer and starts it
-
-        :param indicator: print guidelines
-        :param initial_message: initial message to print
-        :param new_line: True if the print must include a new line
-        :param final_message: message to print end called by end
-        """
+    def __init__(self, initial_message="Starting..."):
         self.initial_message = initial_message
         self.current_milli_time = lambda: int(round(time.time() * 1000))
+        self.positionChrono = Chrono._nestedChronos
+        self._start()
+
+    def millis(self, final_message="done (in {} millis)"):
+        self._print_final_message(final_message)
+
+        self._stop()
+
+    def get_millis(self):
+        return self.current_milli_time() - self.start_time
+
+    def _start(self):
+        self._print_initial_message()
+
         self.start_time = self.current_milli_time()
+        Chrono._nestedChronos += 1
+        Chrono._nestedNewLines += 1
 
-        self._local_id = Chrono._idd
-        Chrono._indent.append(self._local_id)
-        self.local_indent = len(Chrono._indent) - 1
-        Chrono._idd += 1
+    def _stop(self):
+        Chrono._nestedChronos -= 1
+        if Chrono._nestedNewLines:
+            Chrono._nestedNewLines -= 1
 
-        print(("|\t" if indicator else "\t") * self.local_indent + initial_message)
+    def _print_initial_message(self):
+        print(self._build_initial_message(), end="")
 
-    def millis(self, final_message=None, indicator=True, verbose=False):
-        """
-        Print the final message. Print other optional information and checks the elapsed time
+    def _print_final_message(self, final_message):
+        print(self._build_final_message(final_message.format(self.get_millis())))
 
-        :param indicator: print guidelines
-        :param verbose: print full information if true
-        :param final_message: additional information whether to print a message or not
-        :return: the elapsed time
-        """
-        elapsed = self.current_milli_time() - self.start_time
-        print("{}{}done{} (in {} millis)".format(("|\t" if indicator else "\t") * self.local_indent,
-                                                 self.initial_message + " " if verbose else "",
-                                                 ", {}".format(final_message) if final_message else "",
-                                                 elapsed))
-        if Chrono._indent and Chrono._indent[-1] == self._local_id:
-            Chrono._indent.pop()
-        return elapsed
+    def _build_initial_message(self, ):
+        return self._start_prefix() + self.initial_message
+
+    def _build_final_message(self, final_message):
+        return self._final_prefix() + final_message
+
+    def _start_prefix(self):
+        s = ""
+        if(Chrono._nestedNewLines > 0):
+            s = "\n"
+            Chrono._nestedNewLines -= 1
+        return s + "\t" * Chrono._nestedChronos
+
+    def _final_prefix(self):
+        return "\t" if Chrono._nestedNewLines else "\t" * self.positionChrono

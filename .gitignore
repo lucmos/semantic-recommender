@@ -1,4 +1,5 @@
 ## Personal
+.vscode/
 config/babelnet.var.properties
 .idea/compiler.xml
 **/.directory
