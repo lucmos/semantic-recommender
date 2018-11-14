@@ -4,7 +4,6 @@ import constants.DatasetName;
 import io.Cache;
 import io.IndexedSerializable;
 import io.Utils;
-import model.clusters.Cluster;
 import model.twitter.Dataset;
 import model.twitter.UserModel;
 import utils.Chrono;
@@ -20,13 +19,13 @@ public class JavaExport implements IndexedSerializable {
     Set<String> all_pages;
     Set<String> all_catdom;
 
-    Map<String, Set<String>> pages2catdom_counter;
-    Map<String, Set<String>> user2personalPage_catdom_counter;
+    Map<String, Set<String>> pages2catdom;
+    Map<String, Set<String>> user2personalPage_catdom;
 
     Map<String, Set<String>> user2likedItems_wikipage;
     Map<String, Set<String>> user2followOut;
 
-    Map<String, Counter<String>> user2tweet_catdom_counter;
+    Map<String, Map<String, Double>> user2tweet_catdom_counter;
 
     public JavaExport(Dataset dataset) {
         Chrono c = new Chrono(String.format("Computing export: %s, %s...", dataset.getName(), dataset.getDimension()));
@@ -45,21 +44,21 @@ public class JavaExport implements IndexedSerializable {
     }
 
     private void fill_pages2catdom(Dataset dataset) {
-        pages2catdom_counter = new HashMap<>();
+        pages2catdom = new HashMap<>();
         dataset.getWikiPages().values().forEach(x ->
         {
             Set<String> s = ClustersUtils.getCategories(dataset, x);
             if (!s.isEmpty()) {
-                pages2catdom_counter.put(x.getName(dataset), s);
+                pages2catdom.put(x.getName(dataset), s);
             }
         });
     }
 
     private void fill_user2personal(Dataset dataset) {
-        user2personalPage_catdom_counter = new HashMap<>();
+        user2personalPage_catdom = new HashMap<>();
         dataset.getUsers().values().forEach(x -> {
             if (x.isFamous()) {
-                user2personalPage_catdom_counter.put(x.getName(dataset),
+                user2personalPage_catdom.put(x.getName(dataset),
                         ClustersUtils.getCategories(dataset, x.getWikiPageAboutUserModel(dataset)));
             }
         });
@@ -90,7 +89,7 @@ public class JavaExport implements IndexedSerializable {
         for (UserModel user : map.keySet()) {
             Counter<String> s = map.get(user);
             if (!s.getMap().isEmpty()) {
-                user2tweet_catdom_counter.put(user.getName(dataset), s);
+                user2tweet_catdom_counter.put(user.getName(dataset), s.getMap());
             }
         }
     }
