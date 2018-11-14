@@ -70,10 +70,10 @@ public abstract class Cache {
         }
     }
 
-    public static class ClustersWikiMidCache extends Cache {
+    public static class JavaExportCache extends Cache {
 
         public static void main(String[] args) throws Utils.CacheNotPresent {
-            ClustersWikiMidCache.export();
+            JavaExportCache.export();
         }
 
         public static void export() throws Utils.CacheNotPresent {

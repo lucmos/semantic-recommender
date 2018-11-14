@@ -155,6 +155,12 @@ public class UserModel extends ObjectModel {
         return wikiPagesOfLikedItemsIds;
     }
 
+    public Set<WikiPageModel> getWikiPagesOfLikedItemdsModel(Dataset dataset) {
+        assert wikiPagesOfLikedItemsIds != null;
+
+        return wikiPagesOfLikedItemsIds.stream().map(x -> dataset.wikiPages.get(x)).collect(Collectors.toSet());
+    }
+
     public Set<UserModel> getFollowOutUserModels(Dataset dataset) {
         assert followOutIds != null;
 

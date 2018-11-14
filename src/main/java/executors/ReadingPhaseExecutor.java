@@ -59,7 +59,7 @@ public class ReadingPhaseExecutor {
 //        System.out.println(c);
 //        System.out.println(d.report());
 
-//        Clusters c = Cache.ClustersWikiMidCache.read();
+//        Clusters c = Cache.JavaExportCache.read();
 //        System.out.println(c.report(d));
 //        ClusterFactory cf = new ClusterFactory(c);
 //        System.out.println(ClustersMeter.cosineSimilarity(u1.getTweetsCategories());
