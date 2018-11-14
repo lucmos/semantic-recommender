@@ -10,6 +10,7 @@ import utils.Chrono;
 import utils.Counter;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -19,13 +20,13 @@ public class JavaExport implements IndexedSerializable {
     Set<String> all_pages;
     Set<String> all_catdom;
 
-    Map<String, Set<String>> pages2catdom;
-    Map<String, Set<String>> user2personalPage_catdom;
+    Map<String, Set<String>> pages2catdom = new HashMap<>();
+    Map<String, Set<String>> user2personalPage_catdom = new HashMap<>();
 
-    Map<String, Set<String>> user2likedItems_wikipage;
-    Map<String, Set<String>> user2followOut;
+    Map<String, Set<String>> user2likedItems_wikipage = new HashMap<>();
+    Map<String, Set<String>> user2followOut = new HashMap<>();
 
-    Map<String, Map<String, Double>> user2tweet_catdom_counter;
+    Map<String, Map<String, Double>> user2tweet_catdom_counter = new HashMap<>();
 
     public JavaExport(Dataset dataset) {
         Chrono c = new Chrono(String.format("Computing export: %s, %s...", dataset.getName(), dataset.getDimension()));
