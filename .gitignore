@@ -1,4 +1,5 @@
 ## Personal
+.project
 .vscode/
 config/babelnet.var.properties
 .idea/compiler.xml

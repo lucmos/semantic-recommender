@@ -1,6 +1,6 @@
 import os
 import pickle
-import rapidjson as json
+import json
 
 
 def load_pickle(filename, folder="."):

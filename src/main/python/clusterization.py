@@ -1,4 +1,5 @@
 import scipy.sparse
+import numpy as np
 # import hdbscan
 
 import utils
@@ -11,14 +12,15 @@ from config import Config
 
 class Clusterizator:
 
-    TWEET_CATDOM_IMPORTANCE = 0.20
+    TWEET_IMPORTANCE = 0.20
     PERSONAL_PAGE_IMPORTANCE = 0.20
-    LIKED_ITEMS_CATDOM_IMPORTANCE = 0.50
+    LIKED_ITEMS_IMPORTANCE = 0.50
 
     #  #users x #cat
     def sparse_user2tweetcat(self, data):
         chrono = Chrono("Computing user2tweet matrix...")
-        T = scipy.sparse.lil_matrix((self.num_users, self.num_cat))
+        T = scipy.sparse.lil_matrix(
+            (self.num_users, self.num_cat), dtype=np.float32)
         for u in data.user2tweet_catdom_counter:
             for c in data.user2tweet_catdom_counter[u]:
                 u_index = self.users2index[u]
@@ -29,14 +31,13 @@ class Clusterizator:
         chrono.millis()
 
         del data.user2tweet_catdom_counter
-        # return T.tocsr()
-        return T
+        return T.tocsr()
 
     #  #users x #cat
-
     def sparse_user2personalcat(self, data):
         chrono = Chrono("Computing user2personal matrix...")
-        P = scipy.sparse.lil_matrix((self.num_users, self.num_cat))
+        P = scipy.sparse.lil_matrix(
+            (self.num_users, self.num_cat), dtype=np.float32)
         for u in data.user2personalPage_catdom:
             for c in data.user2personalPage_catdom[u]:
                 u_index = self.users2index[u]
@@ -47,14 +48,13 @@ class Clusterizator:
         chrono.millis()
 
         del data.user2personalPage_catdom
-        # return P.tocsr()
-        return P
+        return P.tocsr()
 
     #  #users x #cat
-
     def sparse_user2likedcat(self, data):
         chrono = Chrono("Computing user2likedcat matrix...")
-        L = scipy.sparse.lil_matrix((self.num_users, self.num_cat))
+        L = scipy.sparse.lil_matrix(
+            (self.num_users, self.num_cat), dtype=np.float32)
         for u in data.user2likedItems_wikipage:
             for page in data.user2likeItems_wikipage[u]:
                 for c in data.pages2catdom[page]:
@@ -66,12 +66,12 @@ class Clusterizator:
         chrono.millis()
 
         del data.user2likedItems_wikipage
-        # return L.tocsr()
-        return L
+        return L.tocsr()
 
     def sparse_user2followout(self, data):
         chrono = Chrono("Computing followOut matrix...")
-        F = scipy.sparse.lil_matrix((self.num_users, self.num_users))
+        F = scipy.sparse.lil_matrix(
+            (self.num_users, self.num_users), dtype=np.bool)
         for u in data.user2followOut:
             for f in data.user2followOut[u]:
                 u_index = self.users2index[u]
@@ -80,11 +80,13 @@ class Clusterizator:
         chrono.millis()
 
         del data.user2followOut
-        # return F.tocsr()
-        return F
+        return F.tocsr()
 
     #  minore di 1, esponente non deve essere negativo
-    FOLLOW_OUT_CATDOM_IMPORTANCE = 0.10
+    FOLLOW_OUT_TWEET_IMPORTANCE = 0.10
+    FOLLOW_OUT_PERSONAL_PAGE_IMPORTANCE = 0.10
+    FOLLOW_OUT_LIKED_ITEMS_IMPORTANCE = 0.10
+
     MAX_USER_DISTANCE = 3
 
     def compute_matrix(self, data):
@@ -96,36 +98,33 @@ class Clusterizator:
         F = self.sparse_user2followout(data)
         del data
 
-        M = scipy.sparse.csr_matrix((self.num_users, self.num_cat))
-
-        chrono3 = Chrono("Performing M + T")
-        M += T
+        chrono3 = Chrono("Performing T + P + L")
+        M = T + P + L
         chrono3.millis()
 
-        chrono3 = Chrono("Performing M + P")
-        M += P
-        chrono3.millis()
+        Fi = F.copy()
+        for i in range(1, Clusterizator.MAX_USER_DISTANCE + 1):
+            chrono2 = Chrono("Computing iteration {}...".format(i))
 
-        chrono3 = Chrono("Performing M + L")
-        M += L
-        chrono3.millis()
-
-        for i in range(1, Clusterizator.MAX_USER_DISTANCE):
-            chrono2 = Chrono("Computing {} power..".format(i))
-
-            chorno4 = Chrono("Computing F @ F...")
-            F @= F
-            F = (F > 0).astype(float)
-            # F = F.tolil()
-            F.setdiag(0)
-            # F = F.tocsr()
-            chorno4.millis()
-
-            for num_iter, matrix in enumerate([T, P, L]):
-                chrono3 = Chrono("Computing F^i @ matrix{}".format(num_iter))
-                coeff = Clusterizator.FOLLOW_OUT_CATDOM_IMPORTANCE ** i
-                M += (coeff * (F @ matrix))
+            for name_matrix, matrix, coeff in zip(("T", "P", "L"),
+                                                  (T, P, L),
+                                                  (Clusterizator.FOLLOW_OUT_TWEET_IMPORTANCE,
+                                                   Clusterizator.FOLLOW_OUT_PERSONAL_PAGE_IMPORTANCE,
+                                                   Clusterizator.FOLLOW_OUT_LIKED_ITEMS_IMPORTANCE)):
+                chrono3 = Chrono("Computing F^{} @ {}".format(i, name_matrix))
+                M += ((coeff ** i) * (Fi @ matrix))
                 chrono3.millis()
+
+            if (i == Clusterizator.MAX_USER_DISTANCE):
+                break
+
+            chorno4 = Chrono("Computing F^{} @ F...".format(i))
+            Fi @= F
+            # Fi = (Fi > 0).astype(float)
+            Fi = Fi.tolil()
+            Fi.setdiag(False)
+            Fi = Fi.tocsr()
+            chorno4.millis()
 
             chrono2.millis()
         chrono1.millis()
@@ -210,13 +209,15 @@ class Clusterizator:
 
 
 if __name__ == "__main__":
-    # c = scipy.sparse.lil_matrix((5, 5))
-    # c[1, 1] = 5
-    # c[0, 4] = 23
-    # d = scipy.sparse.lil_matrix((5, 5))
-    # d[1, 1] = 5
-    # d[0, 4] = 23
-    # d[2, 4] = -23
+    c = scipy.sparse.lil_matrix((5, 5), dtype=np.bool)
+    c[0, 4] = 1
+    c[0, 3] = 1
+    c[3, 2] = 1
+    c[4, 1] = 1
+    d = scipy.sparse.lil_matrix((5, 5))
+    d[1, 1] = 5
+    d[0, 4] = 23
+    d[2, 4] = -23
 
     # # print("normale\n\n", d.todense())
     # # d.setdiag(0)
@@ -227,10 +228,13 @@ if __name__ == "__main__":
     # # print("logical\n\n", d.todense())
 
     # c = c * 5
-    # print()
-    # print(c.todense())
-    # print()
-    # print(d.todense())
-    # print()
-    # print(c @ d.todense())
-    Clusterizator(Dataset.WIKIMID())
+    print()
+    print(c.todense())
+    print()
+    print(d.todense())
+    print()
+    print(c @ d.todense())
+    print(c.todense())
+    print((c @ c).todense())
+    print((c @ c @ c).todense())
+    # Clusterizator(Dataset.WIKIMID())
