@@ -1,7 +1,7 @@
 from collections import Counter
 
 import utils
-from config import Config
+from config import *
 from chronometer import Chrono
 from constants import JavaExportPath, Dataset
 
@@ -13,15 +13,29 @@ class JavaExport:
         i = Config.get_instance()
 
         path = JavaExportPath.get_path(
-            datasetName.name, i.cluster_over(), i.dimension())
+            datasetName.name, i[CLUSTER_OVER], i[DIMENSION])
+
+        path_cache = JavaExportPath.get_path_cache(
+            datasetName.name, i[CLUSTER_OVER], i[DIMENSION])
 
         c = Chrono("Reading {}...".format(path))
 
-        data = utils.load_json(path)
-        out = JavaExport(*[data[x] for x in JavaExport.KEYS])
+        try:
+            obj = utils.load_pickle(path_cache)
+            c.millis("from pickle (in {} millis)")
+            return obj
+        except IOError:
+            pass
 
-        c.millis()
-        return out
+        try:
+            data = utils.load_json(path)
+            obj = JavaExport(*[data[x] for x in JavaExport.KEYS])
+            utils.save_pickle(obj, path_cache)
+            c.millis("from json, cached (in {} millis)")
+            return obj
+
+        except IOError:
+            raise IOError("File not found: {}".format(path))
 
     ALL_USERS = "all_users"
     ALL_PAGES = "all_pages"

@@ -1,5 +1,9 @@
 import scipy.sparse
 import numpy as np
+
+from sklearn.decomposition import TruncatedSVD
+from sklearn.preprocessing import Normalizer
+from sklearn.pipeline import make_pipeline
 # import hdbscan
 
 import utils
@@ -7,22 +11,10 @@ from constants import *
 from chronometer import Chrono
 # from sklearn.cluster import *
 from java_export import JavaExport
-from config import Config
+from config import *
 
 
 class Clusterizator:
-
-    #   ! values in [0, 1]
-    TWEET_IMPORTANCE = 0.30
-    PERSONAL_PAGE_IMPORTANCE = 0.20
-    LIKED_ITEMS_IMPORTANCE = 0.50
-
-    RATE_OF_DECAY = 0.5
-    FOLLOW_OUT_TWEET_IMPORTANCE = 0.15
-    FOLLOW_OUT_PERSONAL_PAGE_IMPORTANCE = 0.55
-    FOLLOW_OUT_LIKED_ITEMS_IMPORTANCE = 0.30
-
-    MAX_USER_DISTANCE = 3
 
     #  #users x #cat
     def sparse_user2tweetcat(self, data):
@@ -81,13 +73,23 @@ class Clusterizator:
             for f in data.user2followOut[u]:
                 u_index = self.users2index[u]
                 f_index = self.users2index[f]
-                F[u_index, f_index] = 1
+                F[u_index, f_index] = True
         chrono.millis()
 
         del data.user2followOut
         return F.tocsr()
 
-    def compute_matrix(self, data):
+    def _compute_matrix(self, data):
+        conf = Config.get_instance()
+
+        tweet_imp = conf[TWEET_IMPORTANCE]
+        personal_page_imp = conf[PERSONAL_PAGE_IMPORTANCE]
+        liked_items_imp = conf[LIKED_ITEMS_IMPORTANCE]
+        f_tweet_imp = conf[FOLLOW_OUT_TWEET_IMPORTANCE]
+        f_personal_page_imp = conf[FOLLOW_OUT_PERSONAL_PAGE_IMPORTANCE]
+        f_liked_items_imp = conf[FOLLOW_OUT_LIKED_ITEMS_IMPORTANCE]
+        decay = conf[RATE_OF_DECAY]
+
         chrono1 = Chrono("Computing M....")
         T = self.sparse_user2tweetcat(data)
         P = self.sparse_user2personalcat(data)
@@ -97,77 +99,103 @@ class Clusterizator:
         del data
 
         chrono3 = Chrono("Performing M = T + P + L")
-        M = (Clusterizator.TWEET_IMPORTANCE * T +
-             Clusterizator.PERSONAL_PAGE_IMPORTANCE * P +
-             Clusterizator.LIKED_ITEMS_IMPORTANCE * L)
+        M = (tweet_imp * T +
+             personal_page_imp * P +
+             liked_items_imp * L)
         chrono3.millis()
 
         Fi = F.copy()
-        for i in range(1, Clusterizator.MAX_USER_DISTANCE + 1):
-            chrono2 = Chrono("Computing iteration {}...".format(i))
+        for i in range(1, conf[MAX_USER_DISTANCE] + 1):
+            chrono2 = Chrono(
+                "Computing iteration {} (number of ones in F: {})...".format(i, Fi.sum()))
 
             for name_matrix, matrix, importance in zip(("T", "P", "L"),
                                                        (T, P, L),
-                                                       (Clusterizator.FOLLOW_OUT_TWEET_IMPORTANCE,
-                                                        Clusterizator.FOLLOW_OUT_PERSONAL_PAGE_IMPORTANCE,
-                                                        Clusterizator.FOLLOW_OUT_LIKED_ITEMS_IMPORTANCE)):
+                                                       (f_tweet_imp, f_personal_page_imp, f_liked_items_imp)):
+
                 chrono3 = Chrono("Computing F^{} @ {}".format(i, name_matrix))
-                coeff = (Clusterizator.RATE_OF_DECAY ** i) * importance
+                coeff = (decay ** i) * importance
+                print(" (coeff: ", coeff, end=") ", flush=True)
                 M += (coeff * (Fi @ matrix))
                 chrono3.millis()
 
-            if (i == Clusterizator.MAX_USER_DISTANCE):
+            if (i == conf[MAX_USER_DISTANCE]):
                 break
 
             chorno4 = Chrono("Computing F^{} @ F...".format(i))
 
             Fi @= F
+            chorno4.millis()
+
+            chorno4 = Chrono("Setting diagonal to zero...")
             Fi = Fi.tolil()
             Fi.setdiag(False)
             Fi = Fi.tocsr()
-
             chorno4.millis()
+
             chrono2.millis()
 
         chrono1.millis()
         del T, P, L, F
         return M
 
-    def _get_opp_diagonal_matrix(self, F_i):
-        D = scipy.sparse.lil_matrix((self.num_users, self.num_users))
-        for i, v in enumerate(F_i.diagonal()):
-            D[i, i] = -v
-        return D.tocsr()
-
-    def compute_matrix_cached(self, dataset_name, data):
+    def _compute_decomposition(self, M):
         i = Config.get_instance()
-        path = MatrixPath.get_path(
-            dataset_name, i.cluster_over(), i.dimension(), Clusterizator.MAX_USER_DISTANCE)
+        normalizer_input = Normalizer(copy=False)
+        SVD = TruncatedSVD(n_components=i[MATRIX_DIMENSIONALITY])
+        normalizer_output = Normalizer(copy=False)
+        pipeline = make_pipeline(normalizer_input, SVD, normalizer_output)
 
-        c = Chrono("Loading provider...")
-        cache = None
+        return pipeline.fit_transform(M), pipeline
 
-        cache = utils.load_pickle(path)
-        M = cache if cache else self.compute_matrix(data)
+    def _compute_decomposition_and_save(self, dataset_name, M):
+        conf = Config.get_instance()
+        red_matrix, red_svd = MatrixPath.get_matrix_svd_path(
+            dataset_name, MatrixPath.SVD)
 
-        if not cache:
-            c.millis("generated")
-            utils.save_pickle(M, path, override=True)
-        else:
-            c.millis("cached")
+        c = Chrono("Computing decomposition...")
+        M_reduced, SVD = self._compute_decomposition(M)
+        assert M_reduced.shape()[1] == conf[MATRIX_DIMENSIONALITY]
+        c.millis()
 
-        return M
+        c = Chrono("Saving decomposition...")
+        scipy.sparse.save_npz(red_matrix, M_reduced)
+        utils.save_joblib(SVD, red_svd)
+        c.millis()
 
-    # Data in the json export json:
-    #
-    # self.all_users
-    # self.all_pages
-    # self.all_catdom
-    # self.pages2catdom
-    # self.user2personalPage_catdom
-    # self.user2likedItems_wikipage
-    # self.user2followOut
-    # self.user2tweet_catdom_counter
+        return M_reduced, SVD
+
+    def load_reduced_matrix_and_svd(self, dataset_name, data):
+        i = Config.get_instance()
+        full_matrix = MatrixPath.get_matrix_path(dataset_name)
+
+        red_matrix, red_svd = MatrixPath.get_matrix_svd_path(
+            dataset_name, MatrixPath.SVD)
+
+        try:
+            c = Chrono("Loading reduced matrix: {}".format(red_matrix))
+            M_reduced = scipy.sparse.load_npz(red_matrix)
+            SVD = utils.load_joblib(red_svd)
+            assert M_reduced.shape()[1] == i[MATRIX_DIMENSIONALITY]
+            return (M_reduced, SVD)
+        except IOError:
+            c.millis("not present (in {} millis)")
+
+        try:
+            c = Chrono("Loading full matrix: {}".format(full_matrix))
+            M = scipy.sparse.load_npz(full_matrix)
+            c.millis("from cache (in {} millis)")
+            return self._compute_decomposition_and_save(dataset_name, M)
+        except IOError:
+            c.millis("not present (in {} millis)")
+
+        c = Chrono("Computing full matrix...")
+        M = self._compute_matrix(data)
+        c.millis()
+        c = Chrono("Saving matrix...")
+        scipy.sparse.save_npz(full_matrix, M, compressed=False)
+        c.millis()
+        return self._compute_decomposition_and_save(dataset_name, M)
 
     def __init__(self, dataset_name):
         c = Chrono("Inizializing clusterizator...")
@@ -187,8 +215,21 @@ class Clusterizator:
         self.num_users = len(self.users)
         c2.millis()
 
-        M = self.compute_matrix_cached(dataset_name, obj)
-        # P = self.sparse_user2personalcat(obj)
+        M, SVD = self.load_reduced_matrix_and_svd(dataset_name, obj)
+        print(M.sum())
+        print(M.shape)
+        print(M[0:20][0:20].todense())
+        s = M.sum(1)
+        print(s)
+        print(len(s))
+        # svd = TruncatedSVD(n_components=1000)
+        # svd.fit(M)
+        # print(M.shape)
+        # M = svd.transform(M)
+        # print(M.shape)
+        # print(M[2, :])
+        # print(M.sum())
+
         # print("SOMAA: ", P.sum())
         # P = self.sparse_user2likedcat(obj)
         # print("SOMAA: ", P.sum())
@@ -211,41 +252,46 @@ class Clusterizator:
 
 
 if __name__ == "__main__":
-    c = scipy.sparse.lil_matrix((5, 5), dtype=np.bool)
-    c[0, 4] = 1
-    c[0, 3] = 1
-    c[3, 1] = 1
-    c[4, 2] = 1
-    T = scipy.sparse.lil_matrix((5, 5))
-    T[0, 4] = 23
-    T[2, 4] = -23
-    T[1, 1] = 10
-    T[2, 1] = 20
+    # c = scipy.sparse.lil_matrix((5, 5), dtype=np.bool)
+    # c[0, 4] = 1
+    # c[0, 3] = 1
+    # c[3, 1] = 1
+    # c[4, 2] = 1
+    # T = scipy.sparse.lil_matrix((5, 5), dtype=np.float32)
+    # T[0, 4] = 23
+    #
+    # i = Config.get_instance()
+    # a = T * i[TWEET_IMPORTANCE]
+    #
+    # print(a)
+    # T[2, 4] = -23
+    # T[1, 1] = 10
+    # T[2, 1] = 20
 
-    # # print("normale\n\n", d.todense())
-    # # d.setdiag(0)
-    # # print("diag a 0\n\n", d.todense())
-    # # d = d.power(5)
-    # # print("potenza\n\n", d.todense())
-    # # d = (d > 0).astype(float)
-    # # print("logical\n\n", d.todense())
-    print(c.astype(float).todense())
-    print(T.astype(float).todense())
-    print()
-    for i in range(5):
-        print("C^{}".format(i))
-        print((c ** i).astype(float).todense())
-        print(((c ** i) @ T).astype(float).todense())
-        print()
+    # # # print("normale\n\n", d.todense())
+    # # # d.setdiag(0)
+    # # # print("diag a 0\n\n", d.todense())
+    # # # d = d.power(5)
+    # # # print("potenza\n\n", d.todense())
+    # # # d = (d > 0).astype(float)
+    # # # print("logical\n\n", d.todense())
+    # print(c.astype(float).todense())
+    # print(T.astype(float).todense())
+    # print()
+    # for i in range(5):
+    #     print("C^{}".format(i))
+    #     print((c ** i).astype(float).todense())
+    #     print(((c ** i) @ T).astype(float).todense())
+    #     print()
 
-    # c = c * 5
-    # print()
-    # print(c.todense())
-    # print()
-    # print(d.todense())
-    # print()
-    # print(c @ d.todense())
-    # print(c.todense())
-    # print((c @ c).todense())
-    # print((c @ c @ c).todense())
-    # Clusterizator(Dataset.WIKIMID())
+    # # c = c * 5
+    # # print()
+    # # print(c.todense())
+    # # print()
+    # # print(d.todense())
+    # # print()
+    # # print(c @ d.todense())
+    # # print(c.todense())
+    # # print((c @ c).todense())
+    # # print((c @ c @ c).todense())
+    Clusterizator(Dataset.WIKIMID())

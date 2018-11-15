@@ -2,6 +2,26 @@ import os
 import pickle
 import json
 
+from sklearn.externals import joblib
+
+
+def load_joblib(filename, folder="."):
+    filename = os.path.join(folder, filename)
+    if os.path.isfile(filename):
+        with open(filename, 'rb') as handle:
+            return joblib.load(handle)
+    raise IOError("File not found: {}".format(filename))
+
+
+def save_joblib(obj, filename, folder=".", override=False):
+    filename = os.path.join(folder, filename)
+    if os.path.isfile(filename) and not override:
+        filename = "avoid_overwriting_" + filename  # to not lose info for distraction
+
+    os.makedirs(os.path.dirname(filename), exist_ok=True)
+    with open(filename, 'wb') as handle:
+        joblib.dump(obj, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
 
 def load_pickle(filename, folder="."):
     """
@@ -14,7 +34,7 @@ def load_pickle(filename, folder="."):
     if os.path.isfile(filename):
         with open(filename, 'rb') as handle:
             return pickle.load(handle)
-    return False
+    raise IOError("File not found: {}".format(filename))
 
 
 def save_pickle(obj, filename, folder=".", override=False):
@@ -29,6 +49,7 @@ def save_pickle(obj, filename, folder=".", override=False):
     if os.path.isfile(filename) and not override:
         filename = "avoid_overwriting_" + filename  # to not lose info for distraction
 
+    os.makedirs(os.path.dirname(filename), exist_ok=True)
     with open(filename, 'wb') as handle:
         pickle.dump(obj, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
@@ -42,7 +63,7 @@ def load_json(filename):
     if os.path.isfile(filename):
         with open(filename, 'r') as handle:
             return json.load(handle)
-    return False
+    raise IOError("File not found: {}".format(filename))
 
 
 def save_json(obj, filename, override=False):
@@ -55,6 +76,7 @@ def save_json(obj, filename, override=False):
     if os.path.isfile(filename) and not override:
         filename = "avoid_overwriting_" + filename  # to not lose info for distraction
 
+    os.makedirs(os.path.dirname(filename), exist_ok=True)
     with open(filename, "w") as handle:
         json.dump(obj, handle, indent=4, sort_keys=True)
 
@@ -69,6 +91,7 @@ def save_string(string, filename, override=False):
     if os.path.isfile(filename) and not override:
         filename = "avoid_overwriting_" + filename  # to not lose info for distraction
 
+    os.makedirs(os.path.dirname(filename), exist_ok=True)
     with open(filename, "w") as handle:
         handle.write(string)
 
