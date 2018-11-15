@@ -12,7 +12,7 @@ FOLLOW_OUT_PERSONAL_PAGE_IMPORTANCE = "follow_out_personal_page_importance"
 FOLLOW_OUT_LIKED_ITEMS_IMPORTANCE = "follow_out_liked_items_importance"
 
 MAX_USER_DISTANCE = "max_user_distance"
-MATRIX_DIMENSIONALITY = "dimensionality"
+MATRIX_DIMENSIONALITY = "matrix_dimensionality"
 
 
 class Config():

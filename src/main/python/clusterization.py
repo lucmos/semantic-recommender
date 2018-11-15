@@ -145,7 +145,7 @@ class Clusterizator:
         SVD = TruncatedSVD(n_components=i[MATRIX_DIMENSIONALITY])
         normalizer_output = Normalizer(copy=False)
         pipeline = make_pipeline(normalizer_input, SVD, normalizer_output)
-
+        # pipeline = make_pipeline(SVD)
         return pipeline.fit_transform(M), pipeline
 
     def _compute_decomposition_and_save(self, dataset_name, M):
