@@ -27,7 +27,6 @@ class Clusterizator:
                 c_index = self.categories2index[c]
                 T[u_index, c_index] = data.user2tweet_catdom_counter[u][c]
 
-        T = T * Clusterizator.TWEET_CATDOM_IMPORTANCE
         chrono.millis()
 
         del data.user2tweet_catdom_counter
@@ -44,7 +43,6 @@ class Clusterizator:
                 c_index = self.categories2index[c]
                 P[u_index, c_index] = 1
 
-        P = P * Clusterizator.PERSONAL_PAGE_IMPORTANCE
         chrono.millis()
 
         del data.user2personalPage_catdom
@@ -62,7 +60,6 @@ class Clusterizator:
                     c_index = self.categories2index[c]
                     L[u_index, c_index] += 1
 
-        L = L * Clusterizator.LIKED_ITEMS_CATDOM_IMPORTANCE
         chrono.millis()
 
         del data.user2likedItems_wikipage
@@ -99,7 +96,10 @@ class Clusterizator:
         del data
 
         chrono3 = Chrono("Performing T + P + L")
-        M = T + P + L
+        M = (Clusterizator.TWEET_IMPORTANCE * T +
+             Clusterizator.PERSONAL_PAGE_IMPORTANCE * P +
+             Clusterizator.LIKED_ITEMS_IMPORTANCE * L)
+
         chrono3.millis()
 
         Fi = F.copy()
@@ -119,14 +119,15 @@ class Clusterizator:
                 break
 
             chorno4 = Chrono("Computing F^{} @ F...".format(i))
+
             Fi @= F
-            # Fi = (Fi > 0).astype(float)
             Fi = Fi.tolil()
             Fi.setdiag(False)
             Fi = Fi.tocsr()
-            chorno4.millis()
 
+            chorno4.millis()
             chrono2.millis()
+
         chrono1.millis()
         del T, P, L, F
         return M
@@ -212,12 +213,13 @@ if __name__ == "__main__":
     c = scipy.sparse.lil_matrix((5, 5), dtype=np.bool)
     c[0, 4] = 1
     c[0, 3] = 1
-    c[3, 2] = 1
-    c[4, 1] = 1
-    d = scipy.sparse.lil_matrix((5, 5))
-    d[1, 1] = 5
-    d[0, 4] = 23
-    d[2, 4] = -23
+    c[3, 1] = 1
+    c[4, 2] = 1
+    T = scipy.sparse.lil_matrix((5, 5))
+    T[0, 4] = 23
+    T[2, 4] = -23
+    T[1, 1] = 10
+    T[2, 1] = 20
 
     # # print("normale\n\n", d.todense())
     # # d.setdiag(0)
@@ -226,15 +228,23 @@ if __name__ == "__main__":
     # # print("potenza\n\n", d.todense())
     # # d = (d > 0).astype(float)
     # # print("logical\n\n", d.todense())
+    print(c.astype(float).todense())
+    print(T.astype(float).todense())
+    print()
+    for i in range(5):
+        print("C^{}".format(i))
+        print((c ** i).astype(float).todense())
+        print(((c ** i) @ T).astype(float).todense())
+        print()
 
     # c = c * 5
-    print()
-    print(c.todense())
-    print()
-    print(d.todense())
-    print()
-    print(c @ d.todense())
-    print(c.todense())
-    print((c @ c).todense())
-    print((c @ c @ c).todense())
+    # print()
+    # print(c.todense())
+    # print()
+    # print(d.todense())
+    # print()
+    # print(c @ d.todense())
+    # print(c.todense())
+    # print((c @ c).todense())
+    # print((c @ c @ c).todense())
     # Clusterizator(Dataset.WIKIMID())
