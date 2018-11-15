@@ -12,9 +12,17 @@ from config import Config
 
 class Clusterizator:
 
-    TWEET_IMPORTANCE = 0.20
+    #   ! values in [0, 1]
+    TWEET_IMPORTANCE = 0.30
     PERSONAL_PAGE_IMPORTANCE = 0.20
     LIKED_ITEMS_IMPORTANCE = 0.50
+
+    RATE_OF_DECAY = 0.5
+    FOLLOW_OUT_TWEET_IMPORTANCE = 0.15
+    FOLLOW_OUT_PERSONAL_PAGE_IMPORTANCE = 0.55
+    FOLLOW_OUT_LIKED_ITEMS_IMPORTANCE = 0.30
+
+    MAX_USER_DISTANCE = 3
 
     #  #users x #cat
     def sparse_user2tweetcat(self, data):
@@ -79,13 +87,6 @@ class Clusterizator:
         del data.user2followOut
         return F.tocsr()
 
-    #  minore di 1, esponente non deve essere negativo
-    FOLLOW_OUT_TWEET_IMPORTANCE = 0.10
-    FOLLOW_OUT_PERSONAL_PAGE_IMPORTANCE = 0.10
-    FOLLOW_OUT_LIKED_ITEMS_IMPORTANCE = 0.10
-
-    MAX_USER_DISTANCE = 3
-
     def compute_matrix(self, data):
         chrono1 = Chrono("Computing M....")
         T = self.sparse_user2tweetcat(data)
@@ -95,24 +96,24 @@ class Clusterizator:
         F = self.sparse_user2followout(data)
         del data
 
-        chrono3 = Chrono("Performing T + P + L")
+        chrono3 = Chrono("Performing M = T + P + L")
         M = (Clusterizator.TWEET_IMPORTANCE * T +
              Clusterizator.PERSONAL_PAGE_IMPORTANCE * P +
              Clusterizator.LIKED_ITEMS_IMPORTANCE * L)
-
         chrono3.millis()
 
         Fi = F.copy()
         for i in range(1, Clusterizator.MAX_USER_DISTANCE + 1):
             chrono2 = Chrono("Computing iteration {}...".format(i))
 
-            for name_matrix, matrix, coeff in zip(("T", "P", "L"),
-                                                  (T, P, L),
-                                                  (Clusterizator.FOLLOW_OUT_TWEET_IMPORTANCE,
-                                                   Clusterizator.FOLLOW_OUT_PERSONAL_PAGE_IMPORTANCE,
-                                                   Clusterizator.FOLLOW_OUT_LIKED_ITEMS_IMPORTANCE)):
+            for name_matrix, matrix, importance in zip(("T", "P", "L"),
+                                                       (T, P, L),
+                                                       (Clusterizator.FOLLOW_OUT_TWEET_IMPORTANCE,
+                                                        Clusterizator.FOLLOW_OUT_PERSONAL_PAGE_IMPORTANCE,
+                                                        Clusterizator.FOLLOW_OUT_LIKED_ITEMS_IMPORTANCE)):
                 chrono3 = Chrono("Computing F^{} @ {}".format(i, name_matrix))
-                M += ((coeff ** i) * (Fi @ matrix))
+                coeff = (Clusterizator.RATE_OF_DECAY ** i) * importance
+                M += (coeff * (Fi @ matrix))
                 chrono3.millis()
 
             if (i == Clusterizator.MAX_USER_DISTANCE):
