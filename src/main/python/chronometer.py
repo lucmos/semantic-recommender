@@ -36,10 +36,11 @@ class Chrono:
             Chrono._nestedNewLines -= 1
 
     def _print_initial_message(self):
-        print(self._build_initial_message(), end="")
+        print(self._build_initial_message(), end="", flush=True)
 
     def _print_final_message(self, final_message):
-        print(self._build_final_message(final_message.format(self.get_millis())))
+        print(self._build_final_message(
+            final_message.format(self.get_millis())), flush=True)
 
     def _build_initial_message(self, ):
         return self._start_prefix() + self.initial_message

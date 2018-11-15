@@ -1,6 +1,14 @@
 from enum import Enum
 
 
+class MatrixPath:
+    _MATRIX_CACHE = "cache/matrix_{}_{}_{}_maxdistance_{}.bin"
+
+    @staticmethod
+    def get_path(name, cluster_over, dimension, max_distance):
+        return MatrixPath._MATRIX_CACHE.format(name, cluster_over, dimension, max_distance)
+
+
 class JavaExportPath:
     _IMPORT_PATH = "results/java_export/export_{}_{}_{}.json"
 
