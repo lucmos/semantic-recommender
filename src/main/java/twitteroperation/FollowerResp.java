@@ -1,6 +1,8 @@
 package twitteroperation;
 
 import constants.DatasetName;
+import constants.TwitterRespPath;
+import io.Utils;
 import twitter4j.*;
 
 import java.util.HashMap;
@@ -13,6 +15,10 @@ public class FollowerResp extends Resp
      * Tweeter respons of the request
      */
     private HashMap<String, HashSet<String>> results;
+
+//    public FollowerResp(){
+//        super(null);
+//    }
 
     public FollowerResp(DatasetName originDataset){
         super(originDataset);
@@ -30,5 +36,11 @@ public class FollowerResp extends Resp
                 "# private users = " + this.getPrivateUserId().size() +"\n"
                 + "# voices in the report "+this.getResults().size());
     }
+
+
+//    public void saveFollowerResp(boolean pretty, String datasetName) {
+//        Utils.saveJson(this, TwitterRespPath.FRIENDS_RESP.getPath(datasetName), pretty);
+//    }
+
 
 }

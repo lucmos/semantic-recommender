@@ -1,14 +1,16 @@
 package twitteroperation;
 
 import constants.DatasetName;
+import io.IndexedSerializable;
 import model.twitter.Dataset;
 import twitter4j.*;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-public abstract class Resp {
+public abstract class Resp implements IndexedSerializable {
 
     /**
      * List of idStrings of private users
@@ -34,6 +36,11 @@ public abstract class Resp {
 //        this.results = new HashMap<String, Object>();
     }
 
+    public Resp(){
+        this(null);
+    }
+
+
     public DatasetName getOriginDataset() {
         return originDataset;
     }
@@ -49,6 +56,7 @@ public abstract class Resp {
     public HashSet<String> getNotExistingId() {
         return notExistingId;
     }
+
 
 //    public void addResult(String id, Object value){this.results.put(id, value);}
 //

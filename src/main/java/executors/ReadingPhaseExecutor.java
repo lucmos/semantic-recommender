@@ -11,7 +11,7 @@ import model.twitter.Dataset;
 @Deprecated
 public class ReadingPhaseExecutor {
 
-//<<<<<<< Updated upstream
+    //<<<<<<< Updated upstream
     public static void main(String[] args) throws Utils.CacheNotPresent {
 
 
@@ -37,6 +37,8 @@ public class ReadingPhaseExecutor {
 //        System.out.println(a);
         Dataset d = Cache.DatasetCache.read(DatasetName.WIKIMID);
         System.out.println(d.report());
+    }
+}
 //        TwitterFactory f = new TwitterFactory(d);
 //
 //        UserModel u1 = f.getUser(1591641);
@@ -97,19 +99,19 @@ public class ReadingPhaseExecutor {
 //        System.out.println(d);
 //        System.out.println(d.clustersStats());
 //=======
-    public Dataset execute(DatasetName dn, Dimension dim)
-    {
-        System.out.println("Reading... " + dn);
-
-        //Dataset d = CacheManager.readFromCache(dn, Dimension.SMALL);
-        DatasetReader dr = new DatasetReader();
-        Dataset d = dr.readDataset(dn, dim);
-
-        System.out.println(d);
-        System.out.println();
-        return d;
+//    public Dataset execute(DatasetName dn, Dimension dim)
+//    {
+//        System.out.println("Reading... " + dn);
+//
+//        Dataset d = CacheManager.readFromCache(dn, Dimension.SMALL);
+//        DatasetReader dr = new DatasetReader();
+//        Dataset d = dr.readDataset(dn, dim);
+//
+//        System.out.println(d);
+//        System.out.println();
+//        return d;
 //>>>>>>> Stashed changes
-    }
+//    }
 //    public static void main(String[] args) {
 //
 //        long start = System.currentTimeMillis();
@@ -129,4 +131,4 @@ public class ReadingPhaseExecutor {
 //            System.out.println();
 //        }
 //    }
-}
+//}

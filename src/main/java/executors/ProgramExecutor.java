@@ -1,8 +1,6 @@
 package executors;
 
 import constants.DatasetName;
-import constants.Dimension;
-import datasetsreader.Dataset;
 import twitter4j.conf.ConfigurationBuilder;
 import twitter4j.*;
 
@@ -29,7 +27,7 @@ public class ProgramExecutor
 ////        for (DatasetName name : DatasetName.values()) {
 ////            programEx.getReadingEx().execute(name);
 ////        }
-        Dataset ds21 = programEx.getReadingEx().execute(DatasetName.S21, Dimension.COMPLETE);
+//        Dataset ds21 = programEx.getReadingEx().execute(DatasetName.S21, Dimension.COMPLETE);
 
         programEx.getTwitterExtractionEx().execute();
 

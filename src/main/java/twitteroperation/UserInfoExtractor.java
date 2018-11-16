@@ -1,9 +1,9 @@
 package twitteroperation;
 
 import constants.DatasetName;
+import constants.TwitterRespPath;
 import io.Cache;
 import io.Utils;
-import javafx.scene.control.SpinnerValueFactory;
 import model.twitter.Dataset;
 import model.twitter.UserModel;
 import twitter4j.*;
@@ -23,7 +23,7 @@ public class UserInfoExtractor
      */
     public FollowerResp getUsersFollowing(Dataset dataset, Dataset clusterizedDataset) throws InterruptedException {
         Chrono c = new Chrono("Downloading user friendships....");
-        int counter = 0;
+//        int counter = 0;
         FollowerResp resp = new FollowerResp(dataset.getName());
         Map<Integer, UserModel> users = dataset.getUsers();
         Twitter twitter = new TwitterFactory().getInstance();
@@ -52,10 +52,11 @@ public class UserInfoExtractor
                 }
             } catch (TwitterException e) {
                 if(e.exceededRateLimitation()){
-                    if (counter==1)return resp;
-                    counter+=1;
-                    System.out.println("I'm so asleep.... I think I'll relax for next 15 minutes! (zzzzzz.....)");
-                    TimeUnit.MINUTES.sleep(3);
+//                    if (counter==0)return resp;
+//                    counter+=1;
+                    return resp;
+//                    System.out.println("I'm so asleep.... I think I'll relax for next 15 minutes! (zzzzzz.....)");
+//                    TimeUnit.MINUTES.sleep(3);
                 }
                 else{
                 manageRequestError(e, entry.getValue(), resp, dataset);
@@ -65,7 +66,7 @@ public class UserInfoExtractor
         return resp;
     }
 
-    public TweetsResp getUsersTwetter(Dataset dataset) throws TwitterException {
+    public TweetsResp getUsersTwetter(Dataset dataset) throws TwitterException, InterruptedException {
         Chrono c = new Chrono("Downloading user tweets....");
         TweetsResp resp = new TweetsResp(dataset.getName());
         Map<Integer, UserModel> users = dataset.getUsers();
@@ -81,7 +82,12 @@ public class UserInfoExtractor
                 }
                 else{
                     List<Status> statuses = twitter.getUserTimeline(userId);
-                    resp.addResult(stringUserId, statuses);
+                    List<String> texts = new ArrayList<>();
+                    for (Status s : statuses) {
+//                        System.out.println("Hello");
+                        texts.add(s.getText());
+                    }
+                    resp.addResult(stringUserId, texts);
                 }
             } catch (TwitterException e) {
                 manageRequestError(e, entry.getValue(), resp, dataset);
@@ -91,11 +97,16 @@ public class UserInfoExtractor
         return resp;
     }
 
-    private void manageRequestError(TwitterException e, UserModel user, Resp resp, Dataset dataset){
+    private void manageRequestError(TwitterException e, UserModel user, Resp resp, Dataset dataset) throws InterruptedException {
         if (e.resourceNotFound()) {
+            System.out.println("A user hasn't been found");
             user.setNotExists(true);
             resp.addNotExistingId(user.getName(dataset));
-        } else {
+        } else if(e.getErrorCode()==403){
+            System.out.println("Error 403: "+ e.getMessage());
+            System.out.println("I'm so asleep.... I think I'll relax for next 15 minutes! (zzzzzz.....)");
+            TimeUnit.MINUTES.sleep(3);
+        } else{
             e.printStackTrace();
             System.out.println("Failed to get user tweets: " + e.getMessage());
             System.exit((-1));
@@ -104,23 +115,23 @@ public class UserInfoExtractor
 
     public static void main(String[] args) throws Utils.CacheNotPresent, TwitterException, InterruptedException {
         UserInfoExtractor userInfoExtractor = new UserInfoExtractor();
+//
+        Dataset d22 = Cache.DatasetCache.read(DatasetName.S22);
+//        Dataset wikimid = Cache.DatasetCache.read(DatasetName.WIKIMID);
+//        Map<Integer, UserModel>1 users = d22.getUsers();
 
-        Dataset d22 = Cache.DatasetCache.read(DatasetName.S21);
-        Dataset wikimid = Cache.DatasetCache.read(DatasetName.WIKIMID);
-        Map<Integer, UserModel> users = d22.getUsers();
+//        System.out.println(d22.getName());
 
-//        ConfigurationBuilder cfg = new ConfigurationBuilder();
+////
+//        FollowerResp fresp = userInfoExtractor.getUsersFollowing(d22, wikimid);
+//        fresp.toString();
+//        System.out.println(fresp);
+////        fresp.saveFollowerResp(true, d22.getName().toString());
+//        Utils.saveJson(fresp, TwitterRespPath.FRIENDS_RESP.getPath(d22.getName().toString()), true);
 //
-//        cfg.setOAuthAccessToken("973247752401547264-lSfo9oTH7hVnSCoY2UgSlYfEyZLzMiD");
-//        cfg.setOAuthAccessTokenSecret("qgVEBsbSGueCRNqw9LpHgy1DOddAAvJhqAD9vJo1tP3PE");
-//        cfg.setOAuthConsumerKey("kYx4lTa9T0VXOdrCO8bvg5qIO");
-//        cfg.setOAuthConsumerSecret("06XC6YyjP6acZ96rf3ATHe91t7HR4e3efZ0xhXMNpIMlDIyFH3");
-//
-//        cfg.setTweetModeExtended(true);
-//
-        FollowerResp fresp = userInfoExtractor.getUsersFollowing(d22, wikimid);
-        fresp.toString();
-        System.out.println(fresp);
+//        FollowerResp respf = Utils.restoreJson(TwitterRespPath.FRIENDS_RESP.getPath(DatasetName.S22.name()), FollowerResp.class);
+//        System.out.println(respf);
+
 
         System.out.println();
         TweetsResp resp = userInfoExtractor.getUsersTwetter(d22);
@@ -128,5 +139,14 @@ public class UserInfoExtractor
         System.out.println("!!!!!!!!!!!!!!!!!!!");
         System.out.println(resp);
 
+//        resp.saveTweetResp(true, d22.getName().toString());
+        Utils.saveJson(resp, TwitterRespPath.TWEETS_RESP.getPath(d22.getName().toString()), true);
+
+//
+        TweetsResp resp2 = Utils.restoreJson(TwitterRespPath.TWEETS_RESP.getPath(DatasetName.S22.name()), TweetsResp.class);
+//        FollowerResp respfk = Utils.restoreJson(TwitterRespPath.FRIENDS_RESP.getPath(DatasetName.S22.name()), FollowerResp.class);
+
+        System.out.println(resp2);
+//        System.out.println(respfk);
     }
 }

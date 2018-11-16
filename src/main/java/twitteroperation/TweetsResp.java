@@ -1,6 +1,8 @@
 package twitteroperation;
 
 import constants.DatasetName;
+import constants.TwitterRespPath;
+import io.Utils;
 import twitter4j.*;
 
 import java.util.ArrayList;
@@ -13,16 +15,21 @@ public class TweetsResp extends Resp{
     /**
      * Tweeter respons of the request
      */
-    private HashMap<String, List<Status>> results;
+    private HashMap<String, List<String>> results;
+
+    public TweetsResp(){
+        super(null);
+//        this.results = new HashMap<String, List<Status>>();
+    }
 
     public TweetsResp(DatasetName originDataset){
         super(originDataset);
-        this.results = new HashMap<String, List<Status>>();
+        this.results = new HashMap<String, List<String>>();
     }
 
-    public void addResult(String id, List<Status> value){this.results.put(id, value);}
+    public void addResult(String id, List<String> value){this.results.put(id, value);}
 
-    public HashMap<String, List<Status>> getResults(){return this.results;}
+    public HashMap<String, List<String>> getResults(){return this.results;}
 
     public String toString(){
         return ("REPORT OF THE TWEET SEARCH:\n"+
@@ -31,5 +38,9 @@ public class TweetsResp extends Resp{
                 "# private users = " + this.getPrivateUserId().size() +"\n"
                 + "# voices in the report "+this.getResults().size());
     }
+
+//    public void saveTweetResp(boolean pretty, String datasetName){
+//        Utils.saveJson(this, TwitterRespPath.TWEETS_RESP.getPath(datasetName), pretty);
+//    }
 
 }

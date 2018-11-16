@@ -18,7 +18,7 @@ public enum TwitterRespPath {
      *
      * @return the path
      */
-    public String getPath(DatasetName dn) {
-        return String.format(this.path, dn.name());
+    public String getPath(String datasetName) {
+        return String.format(this.path, datasetName);
     }
 }
