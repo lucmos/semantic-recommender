@@ -3,8 +3,8 @@ from config import *
 
 class MatrixPath:
     _FULL_MATRIX_CACHE = "cache/matrix_{}_{}_{}_maxdistance_{}_full.npz"
-    _REDUCED_MATRIX_CACHE = "cache/matrix_{}_{}_{}_maxdistance_{}_dimensionality_{}.npz"
-    _SVD_INSTANCE = "cache/reducer_of_{}_with_{}.joblib"
+    _REDUCED_MATRIX_CACHE = "cache/matrix_{}_{}_{}_maxdistance_{}_dimensionality_{}.joblib"
+    _SVD_INSTANCE = "cache/reducer_of_matrix_{}_{}_{}_maxdistance_{}_dimensionality_{}_with_{}.joblib"
 
     SVD = "truncated_svd"
 
@@ -18,7 +18,7 @@ class MatrixPath:
         i = Config.get_instance()
         reduced_matrix = MatrixPath._REDUCED_MATRIX_CACHE.format(
             dataset.name, i[CLUSTER_OVER], i[DIMENSION], i[MAX_USER_DISTANCE], i[MATRIX_DIMENSIONALITY])
-        return reduced_matrix, MatrixPath._SVD_INSTANCE.format(reduced_matrix, reducer)
+        return reduced_matrix, MatrixPath._SVD_INSTANCE.format(dataset.name, i[CLUSTER_OVER], i[DIMENSION], i[MAX_USER_DISTANCE], i[MATRIX_DIMENSIONALITY], reducer)
 
 
 class JavaExportPath:

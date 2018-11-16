@@ -155,11 +155,11 @@ class Clusterizator:
 
         c = Chrono("Computing decomposition...")
         M_reduced, SVD = self._compute_decomposition(M)
-        assert M_reduced.shape()[1] == conf[MATRIX_DIMENSIONALITY]
+        assert M_reduced.shape[1] == conf[MATRIX_DIMENSIONALITY]
         c.millis()
 
         c = Chrono("Saving decomposition...")
-        scipy.sparse.save_npz(red_matrix, M_reduced)
+        utils.save_joblib(M_reduced, red_matrix)
         utils.save_joblib(SVD, red_svd)
         c.millis()
 
@@ -174,9 +174,9 @@ class Clusterizator:
 
         try:
             c = Chrono("Loading reduced matrix: {}".format(red_matrix))
-            M_reduced = scipy.sparse.load_npz(red_matrix)
+            M_reduced = utils.load_joblib(red_matrix)
             SVD = utils.load_joblib(red_svd)
-            assert M_reduced.shape()[1] == i[MATRIX_DIMENSIONALITY]
+            assert M_reduced.shape[1] == i[MATRIX_DIMENSIONALITY]
             return (M_reduced, SVD)
         except IOError:
             c.millis("not present (in {} millis)")
@@ -218,7 +218,7 @@ class Clusterizator:
         M, SVD = self.load_reduced_matrix_and_svd(dataset_name, obj)
         print(M.sum())
         print(M.shape)
-        print(M[0:20][0:20].todense())
+        print(M[0:20][0:20])
         s = M.sum(1)
         print(s)
         print(len(s))

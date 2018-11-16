@@ -97,7 +97,7 @@ class Config():
 
     def __str__(self):
         p = map(lambda x: "\t{}: {}\n".format(
-            x.upper(), self.properties[x]), self.properties)
+            x.upper(), self.properties[x]), self.KEYS)
         return "[CONFIGURATION]\n" + "".join(p)
 
     def __setitem__(self, key, value):
