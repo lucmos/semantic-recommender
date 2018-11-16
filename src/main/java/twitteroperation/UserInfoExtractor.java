@@ -9,6 +9,7 @@ import model.twitter.UserModel;
 import twitter4j.*;
 import utils.Chrono;
 
+import javax.xml.crypto.Data;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -52,11 +53,8 @@ public class UserInfoExtractor
                 }
             } catch (TwitterException e) {
                 if(e.exceededRateLimitation()){
-//                    if (counter==0)return resp;
-//                    counter+=1;
-                    return resp;
-//                    System.out.println("I'm so asleep.... I think I'll relax for next 15 minutes! (zzzzzz.....)");
-//                    TimeUnit.MINUTES.sleep(3);
+                    System.out.println("I'm so asleep.... I think I'll relax for next 15 minutes! (zzzzzz.....)");
+                    TimeUnit.MINUTES.sleep(3);
                 }
                 else{
                 manageRequestError(e, entry.getValue(), resp, dataset);
@@ -68,10 +66,14 @@ public class UserInfoExtractor
 
     public TweetsResp getUsersTwetter(Dataset dataset) throws TwitterException, InterruptedException {
         Chrono c = new Chrono("Downloading user tweets....");
+        int userCounter = 0;
         TweetsResp resp = new TweetsResp(dataset.getName());
         Map<Integer, UserModel> users = dataset.getUsers();
         Twitter twitter = new TwitterFactory().getInstance();
         for (Map.Entry<Integer, UserModel> entry : users.entrySet()) {
+            System.out.println("\n\nThis is the "+userCounter+" user");
+            userCounter++;
+
             try {
                 String stringUserId = entry.getValue().getName(dataset);
                 long userId = Integer.parseInt(stringUserId);
@@ -83,8 +85,11 @@ public class UserInfoExtractor
                 else{
                     List<Status> statuses = twitter.getUserTimeline(userId);
                     List<String> texts = new ArrayList<>();
+//                    int abc = 0;
                     for (Status s : statuses) {
-//                        System.out.println("Hello");
+//                        System.out.print(abc);
+//                        ++abc;
+//                        System.out.println(s.getText());
                         texts.add(s.getText());
                     }
                     resp.addResult(stringUserId, texts);
@@ -114,10 +119,25 @@ public class UserInfoExtractor
     }
 
     public static void main(String[] args) throws Utils.CacheNotPresent, TwitterException, InterruptedException {
+        //FAI PER S22 ED S21 (DI DEFAULT E' S22)
         UserInfoExtractor userInfoExtractor = new UserInfoExtractor();
-//
+
         Dataset d22 = Cache.DatasetCache.read(DatasetName.S22);
-//        Dataset wikimid = Cache.DatasetCache.read(DatasetName.WIKIMID);
+        Dataset wikimid = Cache.DatasetCache.read(DatasetName.WIKIMID);
+
+        FollowerResp friendResp22 = userInfoExtractor.getUsersFollowing(d22, wikimid);
+        System.out.println(friendResp22);
+        Utils.saveJson(friendResp22, TwitterRespPath.FRIENDS_RESP.getPath(d22.getName().toString()), true);
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////
+        UserInfoExtractor userInfoExtractorTweet = new UserInfoExtractor();
+
+        Dataset d22Tweet = Cache.DatasetCache.read(DatasetName.S22);
+
+        TweetsResp tweetResp22 = userInfoExtractorTweet.getUsersTwetter(d22Tweet);
+        System.out.println(tweetResp22);
+        Utils.saveJson(tweetResp22, TwitterRespPath.TWEETS_RESP.getPath(d22Tweet.getName().toString()), true);
+
+
 //        Map<Integer, UserModel>1 users = d22.getUsers();
 
 //        System.out.println(d22.getName());
@@ -133,20 +153,20 @@ public class UserInfoExtractor
 //        System.out.println(respf);
 
 
-        System.out.println();
-        TweetsResp resp = userInfoExtractor.getUsersTwetter(d22);
-        resp.toString();
-        System.out.println("!!!!!!!!!!!!!!!!!!!");
-        System.out.println(resp);
+
+//        TweetsResp resp = userInfoExtractor.getUsersTwetter(d22);
+//        resp.toString();
+//        System.out.println("!!!!!!!!!!!!!!!!!!!");
+//        System.out.println(resp);
 
 //        resp.saveTweetResp(true, d22.getName().toString());
-        Utils.saveJson(resp, TwitterRespPath.TWEETS_RESP.getPath(d22.getName().toString()), true);
+//        Utils.saveJson(resp, TwitterRespPath.TWEETS_RESP.getPath(d22.getName().toString()), true);
 
 //
-        TweetsResp resp2 = Utils.restoreJson(TwitterRespPath.TWEETS_RESP.getPath(DatasetName.S22.name()), TweetsResp.class);
+//        TweetsResp resp2 = Utils.restoreJson(TwitterRespPath.TWEETS_RESP.getPath(DatasetName.S22.name()), TweetsResp.class);
 //        FollowerResp respfk = Utils.restoreJson(TwitterRespPath.FRIENDS_RESP.getPath(DatasetName.S22.name()), FollowerResp.class);
 
-        System.out.println(resp2);
+//        System.out.println(resp2);
 //        System.out.println(respfk);
     }
 }
