@@ -3,20 +3,16 @@ from collections import Counter
 import utils
 from config import *
 from chronometer import Chrono
-from constants import JavaExportPath, Dataset
+from constants import JavaExportPath
 
 
 class JavaExport:
 
     @staticmethod
-    def read(datasetName):
-        i = Config.get_instance()
+    def read():
+        path = JavaExportPath.get_path()
 
-        path = JavaExportPath.get_path(
-            datasetName.name, i[CLUSTER_OVER], i[DIMENSION])
-
-        path_cache = JavaExportPath.get_path_cache(
-            datasetName.name, i[CLUSTER_OVER], i[DIMENSION])
+        path_cache = JavaExportPath.get_path_cache()
 
         c = Chrono("Reading {}...".format(path))
 
@@ -76,7 +72,7 @@ class JavaExport:
 
 
 if __name__ == "__main__":
-    a = JavaExport.read(Dataset.WIKIMID())
+    a = JavaExport.read()
     # print(a)
     for i in JavaExport.KEYS:
         print(i, len(a.__getattribute__(i)))

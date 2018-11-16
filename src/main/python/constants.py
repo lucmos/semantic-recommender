@@ -1,90 +1,71 @@
+import os
 from config import *
 
 
 class MatrixPath:
-    _FULL_MATRIX_CACHE = "cache/matrix_{}_{}_{}_maxdistance_{}_full.npz"
-    _REDUCED_MATRIX_CACHE = "cache/matrix_{}_{}_{}_maxdistance_{}_dimensionality_{}.joblib"
-    _SVD_INSTANCE = "cache/reducer_of_matrix_{}_{}_{}_maxdistance_{}_dimensionality_{}_with_{}.joblib"
-
-    SVD = "truncated_svd"
-
-    @staticmethod
-    def get_matrix_path(dataset):
-        i = Config.get_instance()
-        return MatrixPath._FULL_MATRIX_CACHE.format(dataset.name, i[CLUSTER_OVER], i[DIMENSION], i[MAX_USER_DISTANCE])
+    _FULL_MATRIX_CACHE = "cache/full/full_matrix_{}_{}_{}_maxdistance_{}.npz"
+    _INDEXES_CACHE = "cache/full/indexes_of_{}.joblib"
+    _REDUCED_MATRIX_CACHE = "cache/reduced/reduced_{}_with_dimensionality_{}.joblib"
+    _SVD_INSTANCE = "cache/reduced/reducer_of_{}_with_{}.joblib"
 
     @staticmethod
-    def get_matrix_svd_path(dataset, reducer):
+    def get_full_matrix_path():
         i = Config.get_instance()
+        return MatrixPath._FULL_MATRIX_CACHE.format(i[DATASET], i[CLUSTER_OVER], i[DIMENSION], i[MAX_USER_DISTANCE])
+
+    @staticmethod
+    def get_full_matrix_name():
+        return os.path.basename(MatrixPath.get_full_matrix_path())
+
+    @staticmethod
+    def get_indexes_path():
+        return MatrixPath._INDEXES_CACHE.format(MatrixPath.get_full_matrix_name())
+
+    @staticmethod
+    def get_matrix_svd_path():
+        i = Config.get_instance()
+
+        full_matrix = MatrixPath.get_full_matrix_name()
         reduced_matrix = MatrixPath._REDUCED_MATRIX_CACHE.format(
-            dataset.name, i[CLUSTER_OVER], i[DIMENSION], i[MAX_USER_DISTANCE], i[MATRIX_DIMENSIONALITY])
-        return reduced_matrix, MatrixPath._SVD_INSTANCE.format(dataset.name, i[CLUSTER_OVER], i[DIMENSION], i[MAX_USER_DISTANCE], i[MATRIX_DIMENSIONALITY], reducer)
+            full_matrix, i[MATRIX_DIMENSIONALITY])
+        return reduced_matrix, MatrixPath._SVD_INSTANCE.format(os.path.basename(reduced_matrix), i[REDUCER])
 
 
 class JavaExportPath:
     _EXPORT_PATH = "results/java_export/export_{}_{}_{}.json"
-    _EXPORT_CACHE = "cache/java_export/export_{}_{}_{}.pickle"
+    _EXPORT_CACHE = "cache/java_export/{}.pickle"
 
     @staticmethod
-    def get_path(name, cluster_over, dimension):
-        return JavaExportPath._EXPORT_PATH.format(name, cluster_over, dimension)
+    def get_path():
+        i = Config.get_instance()
+        return JavaExportPath._EXPORT_PATH.format(i[DATASET], i[CLUSTER_OVER], i[DIMENSION])
 
     @staticmethod
-    def get_path_cache(name, cluster_over, dimension):
-        return JavaExportPath._EXPORT_CACHE.format(name, cluster_over, dimension)
-
-
-class Dimension:
-    @staticmethod
-    def COMPLETE():
-        return Dimension("complete")
-
-    @staticmethod
-    def SMALL():
-        return Dimension("small")
-
-    def __init__(self, name):
-        self.name = name
-
-
-class Dataset:
-    @staticmethod
-    def WIKIMID():
-        return Dataset("WIKIMID", "datasets/bin/wikimid_{}.bin")
-
-    @staticmethod
-    def S21():
-        return Dataset("S21", "datasets/bin/S21_{}.bin")
-
-    @staticmethod
-    def S22():
-        return Dataset("S22", "datasets/bin/S22_preferences_{}.bin")
-
-    @staticmethod
-    def S23():
-        return Dataset("S23", "datasets/bin/S23_{}.bin")
-
-    def __init__(self, name, path):
-        self.name = name
-        self.path = path
-
-    # todo: usa config
-    def get_path(self, dimension):
-        return self.path.format(dimension)
+    def get_path_cache():
+        path = os.path.basename(JavaExportPath.get_path())
+        return JavaExportPath._EXPORT_CACHE.format(path)
 
 
 class Clusters:
     @staticmethod
     def CLUSTERS():
-        return Clusters("results/clusters_{}_{}_{}.json")
+        return Clusters("results/clusters_{}_clusterized_with_{}.json")
 
     def __init__(self, name):
         self.name = name
 
     # todo: usa config
-    def get_path(self, cluster_over, cluster_method, dimension):
-        return self.name.format(cluster_over, cluster_method, dimension)
+    def get_path(self):
+        i = Config.get_instance()
+        m, _ = MatrixPath.get_matrix_svd_path()
+        # ! todo to change
+        return self.name.format(os.path.basename(m), None)
 
 
 if __name__ == "__main__":
-    print(Dataset.WIKIMID().get_path("small"))
+    a = MatrixPath.get_full_matrix_path()
+    b, c = MatrixPath.get_matrix_svd_path()
+    d = JavaExportPath.get_path()
+    e = JavaExportPath.get_path_cache()
+
+    print("{}\n{}\n{}\n{}\n{}\n".format(a, b, c, d, e))
