@@ -13,7 +13,24 @@ from config import *
 
 
 class Decompositor:
-     #  #users x #cat
+
+    instance = None
+
+    @staticmethod
+    def get_instance():
+        if not Decompositor.instance:
+            Decompositor.instance = Decompositor()
+        return Decompositor.instance
+
+    def __init__(self):
+        c = Chrono("Initializing decompositor...")
+        (self.categories, self.categories2index, self.num_cat,
+         self.pages, self.pages2index, self.num_pages,
+         self.users, self.users2index, self.num_users) = self._load_indexes()
+        self.matrix, self.reducer = self._load_matrix()
+        c.millis()
+
+    #  #users x #cat
     def sparse_user2tweetcat(self, data):
         chrono = Chrono("Computing user2tweet matrix...")
         T = scipy.sparse.lil_matrix(
@@ -223,39 +240,6 @@ class Decompositor:
         utils.save_joblib(ind, path)
         c3.millis()
         return ind
-
-    instance = None
-
-    @staticmethod
-    def get_instance():
-        if not Decompositor.instance:
-            Decompositor.instance = Decompositor()
-        return Decompositor.instance
-
-    def __init__(self):
-        c = Chrono("Initializing decompositor...")
-        (self.categories, self.categories2index, self.num_cat,
-         self.pages, self.pages2index, self.num_pages,
-         self.users, self.users2index, self.num_users) = self._load_indexes()
-        self.matrix, self.reducer = self._load_matrix()
-        c.millis()
-        # print(M.sum())
-        # print(M.shape)
-        # print(M[0:20][0:20])
-        # s = M.sum(1)
-        # print(s)
-        # print(len(s))
-        # svd = TruncatedSVD(n_components=1000)
-        # svd.fit(M)
-        # print(M.shape)
-        # M = svd.transform(M)
-        # print(M.shape)
-        # print(M[2, :])
-        # print(M.sum())
-
-        # print("SOMAA: ", P.sum())
-        # P = self.sparse_user2likedcat(obj)
-        # print("SOMAA: ", P.sum())
 
 
 if __name__ == "__main__":
