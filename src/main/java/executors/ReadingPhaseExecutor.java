@@ -11,6 +11,7 @@ import model.twitter.Dataset;
 @Deprecated
 public class ReadingPhaseExecutor {
 
+    //<<<<<<< Updated upstream
     public static void main(String[] args) throws Utils.CacheNotPresent {
 
 
@@ -36,6 +37,8 @@ public class ReadingPhaseExecutor {
 //        System.out.println(a);
         Dataset d = Cache.DatasetCache.read(DatasetName.WIKIMID);
         System.out.println(d.report());
+    }
+}
 //        TwitterFactory f = new TwitterFactory(d);
 //
 //        UserModel u1 = f.getUser(1591641);
@@ -95,5 +98,37 @@ public class ReadingPhaseExecutor {
 //        d = Cache.WikiMappingCache.read(Dimension.COMPLETE);
 //        System.out.println(d);
 //        System.out.println(d.clustersStats());
-    }
-}
+//=======
+//    public Dataset execute(DatasetName dn, Dimension dim)
+//    {
+//        System.out.println("Reading... " + dn);
+//
+//        Dataset d = CacheManager.readFromCache(dn, Dimension.SMALL);
+//        DatasetReader dr = new DatasetReader();
+//        Dataset d = dr.readDataset(dn, dim);
+//
+//        System.out.println(d);
+//        System.out.println();
+//        return d;
+//>>>>>>> Stashed changes
+//    }
+//    public static void main(String[] args) {
+//
+//        long start = System.currentTimeMillis();
+//        for (DatasetName name : DatasetName.values()) {
+//            System.out.println("Reading... " + name);
+//
+////            Dataset d = DatasetReader.readDataset(name, Dimension.COMPLETE);
+////            CacheManager.writeToCache(name, d);
+//
+//          Dataset d = CacheManager.readFromCache(name, Dimension.COMPLETE);
+//
+//            System.out.println(d);
+//            long now = System.currentTimeMillis();
+//            System.out.println("In: " + (now - start)/ 1000.0);
+//            start = now;
+//
+//            System.out.println();
+//        }
+//    }
+//}

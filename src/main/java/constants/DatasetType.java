@@ -7,5 +7,5 @@ public enum DatasetType
     MESSAGEBASED_DATASET,
     MESSAGEBASED_INTEREST,
     S21,
-    S22_S23,
+    S22_S23;
 }

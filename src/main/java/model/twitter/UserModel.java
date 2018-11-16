@@ -43,6 +43,16 @@ public class UserModel extends ObjectModel {
      */
     private DatasetName datasetName;
 
+    /**
+     * True if the user information are private;
+     */
+    private boolean isPrivate;
+
+    /**
+     * True if the user has been deleted by Twitter;
+     */
+    private boolean notExists;
+
 
     /**
      * The list of the wiki wikiPages of the items that the user likes.
@@ -61,6 +71,8 @@ public class UserModel extends ObjectModel {
         this.wikiPagesOfLikedItemsIds = new IntOpenHashSet();
 
         this.datasetName = datasetName;
+        this.isPrivate = false;
+        this.notExists = false;
     }
 
     /**
@@ -228,4 +240,8 @@ public class UserModel extends ObjectModel {
     public String toString() {
         return String.format("(user: #%s {tweets: %s, out: %s, in: %s})", getId(), tweetsIds.size(), followOutIds.size(), followInIds.size());
     }
+
+    public void setIsPrivate(boolean isPrivate){this.isPrivate = isPrivate;}
+
+    public  void setNotExists(boolean notExists){this.notExists = notExists;}
 }
