@@ -2,6 +2,7 @@
 .project
 .vscode/
 config/babelnet.var.properties
+config/babelfy.var.properties
 .idea/compiler.xml
 **/.directory
 src/main/resources/twitter4j.properties
