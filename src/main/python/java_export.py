@@ -1,7 +1,7 @@
 from collections import Counter
 
 import utils
-from config import *
+from configuration import *
 from chronometer import Chrono
 from constants import JavaExportPath
 

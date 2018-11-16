@@ -9,7 +9,7 @@ import utils
 from constants import *
 from chronometer import Chrono
 from java_export import JavaExport
-from config import *
+from configuration import *
 
 
 class Decompositor:
@@ -94,15 +94,13 @@ class Decompositor:
         return F.tocsr()
 
     def _compute_matrix(self, data):
-        conf = Config.get_instance()
-
-        tweet_imp = conf[TWEET_IMPORTANCE]
-        personal_page_imp = conf[PERSONAL_PAGE_IMPORTANCE]
-        liked_items_imp = conf[LIKED_ITEMS_IMPORTANCE]
-        f_tweet_imp = conf[FOLLOW_OUT_TWEET_IMPORTANCE]
-        f_personal_page_imp = conf[FOLLOW_OUT_PERSONAL_PAGE_IMPORTANCE]
-        f_liked_items_imp = conf[FOLLOW_OUT_LIKED_ITEMS_IMPORTANCE]
-        decay = conf[RATE_OF_DECAY]
+        tweet_imp = config[TWEET_IMPORTANCE]
+        personal_page_imp = config[PERSONAL_PAGE_IMPORTANCE]
+        liked_items_imp = config[LIKED_ITEMS_IMPORTANCE]
+        f_tweet_imp = config[FOLLOW_OUT_TWEET_IMPORTANCE]
+        f_personal_page_imp = config[FOLLOW_OUT_PERSONAL_PAGE_IMPORTANCE]
+        f_liked_items_imp = config[FOLLOW_OUT_LIKED_ITEMS_IMPORTANCE]
+        decay = config[RATE_OF_DECAY]
 
         chrono1 = Chrono("Computing M....")
         T = self.sparse_user2tweetcat(data)
@@ -119,7 +117,7 @@ class Decompositor:
         chrono3.millis()
 
         Fi = F.copy()
-        for i in range(1, conf[MAX_USER_DISTANCE] + 1):
+        for i in range(1, config[MAX_USER_DISTANCE] + 1):
             chrono2 = Chrono(
                 "Computing iteration {} (number of ones in F: {})...".format(i, Fi.sum()))
 
@@ -133,7 +131,7 @@ class Decompositor:
                 M += (coeff * (Fi @ matrix))
                 chrono3.millis()
 
-            if (i == conf[MAX_USER_DISTANCE]):
+            if (i == config[MAX_USER_DISTANCE]):
                 break
 
             chorno4 = Chrono("Computing F^{} @ F...".format(i))
@@ -154,18 +152,17 @@ class Decompositor:
         return M
 
     def _compute_decomposition(self, M):
-        conf = Config.get_instance()
         red_matrix, red_svd = MatrixPath.get_matrix_svd_path()
 
         c = Chrono("Computing decomposition...")
 
         normalizer_input = Normalizer(copy=False)
-        SVD = TruncatedSVD(n_components=conf[MATRIX_DIMENSIONALITY])
+        SVD = TruncatedSVD(n_components=config[MATRIX_DIMENSIONALITY])
         normalizer_output = Normalizer(copy=False)
         pipeline = make_pipeline(normalizer_input, SVD, normalizer_output)
         # pipeline = make_pipeline(SVD)
         M_reduced, SVD = pipeline.fit_transform(M), pipeline
-        assert M_reduced.shape[1] == conf[MATRIX_DIMENSIONALITY]
+        assert M_reduced.shape[1] == config[MATRIX_DIMENSIONALITY]
         c.millis()
 
         c = Chrono("Saving decomposition...")
@@ -176,7 +173,6 @@ class Decompositor:
         return M_reduced, SVD
 
     def _load_matrix(self):
-        i = Config.get_instance()
         full_matrix = MatrixPath.get_full_matrix_path()
 
         red_matrix, red_svd = MatrixPath.get_matrix_svd_path()
@@ -185,7 +181,7 @@ class Decompositor:
             c = Chrono("Loading reduced matrix: {}".format(red_matrix))
             M_reduced = utils.load_joblib(red_matrix)
             SVD = utils.load_joblib(red_svd)
-            assert M_reduced.shape[1] == i[MATRIX_DIMENSIONALITY]
+            assert M_reduced.shape[1] == config[MATRIX_DIMENSIONALITY]
             c.millis("from cache (in {} millis)")
             return (M_reduced, SVD)
         except IOError:
@@ -193,7 +189,7 @@ class Decompositor:
 
         try:
             c = Chrono("Loading full matrix: {}".format(full_matrix))
-            M = scipy.sparse.load_npz(full_matrix)
+            M = utils.load_npz(full_matrix)
             c.millis("from cache (in {} millis)")
             return self._compute_decomposition(M)
         except IOError:
@@ -204,7 +200,7 @@ class Decompositor:
         M = self._compute_matrix(data)
         c.millis()
         c = Chrono("Saving matrix...")
-        scipy.sparse.save_npz(full_matrix, M, compressed=False)
+        utils.save_npz(full_matrix, M, compressed=False)
         c.millis()
         return self._compute_decomposition(M)
 

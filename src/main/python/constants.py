@@ -1,17 +1,16 @@
 import os
-from config import *
+from configuration import *
 
 
 class MatrixPath:
-    _FULL_MATRIX_CACHE = "cache/full/full_matrix_{}_{}_{}_maxdistance_{}.npz"
-    _INDEXES_CACHE = "cache/full/indexes_of_{}.joblib"
-    _REDUCED_MATRIX_CACHE = "cache/reduced/reduced_{}_with_dimensionality_{}.joblib"
-    _SVD_INSTANCE = "cache/reduced/reducer_of_{}_with_{}.joblib"
+    _FULL_MATRIX_CACHE = "cache/full/full_{}_{}_{}_dist_{}"
+    _INDEXES_CACHE = "cache/full/indexes_{}"
+    _REDUCED_MATRIX_CACHE = "cache/reduced/reduced_{}_dim_{}"
+    _SVD_INSTANCE = "cache/reduced/{}_{}"
 
     @staticmethod
     def get_full_matrix_path():
-        i = Config.get_instance()
-        return MatrixPath._FULL_MATRIX_CACHE.format(i[DATASET], i[CLUSTER_OVER], i[DIMENSION], i[MAX_USER_DISTANCE])
+        return MatrixPath._FULL_MATRIX_CACHE.format(config[DATASET], config[CLUSTER_OVER], config[DIMENSION], config[MAX_USER_DISTANCE])
 
     @staticmethod
     def get_full_matrix_name():
@@ -23,22 +22,19 @@ class MatrixPath:
 
     @staticmethod
     def get_matrix_svd_path():
-        i = Config.get_instance()
-
         full_matrix = MatrixPath.get_full_matrix_name()
         reduced_matrix = MatrixPath._REDUCED_MATRIX_CACHE.format(
-            full_matrix, i[MATRIX_DIMENSIONALITY])
-        return reduced_matrix, MatrixPath._SVD_INSTANCE.format(os.path.basename(reduced_matrix), i[REDUCER])
+            full_matrix, config[MATRIX_DIMENSIONALITY])
+        return reduced_matrix, MatrixPath._SVD_INSTANCE.format(os.path.basename(reduced_matrix), config[REDUCER])
 
 
 class JavaExportPath:
-    _EXPORT_PATH = "results/java_export/export_{}_{}_{}.json"
-    _EXPORT_CACHE = "cache/java_export/{}.pickle"
+    _EXPORT_PATH = "results/java_export/export_{}_{}_{}"
+    _EXPORT_CACHE = "cache/java_export/{}"
 
     @staticmethod
     def get_path():
-        i = Config.get_instance()
-        return JavaExportPath._EXPORT_PATH.format(i[DATASET], i[CLUSTER_OVER], i[DIMENSION])
+        return JavaExportPath._EXPORT_PATH.format(config[DATASET], config[CLUSTER_OVER], config[DIMENSION])
 
     @staticmethod
     def get_path_cache():
@@ -46,26 +42,25 @@ class JavaExportPath:
         return JavaExportPath._EXPORT_CACHE.format(path)
 
 
-class Clusters:
+class ClustersPath:
+    _CLUSTERS_PATH = "results/clusters_of_{}_{}_{}"
+    _CLUSTERER_PATH = "results/clusterer_of_{}_{}_{}"
+
     @staticmethod
-    def CLUSTERS():
-        return Clusters("results/clusters_{}_clusterized_with_{}.json")
-
-    def __init__(self, name):
-        self.name = name
-
-    # todo: usa config
-    def get_path(self):
-        i = Config.get_instance()
-        m, _ = MatrixPath.get_matrix_svd_path()
-        # ! todo to change
-        return self.name.format(os.path.basename(m), None)
+    def get_clusterer_path():
+        _, matrix_red_with_svd = MatrixPath.get_matrix_svd_path()
+        clust = config[CLUSTERER]
+        params = "_".join(str(config[x]) for x in CLUSTERER_PARAMETERS[clust])
+        return ClustersPath._CLUSTERER_PATH.format(os.path.basename(matrix_red_with_svd), params, clust)
 
 
 if __name__ == "__main__":
     a = MatrixPath.get_full_matrix_path()
     b, c = MatrixPath.get_matrix_svd_path()
+    o = MatrixPath.get_indexes_path()
     d = JavaExportPath.get_path()
     e = JavaExportPath.get_path_cache()
+    f = ClustersPath.get_clusterer_path()
 
-    print("{}\n{}\n{}\n{}\n{}\n".format(a, b, c, d, e))
+    print(o)
+    print("{}\n{}\n{}\n{}\n{}\n{}\n".format(a, b, c, d, e, f))
