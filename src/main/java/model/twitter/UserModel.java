@@ -53,6 +53,7 @@ public class UserModel extends ObjectModel {
      */
     private boolean notExists;
 
+    private boolean isSuspended;
 
     /**
      * The list of the wiki wikiPages of the items that the user likes.
@@ -244,4 +245,8 @@ public class UserModel extends ObjectModel {
     public void setIsPrivate(boolean isPrivate){this.isPrivate = isPrivate;}
 
     public  void setNotExists(boolean notExists){this.notExists = notExists;}
+
+    public void setIsSuspended(boolean suspended) {
+        isSuspended = suspended;
+    }
 }

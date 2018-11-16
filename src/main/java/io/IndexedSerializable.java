@@ -1,7 +1,5 @@
 package io;
 
-import constants.PathConstants;
-
 import java.io.Serializable;
 
 /**

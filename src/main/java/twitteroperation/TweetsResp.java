@@ -1,13 +1,8 @@
 package twitteroperation;
 
 import constants.DatasetName;
-import constants.TwitterRespPath;
-import io.Utils;
-import twitter4j.*;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 
 public class TweetsResp extends Resp{
@@ -34,7 +29,7 @@ public class TweetsResp extends Resp{
     public String toString(){
         return ("REPORT OF THE TWEET SEARCH:\n"+
                 "Origin dataset = "+this.getOriginDataset()+"\n"+
-                "# not existing users = " + this.getNotExistingId().size() +"\n"+
+                "# not existing users = " + this.getNotExistingUserId().size() +"\n"+
                 "# private users = " + this.getPrivateUserId().size() +"\n"
                 + "# voices in the report "+this.getResults().size());
     }

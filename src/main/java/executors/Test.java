@@ -2,6 +2,7 @@ package executors;
 
 import utils.Chrono;
 
+@Deprecated
 public class Test {
     public static void main(String[] args) {
         Test.ric(5);

@@ -1,19 +1,12 @@
 package clusterization;
 
-import com.google.common.util.concurrent.AtomicDouble;
-import io.Config;
-import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
-import model.clusters.Cluster;
-import model.clusters.ClusterFactory;
 import model.twitter.Dataset;
 import model.twitter.UserModel;
-import twitter4j.User;
 import utils.Counter;
 
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
 
 
 @Deprecated
@@ -25,20 +18,6 @@ public class ClustersMeter {
     public ClustersMeter(Dataset dataset) {
         this.dataset = dataset;
         this.userToCat = ClustersUtils.getUserToCatCounter(dataset); // TODO: 12/11/18 change this, to change how the users are compared 
-    }
-
-    public float distance(int u1, int u2) {
-        return distance(dataset.getUser(u1), dataset.getUser(u2));
-    }
-
-    public float distance(UserModel u1, UserModel u2) {
-        switch (Config.getInstance().distance()) {
-            case COSINE:
-                return usersCosineSimilarity(u1, u2);
-            case JACCARD:
-                return usersJaccardSimilarity(u1, u2);
-        }
-        throw new RuntimeException("Invalid distance measure");
     }
 
     public float usersJaccardSimilarity(int u1, int u2) {

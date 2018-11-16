@@ -2,13 +2,8 @@ package twitteroperation;
 
 import constants.DatasetName;
 import io.IndexedSerializable;
-import model.twitter.Dataset;
-import twitter4j.*;
 
-import java.io.Serializable;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 
 public abstract class Resp implements IndexedSerializable {
 
@@ -19,7 +14,12 @@ public abstract class Resp implements IndexedSerializable {
     /**
      * List of idStrings of not existing users
      */
-    private HashSet<String> notExistingId;
+    private HashSet<String> notExistingUserId;
+
+    /**
+     * List of idStrings of not existing users
+     */
+    private HashSet<String> suspendedUserId;
 //    /**
 //     * Tweeter respons of the request
 //     */
@@ -32,7 +32,8 @@ public abstract class Resp implements IndexedSerializable {
     public Resp(DatasetName originDataset){
         this.originDataset = originDataset;
         this.privateUserId = new HashSet<String>();
-        this.notExistingId = new HashSet<String>();
+        this.notExistingUserId = new HashSet<String>();
+        this.suspendedUserId = new HashSet<>();
 //        this.results = new HashMap<String, Object>();
     }
 
@@ -51,14 +52,22 @@ public abstract class Resp implements IndexedSerializable {
         return privateUserId;
     }
 
-    public void addNotExistingId(String newNotExistingId){this.notExistingId.add(newNotExistingId);}
+    public void addNotExistingUserId(String newNotExistingUserId){this.notExistingUserId.add(newNotExistingUserId);}
 
-    public HashSet<String> getNotExistingId() {
-        return notExistingId;
+    public HashSet<String> getNotExistingUserId() {
+        return notExistingUserId;
+    }
+
+    public void addSuspendedUserId(String user) {
+        this.suspendedUserId.add(user);
+    }
+
+    public HashSet<String> getSuspendedUserId() {
+        return suspendedUserId;
     }
 
 
-//    public void addResult(String id, Object value){this.results.put(id, value);}
+    //    public void addResult(String id, Object value){this.results.put(id, value);}
 //
 //    public HashMap<String, Object> getResults() {
 //        return results;

@@ -6,6 +6,7 @@ import twitter4j.*;
 
 import java.io.IOException;
 
+@Deprecated
 public class ProgramExecutor
 {
     ReadingPhaseExecutor readingEx;

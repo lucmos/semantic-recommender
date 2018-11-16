@@ -35,13 +35,6 @@
             <version>[2.2,)</version>
         </dependency>
 
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-            <scope>test</scope>
-        </dependency>
-
         <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -49,31 +42,11 @@
             <version>3.8.1</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/de.lmu.ifi.dbs.elki/elki -->
-        <dependency>
-            <groupId>de.lmu.ifi.dbs.elki</groupId>
-            <artifactId>elki</artifactId>
-            <version>0.7.1</version>
-        </dependency>
-
         <!-- https://mvnrepository.com/artifact/it.unimi.dsi/fastutil -->
         <dependency>
             <groupId>it.unimi.dsi</groupId>
             <artifactId>fastutil</artifactId>
             <version>8.2.2</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.ojalgo/ojalgo -->
-        <dependency>
-            <groupId>org.ojalgo</groupId>
-            <artifactId>ojalgo</artifactId>
-            <version>46.3.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.ejml</groupId>
-            <artifactId>ejml-all</artifactId>
-            <version>0.37</version>
         </dependency>
     </dependencies>
 </project>
