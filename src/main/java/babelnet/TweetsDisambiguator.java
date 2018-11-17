@@ -38,6 +38,7 @@ public class TweetsDisambiguator {
             TweetRespDisambiguated resp_disambiguated = new TweetRespDisambiguated(resp);
 
             resp.getResults().forEach((x, y) -> {
+                System.out.println(String.format("Operating on user: %s", x));
                 String merged_tweets = merge_tweets(y);
 
                 List<String> synsets = BabelfyInterface.disambiguate(merged_tweets);
