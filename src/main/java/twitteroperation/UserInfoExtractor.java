@@ -142,7 +142,7 @@ public class UserInfoExtractor {
         return new DatasetName[]{DatasetName.S21, DatasetName.S22,};
     }
 
-    private static void _download_tweets() throws Utils.CacheNotPresent, TwitterException, InterruptedException {
+    public static void _download_tweets() throws Utils.CacheNotPresent, TwitterException, InterruptedException {
         for (DatasetName dname : _dataset_to_process()) {
             Chrono c = new Chrono(String.format("Downloading tweets of: %s", dname));
             UserInfoExtractor userInfoExtractorTweet = new UserInfoExtractor();
@@ -154,7 +154,7 @@ public class UserInfoExtractor {
         }
     }
 
-    private static void _download_friends() throws Utils.CacheNotPresent, InterruptedException {
+    public static void _download_friends() throws Utils.CacheNotPresent, InterruptedException {
         for (DatasetName dname : _dataset_to_process()) {
             Chrono c = new Chrono(String.format("Downloading friends of: %s", dname));
             UserInfoExtractor userInfoExtractor = new UserInfoExtractor();
@@ -169,40 +169,40 @@ public class UserInfoExtractor {
         }
     }
 
-    public static void main(String[] args) throws Utils.CacheNotPresent, TwitterException, InterruptedException {
-        Config.getInstance();
-
-//        UserInfoExtractor._download_friends();
-        UserInfoExtractor._download_tweets();
-
-//        Map<Integer, UserModel>1 users = d22.getUsers();
-
-//        System.out.println(d22.getName());
-
+//    public static void main(String[] args) throws Utils.CacheNotPresent, TwitterException, InterruptedException {
+//        Config.getInstance();
+//
+////        UserInfoExtractor._download_friends();
+//        UserInfoExtractor._download_tweets();
+//
+////        Map<Integer, UserModel>1 users = d22.getUsers();
+//
+////        System.out.println(d22.getName());
+//
+//////
+////        FollowerResp fresp = userInfoExtractor.getUsersFollowing(d22, wikimid);
+////        fresp.toString();
+////        System.out.println(fresp);
+//////        fresp.saveFollowerResp(true, d22.getName().toString());
+////        Utils.saveJson(fresp, TwitterRespPath.FRIENDS_RESP.getPath(d22.getName().toString()), true);
 ////
-//        FollowerResp fresp = userInfoExtractor.getUsersFollowing(d22, wikimid);
-//        fresp.toString();
-//        System.out.println(fresp);
-////        fresp.saveFollowerResp(true, d22.getName().toString());
-//        Utils.saveJson(fresp, TwitterRespPath.FRIENDS_RESP.getPath(d22.getName().toString()), true);
+////        FollowerResp respf = Utils.restoreJson(TwitterRespPath.FRIENDS_RESP.getPath(DatasetName.S22.name()), FollowerResp.class);
+////        System.out.println(respf);
 //
-//        FollowerResp respf = Utils.restoreJson(TwitterRespPath.FRIENDS_RESP.getPath(DatasetName.S22.name()), FollowerResp.class);
-//        System.out.println(respf);
-
-
-//        TweetsResp resp = userInfoExtractor.getUsersTwetter(d22);
-//        resp.toString();
-//        System.out.println("!!!!!!!!!!!!!!!!!!!");
-//        System.out.println(resp);
-
-//        resp.saveTweetResp(true, d22.getName().toString());
-//        Utils.saveJson(resp, TwitterRespPath.TWEETS_RESP.getPath(d22.getName().toString()), true);
-
 //
-//        TweetsResp resp2 = Utils.restoreJson(TwitterRespPath.TWEETS_RESP.getPath(DatasetName.S22.name()), TweetsResp.class);
-//        FollowerResp respfk = Utils.restoreJson(TwitterRespPath.FRIENDS_RESP.getPath(DatasetName.S22.name()), FollowerResp.class);
-
-//        System.out.println(resp2);
-//        System.out.println(respfk);
-    }
+////        TweetsResp resp = userInfoExtractor.getUsersTwetter(d22);
+////        resp.toString();
+////        System.out.println("!!!!!!!!!!!!!!!!!!!");
+////        System.out.println(resp);
+//
+////        resp.saveTweetResp(true, d22.getName().toString());
+////        Utils.saveJson(resp, TwitterRespPath.TWEETS_RESP.getPath(d22.getName().toString()), true);
+//
+////
+////        TweetsResp resp2 = Utils.restoreJson(TwitterRespPath.TWEETS_RESP.getPath(DatasetName.S22.name()), TweetsResp.class);
+////        FollowerResp respfk = Utils.restoreJson(TwitterRespPath.FRIENDS_RESP.getPath(DatasetName.S22.name()), FollowerResp.class);
+//
+////        System.out.println(resp2);
+////        System.out.println(respfk);
+//    }
 }

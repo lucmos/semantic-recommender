@@ -28,8 +28,7 @@ public class TweetsDisambiguator {
         return s.toString();
     }
 
-
-    public static void main(String[] args) throws Utils.CacheNotPresent {
+    public static void disambiguate() throws Utils.CacheNotPresent {
         DatasetName[] datasets = _dataset_to_process();
 
         for (DatasetName dname : datasets) {
@@ -57,5 +56,10 @@ public class TweetsDisambiguator {
             Utils.saveJson(resp_disambiguated, TwitterRespPath.TWEETS_RESP_DISAMBIGUATED.getPath(dname.name()), true);
             c.millis();
         }
+    }
+
+
+    public static void main(String[] args) throws Utils.CacheNotPresent {
+        disambiguate();
     }
 }
