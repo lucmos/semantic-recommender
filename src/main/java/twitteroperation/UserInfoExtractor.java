@@ -10,7 +10,6 @@ import model.twitter.UserModel;
 import twitter4j.*;
 import utils.Chrono;
 
-import javax.xml.crypto.Data;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -61,7 +60,7 @@ public class UserInfoExtractor {
 //                            following.addFollowOut(followed);
                         }
                     }
-                    resp.addResult(stringUserId, friends);
+                    resp.addFriends(stringUserId, friends);
                 }
 
                 current_user++;

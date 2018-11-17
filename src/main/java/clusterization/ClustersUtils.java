@@ -54,6 +54,7 @@ public class ClustersUtils {
 
             case DOMAINS:
                 Counter<BabelDomainModel> domCounter = user.getTweetsDomains(datasaet);
+
                 for (BabelDomainModel b : domCounter.getMap().keySet()) {
                     stringCounter.increment(b.getName(datasaet));
                 }
@@ -71,34 +72,10 @@ public class ClustersUtils {
         HashMap<UserModel, Counter<String>> userTocatCounter = new HashMap<>();
 
         for (UserModel user : dataset.getUsers().values()) {
-            for (int tweetID : user.getTweetsIds()) {
+            Counter<String> counter = getUserToCatCounter(dataset, user);
 
-                TweetModel tweet = user.getTweetModel(dataset, tweetID);
-                WikiPageModel page = tweet.getWikiPageModel(dataset);
-
-                Set<String> possibleClusters;
-
-                switch (Config.getInstance().clusterOver()) {
-                    case CATEGORIES: possibleClusters = page.getCategoriesModel(dataset).stream()
-                                .map(x -> x.getName(dataset)).collect(Collectors.toSet());
-                        break;
-
-                    case DOMAINS: possibleClusters = page.getDomainsModel(dataset).stream()
-                            .map(x -> x.getName(dataset)).collect(Collectors.toSet());
-                        break;
-
-                    default:
-                        throw new RuntimeException("Invalid clusterization.");
-                }
-
-                if (possibleClusters.isEmpty()) {continue;} // TODO: 02/11/18 decidi se skippare l'utente o mettergli roba vuota
-//                assert !possibleClusters.isEmpty();
-
-                userTocatCounter.putIfAbsent(user, new Counter<>());
-                for (String c : possibleClusters) {
-                    userTocatCounter.get(user).increment(c);
-                }
-            }
+            assert !userTocatCounter.containsKey(user);
+            userTocatCounter.putIfAbsent(user, counter);
         }
 
         return userTocatCounter;

@@ -1,7 +1,11 @@
 package model.twitter;
 
+import babelnet.BabelnetInterface;
 import constants.DatasetName;
 import model.twitter.*;
+import utils.Chrono;
+
+import java.util.Set;
 
 /**
  * Creates twitter objects.
@@ -13,6 +17,44 @@ public class TwitterObjectFactory {
 
     public TwitterObjectFactory(Dataset dataset) {
         this.dataset = dataset;
+    }
+
+    public void updateBabelnetInformations() {
+        Chrono c = new Chrono("Updating babelnet informations...");
+        dataset.getWikiPages().values().forEach(page -> {
+            Set<String> categories = BabelnetInterface.getCategories(page);
+
+            for (String cat : categories) {
+                BabelCategoryModel catModel = getCategory(cat);
+                page.addCategory(catModel);
+                dataset.addCategory(catModel);
+            }
+
+            Set<String> domains = BabelnetInterface.getDomains(page);
+            for (String dom : domains) {
+                BabelDomainModel domainModel = getDomain(dom);
+                page.addBabelDomain(domainModel);
+                dataset.addDomain(domainModel);
+            }
+        });
+
+//        for (WikiPageModel page : dataset.getWikiPages().values()) {
+//            Set<String> categories = BabelnetInterface.getCategories(page);
+//
+//            for (String cat : categories) {
+//                BabelCategoryModel catModel = twitterObjectFactory.getCategory(cat);
+//                page.addCategory(catModel);
+//                dataset.addCategory(catModel);
+//            }
+//
+//            Set<String> domains = BabelnetInterface.getDomains(page);
+//            for (String dom : domains) {
+//                BabelDomainModel domainModel = twitterObjectFactory.getDomain(dom);
+//                page.addBabelDomain(domainModel);
+//                dataset.addDomain(domainModel);
+//            }
+//        }
+        c.millis();
     }
 
     public BabelCategoryModel getCategory(String id) {

@@ -47,6 +47,10 @@ public class Dataset extends ObjectCollection {
         return name;
     }
 
+    public void setName(DatasetName name) {
+        this.name = name;
+    }
+
     public InterestModel getInterest(int id) {
         assert interests.containsKey(id);
 

@@ -22,16 +22,16 @@ public class FollowerResp extends Resp
         this.results = new HashMap<>();
     }
 
-    public void addResult(String id, HashSet<String> value){this.results.put(id, value);}
+    public void addFriends(String id, HashSet<String> value){this.results.put(id, value);}
 
-    public HashMap<String, HashSet<String>> getResults(){return this.results;}
+    public HashMap<String, HashSet<String>> getUser2Friends(){return this.results;}
 
     public String toString(){
         return ("REPORT OF THE USER SEARCH:\n"+
                 "Origin dataset = "+this.getOriginDataset()+"\n"+
                 "# not existing users = " + this.getNotExistingUserId().size() +"\n"+
                 "# private users = " + this.getPrivateUserId().size() +"\n"
-                + "# voices in the report "+this.getResults().size());
+                + "# voices in the report "+this.getUser2Friends().size());
     }
 
 

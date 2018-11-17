@@ -67,9 +67,9 @@ public abstract class Resp implements IndexedSerializable {
     }
 
 
-    //    public void addResult(String id, Object value){this.results.put(id, value);}
+    //    public void addFriends(String id, Object value){this.results.put(id, value);}
 //
-//    public HashMap<String, Object> getResults() {
+//    public HashMap<String, Object> getUser2Friends() {
 //        return results;
 //    }
 }

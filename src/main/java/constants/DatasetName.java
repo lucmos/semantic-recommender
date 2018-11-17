@@ -3,7 +3,7 @@ package constants;
 import io.Config;
 
 public enum DatasetName {
-
+    UNION("datasets/bin/union_%s.bin"),
     WIKIMID("datasets/bin/wikimid_%s.bin"),
     S21("datasets/bin/S21_%s.bin"),
     S22("datasets/bin/S22_preferences_%s.bin"),

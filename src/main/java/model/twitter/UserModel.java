@@ -2,16 +2,10 @@ package model.twitter;
 
 
 import constants.DatasetName;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
-import it.unimi.dsi.fastutil.ints.IntSet;
-import it.uniroma1.lcl.babelnet.data.BabelCategory;
 import model.ObjectModel;
 import utils.Counter;
 
-import javax.xml.crypto.Data;
-import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -62,6 +56,12 @@ public class UserModel extends ObjectModel {
      */
     private IntOpenHashSet wikiPagesOfLikedItemsIds;
 
+    private IntOpenHashSet wikiPagesOfMayLikeItemsIds;
+
+    private Counter<Integer> babelCategoriesInDisambiguatedTweets;
+
+    private Counter<Integer> babelDomainsInDisambiguatedTweets;
+
     private boolean famous;
 
     UserModel(int seqId, DatasetName datasetName) {
@@ -70,10 +70,38 @@ public class UserModel extends ObjectModel {
         this.followInIds = new IntOpenHashSet();
         this.tweetsIds = new IntOpenHashSet();
         this.wikiPagesOfLikedItemsIds = new IntOpenHashSet();
+        this.wikiPagesOfMayLikeItemsIds = new IntOpenHashSet();
+
+        this.babelCategoriesInDisambiguatedTweets = new Counter<>();
+        this.babelDomainsInDisambiguatedTweets = new Counter<>();
 
         this.datasetName = datasetName;
         this.isPrivate = false;
         this.notExists = false;
+    }
+
+//    public void setBabelCategoriesInDisambiguatedTweets(Counter<Integer> babelCategoriesInDisambiguatedTweets) {
+//        this.babelCategoriesInDisambiguatedTweets = babelCategoriesInDisambiguatedTweets;
+//    }
+//
+//    public void setBabelDomainsInDisambiguatedTweets(Counter<Integer> babelDomainsInDisambiguatedTweets) {
+//        this.babelDomainsInDisambiguatedTweets = babelDomainsInDisambiguatedTweets;
+//    }
+
+    public void addCategoryToDisambiguatedTweets(BabelCategoryModel cat) {
+        babelCategoriesInDisambiguatedTweets.increment(cat.getId());
+    }
+
+    public void addCategoryToDisambiguatedTweets(BabelCategoryModel cat, int times) {
+        babelCategoriesInDisambiguatedTweets.add(cat.getId(), times);
+    }
+
+    public void addDomainToDisambiguatedTweets(BabelDomainModel dom) {
+        babelDomainsInDisambiguatedTweets.increment(dom.getId());
+    }
+
+    public void addDomainToDisambiguatedTweets(BabelDomainModel dom, int times) {
+        babelDomainsInDisambiguatedTweets.add(dom.getId(), times);
     }
 
     /**
@@ -134,6 +162,12 @@ public class UserModel extends ObjectModel {
         assert wikiPage != null;
 
         this.wikiPagesOfLikedItemsIds.add(wikiPage.getId());
+    }
+
+    public void addWikiPagesOfMayLikeItemsIds(WikiPageModel wikiPageModel) {
+        assert wikiPageModel != null;
+
+        this.wikiPagesOfMayLikeItemsIds.add(wikiPageModel.getId());
     }
 
     public IntOpenHashSet getFollowOutIds() {
@@ -220,6 +254,11 @@ public class UserModel extends ObjectModel {
             }
         }
 
+        for (int cat : babelCategoriesInDisambiguatedTweets.getMap().keySet()) {
+            BabelCategoryModel c = dataset.getCategory(cat);
+            cats.add(c, babelCategoriesInDisambiguatedTweets.count(cat));
+        }
+
         return cats;
     }
 
@@ -232,6 +271,11 @@ public class UserModel extends ObjectModel {
             for (BabelDomainModel cat : w.getDomainsModel(dataset)) {
                 cats.increment(cat);
             }
+        }
+
+        for (int dom : babelDomainsInDisambiguatedTweets.getMap().keySet()) {
+            BabelDomainModel d = dataset.getDomain(dom);
+            cats.add(d, babelDomainsInDisambiguatedTweets.count(dom));
         }
 
         return cats;

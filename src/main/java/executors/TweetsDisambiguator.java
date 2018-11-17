@@ -1,5 +1,7 @@
-package babelnet;
+package executors;
 
+import babelnet.BabelfyInterface;
+import babelnet.BabelnetInterface;
 import constants.DatasetName;
 import constants.TwitterRespPath;
 import io.Utils;

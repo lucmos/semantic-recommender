@@ -20,6 +20,23 @@ public class TweetRespDisambiguated extends TweetsResp {
         users2domains = new HashMap<>();
     }
 
+    public HashMap<String, Counter<String>> getUsers2categories() {
+        return users2categories;
+    }
+
+    public HashMap<String, Counter<String>> getUsers2domains() {
+        return users2domains;
+    }
+
+    @Override
+    public String toString() {
+        int synNUm = users2synsets.values().stream().map(Counter::total).reduce(Integer::sum).get();
+        int catNum = users2categories.values().stream().map(Counter::total).reduce(Integer::sum).get();
+        int domNum = users2domains.values().stream().map(Counter::total).reduce(Integer::sum).get();
+        return String.format("(#users: %s, #synsets: %s, #categories: %s, #domains: %s)",
+                users2synsets.size(), synNUm, catNum, domNum);
+    }
+
     public TweetRespDisambiguated(TweetsResp resp) {
         this();
 

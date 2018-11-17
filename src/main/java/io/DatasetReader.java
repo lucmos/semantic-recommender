@@ -1,4 +1,4 @@
-package datasetsreader;
+package io;
 import babelnet.BabelnetInterface;
 import constants.DatasetInfo;
 import constants.DatasetName;
@@ -26,6 +26,9 @@ public class DatasetReader {
         this.twitterObjectFactory = new TwitterObjectFactory(dataset);
     }
 
+    public Dataset getDataset() {
+        return dataset;
+    }
 
     /**
      * From a couple userId-fFriendId creates two users and add them in the dataset object
@@ -129,7 +132,7 @@ public class DatasetReader {
      * @param user_to_wikipage the couple of the user id and of the wikipedia page id
      * @param dataset          the object that stores all the informations
      */
-    public static  void addRow_S22_S23(List<String> user_to_wikipage, Dataset dataset, TwitterObjectFactory twitterObjectFactory, DatasetName dn) {
+    public static  void addRow_S22(List<String> user_to_wikipage, Dataset dataset, TwitterObjectFactory twitterObjectFactory, DatasetName dn) {
         assert user_to_wikipage.size() == 2;
 
         UserModel user = twitterObjectFactory.getUser(user_to_wikipage.get(0), dn);
@@ -141,8 +144,23 @@ public class DatasetReader {
         dataset.addWikiPage(wikiPage);
     }
 
+    public static  void addRow_S23(List<String> user_to_wikipage, Dataset dataset, TwitterObjectFactory twitterObjectFactory, DatasetName dn) {
+        assert user_to_wikipage.size() == 2;
+
+        UserModel user = twitterObjectFactory.getUser(user_to_wikipage.get(0), dn);
+        WikiPageModel wikiPage = twitterObjectFactory.getWikiPage(user_to_wikipage.get(1));
+
+        user.addWikiPagesOfMayLikeItemsIds(wikiPage);
+
+        dataset.addUser(user);
+        dataset.addWikiPage(wikiPage);
+    }
+
+
     public  Dataset readDataset() {
         fillDataset(dataset.getName());
+        twitterObjectFactory.updateBabelnetInformations();
+
         return dataset;
     }
 
@@ -195,7 +213,7 @@ public class DatasetReader {
                 s = TsvFileReader.readText(DatasetInfo.S22_DATASET.getPath());
 
                 c = new Chrono("Building objects...");
-                s.forEach(p -> addRow_S22_S23(p, dataset, twitterObjectFactory, DatasetName.S22));
+                s.forEach(p -> addRow_S22(p, dataset, twitterObjectFactory, DatasetName.S22));
                 c.millis();
 
                 break;
@@ -203,50 +221,13 @@ public class DatasetReader {
                 s = TsvFileReader.readText(DatasetInfo.S23_DATASET.getPath());
 
                 c = new Chrono("Building objects...");
-                s.forEach(p -> addRow_S22_S23(p, dataset, twitterObjectFactory, DatasetName.S23));
+                s.forEach(p -> addRow_S23(p, dataset, twitterObjectFactory, DatasetName.S23));
                 c.millis();
                 break;
         }
-        updateBabelnetInformations();
     }
 
-    private void updateBabelnetInformations() {
-        Chrono c = new Chrono("Updating babelnet informations...");
-        dataset.getWikiPages().values().forEach(page -> {
-            Set<String> categories = BabelnetInterface.getCategories(page);
 
-            for (String cat : categories) {
-                BabelCategoryModel catModel = twitterObjectFactory.getCategory(cat);
-                page.addCategory(catModel);
-                dataset.addCategory(catModel);
-            }
-
-            Set<String> domains = BabelnetInterface.getDomains(page);
-            for (String dom : domains) {
-                BabelDomainModel domainModel = twitterObjectFactory.getDomain(dom);
-                page.addBabelDomain(domainModel);
-                dataset.addDomain(domainModel);
-            }
-        });
-
-//        for (WikiPageModel page : dataset.getWikiPages().values()) {
-//            Set<String> categories = BabelnetInterface.getCategories(page);
-//
-//            for (String cat : categories) {
-//                BabelCategoryModel catModel = twitterObjectFactory.getCategory(cat);
-//                page.addCategory(catModel);
-//                dataset.addCategory(catModel);
-//            }
-//
-//            Set<String> domains = BabelnetInterface.getDomains(page);
-//            for (String dom : domains) {
-//                BabelDomainModel domainModel = twitterObjectFactory.getDomain(dom);
-//                page.addBabelDomain(domainModel);
-//                dataset.addDomain(domainModel);
-//            }
-//        }
-        c.millis();
-    }
 
 //    private  void clean_WikiMID(Dataset dataset) {
 //        // TODO: 30/10/18 Inutile. 4 interesti con wikipage non usati, non 4 interest senza wikipage... [...]
