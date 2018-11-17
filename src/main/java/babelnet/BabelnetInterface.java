@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.uniroma1.lcl.babelnet.BabelNet;
 import it.uniroma1.lcl.babelnet.BabelSynset;
+import it.uniroma1.lcl.babelnet.BabelSynsetID;
 import it.uniroma1.lcl.babelnet.data.BabelCategory;
 import it.uniroma1.lcl.babelnet.resources.WikipediaID;
 import it.uniroma1.lcl.jlt.util.Language;
@@ -11,10 +12,7 @@ import it.uniroma1.lcl.kb.Domain;
 import model.twitter.WikiPageModel;
 import io.IndexedSerializable;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class BabelnetInterface implements IndexedSerializable {
@@ -38,6 +36,23 @@ public class BabelnetInterface implements IndexedSerializable {
         return getDomains(getSynsetObj(pageModel));
     }
 
+    public static List<String> getCategories(List<String> synsetId) {
+        return synsetId.stream().flatMap(x -> getCategories(x).stream()).collect(Collectors.toList());
+    }
+
+    public static Set<String> getCategories(String synsetId) {
+        return getCategories(getSynsetObj(synsetId));
+    }
+
+    public static List<String> getDomains(List<String> synsetId) {
+        return synsetId.stream().flatMap(x -> getDomains(x).stream()).collect(Collectors.toList());
+    }
+
+    public static Set<String> getDomains(String synsetId) {
+        return getDomains(getSynsetObj(synsetId));
+    }
+
+
 //  caching to improve performances.
 
     private static Int2ObjectOpenHashMap<BabelSynset> wikiToSynsetObjCache = new Int2ObjectOpenHashMap<>();
@@ -55,6 +70,11 @@ public class BabelnetInterface implements IndexedSerializable {
         wikiToSynsetObjCache.put(wikiPage.getId(), synset);
 
         return synset;
+    }
+
+    private static BabelSynset getSynsetObj(String synsetId) {
+        BabelSynset syn = BabelNet.getInstance().getSynset(new BabelSynsetID(synsetId));
+        return syn;
     }
 
     private static Set<String> getCategories(BabelSynset synset) {
@@ -91,5 +111,10 @@ public class BabelnetInterface implements IndexedSerializable {
 
         synsetToDomainObjCache.put(synset, domSet);
         return domSet;
+    }
+
+    public static void main(String[] args) {
+        BabelSynset a = BabelnetInterface.getSynsetObj("bn:00015427n");
+        System.out.println(a);
     }
 }

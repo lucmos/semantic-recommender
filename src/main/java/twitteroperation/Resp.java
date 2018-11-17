@@ -10,16 +10,16 @@ public abstract class Resp implements IndexedSerializable {
     /**
      * List of idStrings of private users
      */
-    private HashSet<String>  privateUserId;
+    HashSet<String>  privateUserId;
     /**
      * List of idStrings of not existing users
      */
-    private HashSet<String> notExistingUserId;
+    HashSet<String> notExistingUserId;
 
     /**
      * List of idStrings of not existing users
      */
-    private HashSet<String> suspendedUserId;
+    HashSet<String> suspendedUserId;
 //    /**
 //     * Tweeter respons of the request
 //     */
@@ -27,7 +27,7 @@ public abstract class Resp implements IndexedSerializable {
     /**
      * Dataset from which users have been taken
      */
-    private  DatasetName originDataset;
+    DatasetName originDataset;
 
     public Resp(DatasetName originDataset){
         this.originDataset = originDataset;

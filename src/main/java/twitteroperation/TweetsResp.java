@@ -10,11 +10,10 @@ public class TweetsResp extends Resp{
     /**
      * Tweeter respons of the request
      */
-    private HashMap<String, List<String>> results;
+    HashMap<String, List<String>> results;
 
     public TweetsResp(){
-        super(null);
-//        this.results = new HashMap<String, List<Status>>();
+        this(null);
     }
 
     public TweetsResp(DatasetName originDataset){
