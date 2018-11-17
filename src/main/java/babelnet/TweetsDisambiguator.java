@@ -6,7 +6,9 @@ import io.Utils;
 import twitteroperation.TweetRespDisambiguated;
 import twitteroperation.TweetsResp;
 import utils.Chrono;
+import utils.Counter;
 
+import java.util.Collection;
 import java.util.List;
 
 public class TweetsDisambiguator {
@@ -41,13 +43,13 @@ public class TweetsDisambiguator {
                 System.out.println(String.format("Operating on user: %s", x));
                 String merged_tweets = merge_tweets(y);
 
-                List<String> synsets = BabelfyInterface.disambiguate(merged_tweets);
-                List<String> categories = BabelnetInterface.getCategories(synsets);
-                List<String> domains = BabelnetInterface.getDomains(synsets);
+                Collection<String> synsets = BabelfyInterface.disambiguate(merged_tweets);
+                Collection<String> categories = BabelnetInterface.getCategories(synsets);
+                Collection<String> domains = BabelnetInterface.getDomains(synsets);
 
-                resp_disambiguated.addUserSynsets(x, synsets);
-                resp_disambiguated.addUserCategories(x, categories);
-                resp_disambiguated.addUserDomains(x, domains);
+                resp_disambiguated.addUserSynsets(x, Counter.fromCollection(synsets));
+                resp_disambiguated.addUserCategories(x, Counter.fromCollection(categories));
+                resp_disambiguated.addUserDomains(x, Counter.fromCollection(domains));
             });
 
             Utils.saveJson(resp_disambiguated, TwitterRespPath.TWEETS_RESP_DISAMBIGUATED.getPath(dname.name()), true);

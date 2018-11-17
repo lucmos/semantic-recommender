@@ -36,7 +36,7 @@ public class BabelnetInterface implements IndexedSerializable {
         return getDomains(getSynsetObj(pageModel));
     }
 
-    public static List<String> getCategories(List<String> synsetId) {
+    public static Collection<String> getCategories(Collection<String> synsetId) {
         return synsetId.stream().flatMap(x -> getCategories(x).stream()).collect(Collectors.toList());
     }
 
@@ -44,7 +44,7 @@ public class BabelnetInterface implements IndexedSerializable {
         return getCategories(getSynsetObj(synsetId));
     }
 
-    public static List<String> getDomains(List<String> synsetId) {
+    public static Collection<String> getDomains(Collection<String> synsetId) {
         return synsetId.stream().flatMap(x -> getDomains(x).stream()).collect(Collectors.toList());
     }
 
@@ -55,19 +55,19 @@ public class BabelnetInterface implements IndexedSerializable {
 
 //  caching to improve performances.
 
-    private static Int2ObjectOpenHashMap<BabelSynset> wikiToSynsetObjCache = new Int2ObjectOpenHashMap<>();
-    private static Object2ObjectOpenHashMap<BabelSynset, Set<String>> synsetToCategoriesObjCache = new Object2ObjectOpenHashMap<>();
-    private static Object2ObjectOpenHashMap<BabelSynset, Set<String>> synsetToDomainObjCache = new Object2ObjectOpenHashMap<>();
+//    private static Int2ObjectOpenHashMap<BabelSynset> wikiToSynsetObjCache = new Int2ObjectOpenHashMap<>();
+//    private static Object2ObjectOpenHashMap<BabelSynset, Set<String>> synsetToCategoriesObjCache = new Object2ObjectOpenHashMap<>();
+//    private static Object2ObjectOpenHashMap<BabelSynset, Set<String>> synsetToDomainObjCache = new Object2ObjectOpenHashMap<>();
 
     private static BabelSynset getSynsetObj(WikiPageModel wikiPage) {
         assert (wikiPage != null);
-
-        if (wikiToSynsetObjCache.containsKey(wikiPage.getId())) {
-            return wikiToSynsetObjCache.get(wikiPage.getId());
-        }
+//
+//        if (wikiToSynsetObjCache.containsKey(wikiPage.getId())) {
+//            return wikiToSynsetObjCache.get(wikiPage.getId());
+//        }
 
         BabelSynset synset = BabelNet.getInstance().getSynset(new WikipediaID(wikiPage.getSimpleName(), Language.EN));
-        wikiToSynsetObjCache.put(wikiPage.getId(), synset);
+//        wikiToSynsetObjCache.put(wikiPage.getId(), synset);
 
         return synset;
     }
@@ -78,9 +78,9 @@ public class BabelnetInterface implements IndexedSerializable {
     }
 
     private static Set<String> getCategories(BabelSynset synset) {
-        if (synsetToCategoriesObjCache.containsKey(synset)) {
-            return synsetToCategoriesObjCache.get(synset);
-        }
+//        if (synsetToCategoriesObjCache.containsKey(synset)) {
+//            return synsetToCategoriesObjCache.get(synset);
+//        }
 
         HashSet<String> catSet = new HashSet<>();
 
@@ -91,14 +91,14 @@ public class BabelnetInterface implements IndexedSerializable {
             }
         }
 
-        synsetToCategoriesObjCache.put(synset, catSet);
+//        synsetToCategoriesObjCache.put(synset, catSet);
         return catSet;
     }
 
     private static Set<String> getDomains(BabelSynset synset) {
-        if (synsetToDomainObjCache.containsKey(synset)) {
-            return synsetToDomainObjCache.get(synset);
-        }
+//        if (synsetToDomainObjCache.containsKey(synset)) {
+//            return synsetToDomainObjCache.get(synset);
+//        }
 
         HashSet<String> domSet = new HashSet<>();
 
@@ -109,12 +109,15 @@ public class BabelnetInterface implements IndexedSerializable {
             }
         }
 
-        synsetToDomainObjCache.put(synset, domSet);
+//        synsetToDomainObjCache.put(synset, domSet);
         return domSet;
     }
 
     public static void main(String[] args) {
-        BabelSynset a = BabelnetInterface.getSynsetObj("bn:00015427n");
-        System.out.println(a);
+        BabelSynset v = BabelnetInterface.getSynsetObj("bn:00015427n");
+        ArrayList<String> a = new ArrayList<>();
+        a.add("bn:00015427n");
+        a.add("bn:00015427n");
+        System.out.println(BabelnetInterface.getDomains(a));
     }
 }
