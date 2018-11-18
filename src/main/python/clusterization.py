@@ -66,7 +66,7 @@ class Clusterizator:
         for user, cluster in enumerate(self.clusterer.labels_):
             if cluster not in c2u:
                 c2u[cluster] = set()
-            c2u[cluster].add(self.index2users[user])
+            c2u[cluster].add(self.decompositor.index2users[user])
 
         assert len(c2u) == config[N_CLUSTERS]
         assert sum(len(c2u[x]) for x in c2u) == len(self.clusterer.labels_)
@@ -76,12 +76,12 @@ class Clusterizator:
         calinski = calinski_harabaz_score(self.decompositor.matrix,
                                           self.clusterer.labels_)
 
-        davies = self.DaviesBouldin(self.decompositor.matrix,
-                                    self.clusterer.labels_)
+        davies = davies_bouldin_score(
+            self.decompositor.matrix, self.clusterer.labels_)
 
-        # davies = davies_bouldin_score(self.decompositor.matrix,
-        #   self.clusterer.labels_)
-        return calinski, davies
+        d2 = self.DaviesBouldin(
+            self.decompositor.matrix, self.clusterer.labels_)
+        return calinski, davies, d2
 
     def DaviesBouldin(self, X, labels):
         n_cluster = len(np.bincount(labels))
@@ -101,29 +101,17 @@ class Clusterizator:
 
 
 if __name__ == "__main__":
-    c = Clusterizator()
 
-    u = "101935414"
+    for x in [50, 100, 300, 500]:
+        config[N_CLUSTERS] = x
+        c = Clusterizator()
+        calinski, davies, d = c.measure_quality()
+        print("[QUALITY OF CLUSTERIZATION IN {}]".format(x))
+        print("Calinski-Harabaz score [higher is better]: {}".format(calinski))
+        print("Davies-Bouldin score [0 is best]: {}".format(davies))
+        print("Custom Davies-Bouldin score [0 is best]: {}".format(d))
+        print()
 
-    pages = ["WIKI:EN:Kyle_Lohse", "WIKI:EN:Gilles_Peterson", "WIKI:EN:Kevin_Davies",
-             "WIKI:EN:Bonnie_Bernstein", "WIKI:EN:Shinichi_Osawa", "WIKI:EN:Peter_Barakan"]
-
-    u = "103115352"
-    pages = ["WIKI:EN:Real_Madrid_C.F.", "WIKI:EN:Buddy_Miller", "WIKI:EN:Teleamazonas",
-             "WIKI:EN:EMILY's_List", "WIKI:EN:Once_Mekel", "WIKI:EN:Chris_Cornell"]
-    # print(m[1:50, 1:50].todense())
-    # # for x in range(c.decompositor.num_pages):
-    # #     print(sum(m[x, :]))
-    u = "100552039"
-
-    pages = ["WIKI:EN:John_C._Dvorak",
-             "WIKI:EN:Sergei_Bobrovsky",
-             "WIKI:EN:Rainn_Wilson",
-             "WIKI:EN:Guido_Henkel",
-             "WIKI:EN:Conan_O'Brien",
-             "WIKI:EN:The_All_American"]
-    racc = c.reccomend(u, pages)
-    print(racc)
 
 # np.set_printoptions(precision=100)
 # r = c.decompositor.pipe_reducer.transform(m)
