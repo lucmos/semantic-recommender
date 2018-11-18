@@ -87,7 +87,7 @@ def load_json(filename):
     raise IOError("File not found: {}".format(filename))
 
 
-def save_json(obj, filename, override=False):
+def save_json(obj, filename, override=True):
     """
     Save a object to a json file
     :param obj: object to save
@@ -97,14 +97,14 @@ def save_json(obj, filename, override=False):
     filename += JSON
 
     if os.path.isfile(filename) and not override:
-        filename = "avoid_overwriting_" + filename  # to not lose info for distraction
+        filename = "avoid_overwriting" + filename  # to not lose info for distraction
 
     os.makedirs(os.path.dirname(filename), exist_ok=True)
     with open(filename, "w") as handle:
         json.dump(obj, handle, indent=4, sort_keys=True)
 
 
-def save_string(string, filename, override=False):
+def save_string(string, filename, override=True):
     """
       Save a string to a plain file
       :param string: string to save

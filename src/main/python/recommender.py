@@ -33,8 +33,8 @@ class Recommender:
         dists = self.user_distances_to_pages(
             self.decompositor.users2index[user],
             [self.decompositor.pages2index[i] for i in pages])[0]
-        min_page_index = np.argmin(dists)
-        return (pages[min_page_index], list(zip(pages, dists.tolist())))
+        # min_page_index = np.argmin(dists)
+        return sorted(zip(pages, dists.tolist()), key=lambda x: x[1])
 
     def reccomend_all(self):
         c = Chrono("Computing recommendations...")
@@ -44,9 +44,9 @@ class Recommender:
 
         for user in users2to_recommend:
             possible_pages = users2to_recommend[user]
-            best, recap = self.reccomend(user, possible_pages)
-            users2best_page[user] = best
-            users2ranking[user] = sorted(recap, key=lambda x: x[1])
+            ranking = self.reccomend(user, possible_pages)
+            users2best_page[user] = [x for x, _ in ranking[:3]]
+            users2ranking[user] = ranking
         c.millis()
 
         c = Chrono("Saving reccomendations...")
