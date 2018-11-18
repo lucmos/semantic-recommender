@@ -6,9 +6,8 @@ from sklearn.metrics import silhouette_score
 from sklearn.metrics import silhouette_samples
 from sklearn.metrics import calinski_harabaz_score
 from sklearn.metrics import davies_bouldin_score
-from sklearn.metrics.pairwise import cosine_distances
 
-import utils
+import io_utils
 from decomposition import Decompositor
 from chronometer import Chrono
 from java_export import JavaExport
@@ -39,21 +38,13 @@ class Clusterizator:
     def __init__(self):
         self.decompositor = Decompositor.get_instance()
         self.clusterer = self.clusterize(self.decompositor.matrix)
-
-        self.index2users = {v: u for u,
-                            v in self.decompositor.users2index.items()}
-        self.index2categories = {v: u for u,
-                                 v in self.decompositor.categories2index.items()}
-        self.index2pages = {v: u for u,
-                            v in self.decompositor.pages2index.items()}
-
         # for (row, label) in enumerate(clusterer.labels_):
         #     print("row {} has label {}".format(row, label))
 
     def clusterize(self, M):
         try:
             c = Chrono("Loading clusters...")
-            clusterer = utils.load_joblib(ClustersPath.get_clusterer_path())
+            clusterer = io_utils.load_joblib(ClustersPath.get_clusterer_path())
             c.millis("from cache (in {} millis)")
             return clusterer
         except IOError:
@@ -65,7 +56,7 @@ class Clusterizator:
         c.millis()
 
         c = Chrono("Saving clusterer...")
-        utils.save_joblib(clusterer, ClustersPath.get_clusterer_path())
+        io_utils.save_joblib(clusterer, ClustersPath.get_clusterer_path())
         c.millis()
 
         return clusterer
@@ -92,19 +83,6 @@ class Clusterizator:
         #   self.clusterer.labels_)
         return calinski, davies
 
-    def user_distances_to_pages(self, user_ind, pages_inds):
-        user_vec = self.decompositor.matrix[user_ind, :]
-        return cosine_distances([user_vec], self.decompositor.page_matrix[pages_inds, :])
-
-    def reccomend(self, user, pages):
-        dists = self.user_distances_to_pages(
-            self.decompositor.users2index[user],
-            [self.decompositor.pages2index[i] for i in pages])
-        print("User {}\n {}".format(user, dists))
-        min_page_index = np.argmin(dists)
-        print(min_page_index)
-        return pages[min_page_index]
-
     def DaviesBouldin(self, X, labels):
         n_cluster = len(np.bincount(labels))
         cluster_k = [X[labels == k] for k in range(n_cluster)]
@@ -120,50 +98,6 @@ class Clusterizator:
                               euclidean(centroids[i], centroids[j]))
 
         return(np.max(db) / n_cluster)
-
-    # def visualize(self):
-    #     from sklearn.decomposition import PCA
-    #     import matplotlib.pyplot as plt
-
-    #     reduced_data = PCA(n_components=2).fit_transform(
-    #         self.decompositor.matrix)
-
-    #     # Step size of the mesh. Decrease to increase the quality of the VQ.
-    #     h = .02     # point in the mesh [x_min, x_max]x[y_min, y_max].
-
-    #     # Plot the decision boundary. For that, we will assign a color to each
-    #     x_min, x_max = reduced_data[:, 0].min(
-    #     ) - 1, reduced_data[:, 0].max() + 1
-    #     y_min, y_max = reduced_data[:, 1].min(
-    #     ) - 1, reduced_data[:, 1].max() + 1
-    #     xx, yy = np.meshgrid(np.arange(x_min, x_max, h),
-    #                          np.arange(y_min, y_max, h))
-
-    #     # Obtain labels for each point in mesh. Use last trained model.
-    #     Z = self.clusterer.labels_
-
-    #     # Put the result into a color plot
-    #     # Z = Z.reshape(xx.shape)
-    #     plt.figure(1)
-    #     plt.clf()
-    #     plt.imshow(Z, interpolation='nearest',
-    #                extent=(xx.min(), xx.max(), yy.min(), yy.max()),
-    #                cmap=plt.cm.Paired,
-    #                aspect='auto', origin='lower')
-
-    #     plt.plot(reduced_data[:, 0], reduced_data[:, 1], 'k.', markersize=2)
-    #     # Plot the centroids as a white X
-    #     centroids = self.clusterer.cluster_centers_
-    #     plt.scatter(centroids[:, 0], centroids[:, 1],
-    #                 marker='x', s=169, linewidths=3,
-    #                 color='w', zorder=10)
-    #     plt.title('K-means clustering on the digits dataset (PCA-reduced data)\n'
-    #               'Centroids are marked with white cross')
-    #     plt.xlim(x_min, x_max)
-    #     plt.ylim(y_min, y_max)
-    #     plt.xticks(())
-    #     plt.yticks(())
-    #     plt.show()
 
 
 if __name__ == "__main__":
