@@ -4,7 +4,9 @@ import clusterization.JavaExport;
 import constants.JavaExportPath;
 import constants.DatasetName;
 
+import executors.DatasetMerger;
 import model.twitter.Dataset;
+import sun.security.x509.DNSName;
 import utils.Chrono;
 
 import java.io.File;
@@ -47,13 +49,18 @@ public abstract class Cache {
         }
 
         public static void regenCache() {
-            for (DatasetName name : DatasetName.values()) {
-                Chrono c = new Chrono(String.format("Reading: %s...", name));
+            DatasetName[] names = new DatasetName[]{DatasetName.WIKIMID, DatasetName.S21, DatasetName.S22, DatasetName.S23};
 
-                Dataset d = new DatasetReader(name).readDataset();
-                DatasetCache.write(name, d);
+            for (DatasetName name : names) {
+                for (Config.Dimension dimension : Config.Dimension.values()) {
+                    Config.getInstance().setDimension(dimension);
+                    Chrono c = new Chrono(String.format("Reading: %s...", name));
 
-                c.millis("done (in %s %s) --> " + name + ": " + d);
+                    Dataset d = new DatasetReader(name).readDataset();
+                    DatasetCache.write(name, d);
+
+                    c.millis("done (in %s %s) --> " + name + ": " + d);
+                }
             }
         }
 
@@ -76,18 +83,27 @@ public abstract class Cache {
         }
 
         public static void export() throws Utils.CacheNotPresent {
-
             for (DatasetName name : DatasetName.values()) {
-                for (Config.ClusterOver over : Config.ClusterOver.values()) {
-                    for (Config.Dimension dimension : Config.Dimension.values()) {
+                for (Config.Dimension dimension : Config.Dimension.values()) {
+                    Config.getInstance().setDimension(dimension);
+
+//                    if (name.equals(DatasetName.UNION)) {
+//                        DatasetMerger.unionAndSave();
+//                    }
+
+                    for (Config.ClusterOver over : Config.ClusterOver.values()) {
                         Config.getInstance().setClusterOver(over);
-                        Config.getInstance().setDimension(dimension);
+
+                        Chrono c = new Chrono(String.format("Generating export for: %s, %s, %s", name, over, dimension));
 
                         Dataset d = Cache.DatasetCache.read(name);
+
+
                         JavaExport exp = new JavaExport(d);
 
                         String path = JavaExportPath.EXPORT_PATH.getPath(name, over, dimension);
                         Cache.writeToCache(exp, path, path, true);
+                        c.millis();
 
                     }
                 }

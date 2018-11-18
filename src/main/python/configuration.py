@@ -38,6 +38,7 @@ WIKIMID = "WIKIMID"
 S21 = "S21"
 S22 = "S22"
 S23 = "S23"
+UNION = "UNION"
 
 MINIBATCH_KMEANS = "minibatch_kmeans"
 
@@ -89,7 +90,7 @@ class Config():
     ]
 
     TO_ENFORCE_VALUES = {
-        DATASET: {WIKIMID, S21, S22, S23},
+        DATASET: {WIKIMID, S21, S22, S23, UNION},
         DIMENSION: {"small", "complete"},
         CLUSTER_OVER: {"categories", "domains"},
         REDUCER: {"truncated_svd"},

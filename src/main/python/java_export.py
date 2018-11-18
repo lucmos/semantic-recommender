@@ -73,6 +73,5 @@ class JavaExport:
 
 if __name__ == "__main__":
     a = JavaExport.read()
-    # print(a)
     for i in JavaExport.KEYS:
         print(i, len(a.__getattribute__(i)))

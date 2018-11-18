@@ -27,10 +27,32 @@ class Decompositor:
         (self.categories, self.categories2index, self.num_cat,
          self.pages, self.pages2index, self.num_pages,
          self.users, self.users2index, self.num_users) = self._load_indexes()
-        self.matrix, self.reducer = self._load_matrix()
+        self.matrix, self.pipe_reducer = self._load_matrix()
+        self.page_matrix = self.page2cat_matrix()
         c.millis()
 
+    def page2cat_matrix(self):
+        assert self.pipe_reducer is not None
+
+        data = JavaExport.read()
+
+        chrono = Chrono("Computing page2cat matrix...")
+        M = scipy.sparse.lil_matrix(
+            (self.num_pages, self.num_cat), dtype=np.float32)
+        for page in data.pages2catdom:
+            for c in data.pages2catdom[page]:
+                p_index = self.pages2index[page]
+                c_index = self.categories2index[c]
+                M[p_index, c_index] = 1
+        chrono.millis()
+
+        chrono = Chrono("Trasnforming matrix...")
+        out = self.pipe_reducer.transform(M.tocsr())
+        chrono.millis()
+        return out
+
     #  #users x #cat
+
     def sparse_user2tweetcat(self, data):
         chrono = Chrono("Computing user2tweet matrix...")
         T = scipy.sparse.lil_matrix(
@@ -68,7 +90,8 @@ class Decompositor:
         L = scipy.sparse.lil_matrix(
             (self.num_users, self.num_cat), dtype=np.float32)
         for u in data.user2likedItems_wikipage:
-            for page in data.user2likeItems_wikipage[u]:
+            for page in data.user2likedItems_wikipage[u]:
+                # print(u, page)
                 for c in data.pages2catdom[page]:
                     u_index = self.users2index[u]
                     c_index = self.categories2index[c]
@@ -157,20 +180,21 @@ class Decompositor:
         c = Chrono("Computing decomposition...")
 
         normalizer_input = Normalizer(copy=False)
-        SVD = TruncatedSVD(n_components=config[MATRIX_DIMENSIONALITY])
+        pipe_reducer = TruncatedSVD(n_components=config[MATRIX_DIMENSIONALITY])
         normalizer_output = Normalizer(copy=False)
-        pipeline = make_pipeline(normalizer_input, SVD, normalizer_output)
-        # pipeline = make_pipeline(SVD)
-        M_reduced, SVD = pipeline.fit_transform(M), pipeline
+        pipeline = make_pipeline(
+            normalizer_input, pipe_reducer, normalizer_output)
+        # pipeline = make_pipeline(pipe_reducer)
+        M_reduced, pipe_reducer = pipeline.fit_transform(M), pipeline
         assert M_reduced.shape[1] == config[MATRIX_DIMENSIONALITY]
         c.millis()
 
         c = Chrono("Saving decomposition...")
         utils.save_joblib(M_reduced, red_matrix)
-        utils.save_joblib(SVD, red_svd)
+        utils.save_joblib(pipe_reducer, red_svd)
         c.millis()
 
-        return M_reduced, SVD
+        return M_reduced, pipe_reducer
 
     def _load_matrix(self):
         full_matrix = MatrixPath.get_full_matrix_path()
@@ -180,10 +204,10 @@ class Decompositor:
         try:
             c = Chrono("Loading reduced matrix: {}".format(red_matrix))
             M_reduced = utils.load_joblib(red_matrix)
-            SVD = utils.load_joblib(red_svd)
+            pipe_reducer = utils.load_joblib(red_svd)
             assert M_reduced.shape[1] == config[MATRIX_DIMENSIONALITY]
             c.millis("from cache (in {} millis)")
-            return (M_reduced, SVD)
+            return (M_reduced, pipe_reducer)
         except IOError:
             c.millis("not present (in {} millis)")
 

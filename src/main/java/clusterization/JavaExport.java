@@ -49,9 +49,9 @@ public class JavaExport implements IndexedSerializable {
         dataset.getWikiPages().values().forEach(x ->
         {
             Set<String> s = ClustersUtils.getCategories(dataset, x);
-            if (!s.isEmpty()) {
+//            if (!s.isEmpty()) {
                 pages2catdom.put(x.getName(dataset), s);
-            }
+//            }
         });
     }
 

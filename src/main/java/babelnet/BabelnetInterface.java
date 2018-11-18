@@ -119,5 +119,11 @@ public class BabelnetInterface implements IndexedSerializable {
         a.add("bn:00015427n");
         a.add("bn:00015427n");
         System.out.println(BabelnetInterface.getDomains(a));
+
+        BabelSynset synset = BabelnetInterface.getSynsetObj("WIKI:EN:Casey_Neistat");
+        System.out.println(synset);
+
+        System.out.println(BabelnetInterface.getCategories(synset));
+
     }
 }

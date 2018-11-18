@@ -3,10 +3,12 @@ package executors;
 import constants.DatasetName;
 import constants.TwitterRespPath;
 import io.Cache;
+import io.DatasetReader;
 import io.Utils;
 import model.twitter.*;
 import twitteroperation.FollowerResp;
 import twitteroperation.TweetRespDisambiguated;
+import utils.Chrono;
 import utils.Counter;
 
 import javax.xml.crypto.Data;
@@ -15,8 +17,21 @@ import java.util.Map;
 
 public class DatasetMerger {
 
+    private static DatasetName[] _to_process_to_merge() {
+        return new DatasetName[]{DatasetName.S21, DatasetName.S22, DatasetName.S23};
+    }
+
+
     private static DatasetName[] _to_process() {
         return new DatasetName[]{DatasetName.S21, DatasetName.S22};
+    }
+
+    private static Dataset mergeDatasets(Dataset mainDatset) {
+        DatasetReader reader = new DatasetReader(mainDatset);
+        for (DatasetName datasetName : _to_process_to_merge() ) {
+            reader.fillDataset(datasetName);
+        }
+        return reader.getDataset();
     }
 
     private static void integrate_disambiguated_tweets(TwitterObjectFactory factory, DatasetName dname) throws Utils.CacheNotPresent {
@@ -68,8 +83,18 @@ public class DatasetMerger {
 
     public static void unionAndSave() throws Utils.CacheNotPresent {
         Dataset wikimid = Cache.DatasetCache.read(DatasetName.WIKIMID);
-        Dataset union = integrate_twitter_information(wikimid, _to_process());
+
+        Chrono c = new Chrono("Merging datasets...");
+        Dataset union = mergeDatasets(wikimid);
+        c.millis();
+
+        c = new Chrono("Integreating twitter information...");
+        union = integrate_twitter_information(union, _to_process());
+        c.millis();
+
+        c = new Chrono("Writing to cache...");
         Cache.DatasetCache.write(DatasetName.UNION, union);
+        c.millis();
     }
 
 
