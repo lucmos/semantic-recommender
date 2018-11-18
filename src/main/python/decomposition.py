@@ -5,7 +5,7 @@ from sklearn.decomposition import TruncatedSVD
 from sklearn.preprocessing import Normalizer
 from sklearn.pipeline import make_pipeline
 
-import utils
+import io_utils
 from constants import *
 from chronometer import Chrono
 from java_export import JavaExport
@@ -24,10 +24,13 @@ class Decompositor:
 
     def __init__(self):
         c = Chrono("Initializing decompositor...")
-        (self.categories, self.categories2index, self.num_cat,
-         self.pages, self.pages2index, self.num_pages,
-         self.users, self.users2index, self.num_users) = self._load_indexes()
+        ind = self._load_indexes()
+        (self.categories, self.categories2index, self.index2categories, self.num_cat,
+         self.pages, self.pages2index, self.index2pages, self.num_pages,
+         self.users, self.users2index, self.index2users, self.num_users) = ind
+
         self.matrix, self.pipe_reducer = self._load_matrix()
+
         self.page_matrix = self.page2cat_matrix()
         c.millis()
 
@@ -46,7 +49,7 @@ class Decompositor:
                 M[p_index, c_index] = 1
         chrono.millis()
 
-        chrono = Chrono("Trasnforming matrix...")
+        chrono = Chrono("Transforming matrix...")
         out = self.pipe_reducer.transform(M.tocsr())
         chrono.millis()
         return out
@@ -190,8 +193,8 @@ class Decompositor:
         c.millis()
 
         c = Chrono("Saving decomposition...")
-        utils.save_joblib(M_reduced, red_matrix)
-        utils.save_joblib(pipe_reducer, red_svd)
+        io_utils.save_joblib(M_reduced, red_matrix)
+        io_utils.save_joblib(pipe_reducer, red_svd)
         c.millis()
 
         return M_reduced, pipe_reducer
@@ -203,8 +206,8 @@ class Decompositor:
 
         try:
             c = Chrono("Loading reduced matrix: {}".format(red_matrix))
-            M_reduced = utils.load_joblib(red_matrix)
-            pipe_reducer = utils.load_joblib(red_svd)
+            M_reduced = io_utils.load_joblib(red_matrix)
+            pipe_reducer = io_utils.load_joblib(red_svd)
             assert M_reduced.shape[1] == config[MATRIX_DIMENSIONALITY]
             c.millis("from cache (in {} millis)")
             return (M_reduced, pipe_reducer)
@@ -213,7 +216,7 @@ class Decompositor:
 
         try:
             c = Chrono("Loading full matrix: {}".format(full_matrix))
-            M = utils.load_npz(full_matrix)
+            M = io_utils.load_npz(full_matrix)
             c.millis("from cache (in {} millis)")
             return self._compute_decomposition(M)
         except IOError:
@@ -224,7 +227,7 @@ class Decompositor:
         M = self._compute_matrix(data)
         c.millis()
         c = Chrono("Saving matrix...")
-        utils.save_npz(full_matrix, M, compressed=False)
+        io_utils.save_npz(full_matrix, M, compressed=False)
         c.millis()
         return self._compute_decomposition(M)
 
@@ -233,7 +236,7 @@ class Decompositor:
 
         try:
             c1 = Chrono("Loading indexes...")
-            ind = utils.load_joblib(path)
+            ind = io_utils.load_joblib(path)
             c1.millis("from cache (in {} millis)")
             return ind
         except IOError:
@@ -254,10 +257,15 @@ class Decompositor:
         num_users = len(users)
         c2.millis()
 
+        index2categories = {v: u for u, v in categories2index.items()}
+        index2pages = {v: u for u, v in pages2index.items()}
+        index2users = {v: u for u, v in users2index.items()}
+
         c3 = Chrono("Saving indexes...")
-        ind = (categories, categories2index, num_cat, pages,
-               pages2index, num_pages, users, users2index, num_users)
-        utils.save_joblib(ind, path)
+        ind = (categories, categories2index, index2categories, num_cat,
+               pages, pages2index, index2pages, num_pages,
+               users, users2index, index2users, num_users)
+        io_utils.save_joblib(ind, path)
         c3.millis()
         return ind
 

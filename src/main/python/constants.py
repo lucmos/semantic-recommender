@@ -42,6 +42,10 @@ class JavaExportPath:
         return JavaExportPath._EXPORT_CACHE.format(path)
 
 
+class DatasetPath:
+    _S23_PATH = "datasets/S23.tsv"
+
+
 class ClustersPath:
     _CLUSTERS_PATH = "results/clusters_of_{}_{}_{}"
     _CLUSTERER_PATH = "results/clusterer_of_{}_{}_{}"
@@ -52,6 +56,11 @@ class ClustersPath:
         clust = config[CLUSTERER]
         params = "_".join(str(config[x]) for x in CLUSTERER_PARAMETERS[clust])
         return ClustersPath._CLUSTERER_PATH.format(os.path.basename(matrix_red_with_svd), params, clust)
+
+
+class RecommenderPath:
+    _BEST_RECCOMENDATION = "results/recommendations/best_reccomendation"
+    _RANKING_RECCOMENDATION = "results/recommendations/ranking_reccomendation"
 
 
 if __name__ == "__main__":

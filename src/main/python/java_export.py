@@ -1,6 +1,6 @@
 from collections import Counter
 
-import utils
+import io_utils
 from configuration import *
 from chronometer import Chrono
 from constants import JavaExportPath
@@ -17,16 +17,16 @@ class JavaExport:
         c = Chrono("Reading {}...".format(path))
 
         try:
-            obj = utils.load_pickle(path_cache)
+            obj = io_utils.load_pickle(path_cache)
             c.millis("from pickle (in {} millis)")
             return obj
         except IOError:
             pass
 
         try:
-            data = utils.load_json(path)
+            data = io_utils.load_json(path)
             obj = JavaExport(*[data[x] for x in JavaExport.KEYS])
-            utils.save_pickle(obj, path_cache)
+            io_utils.save_pickle(obj, path_cache)
             c.millis("from json, cached (in {} millis)")
             return obj
 
