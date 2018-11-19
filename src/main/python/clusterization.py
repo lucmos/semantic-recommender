@@ -61,16 +61,24 @@ class Clusterizator:
 
         return clusterer
 
-    def cluster2user(self):
+    def clusters2users(self):
         c2u = {}
         for user, cluster in enumerate(self.clusterer.labels_):
-            if cluster not in c2u:
-                c2u[cluster] = set()
-            c2u[cluster].add(self.decompositor.index2users[user])
+            clu = cluster.item()
+            if clu not in c2u:
+                c2u[clu] = set()
+            c2u[clu].add(self.decompositor.index2users[user])
 
+        c2u = {x: list(y) for x, y in c2u.items()}
         assert len(c2u) == config[N_CLUSTERS]
         assert sum(len(c2u[x]) for x in c2u) == len(self.clusterer.labels_)
         return c2u
+
+    def users2clusters(self):
+        out = {self.decompositor.index2users[user]: cluster.item() for user, cluster in enumerate(
+            self.clusterer.labels_)}
+        assert len(out) == self.decompositor.num_users
+        return out
 
     def measure_quality(self):
         calinski = calinski_harabaz_score(self.decompositor.matrix,
@@ -104,14 +112,24 @@ if __name__ == "__main__":
 
     for x in [50, 100, 300, 500]:
         config[N_CLUSTERS] = x
+        print("\n\n")
+        print(config)
         c = Clusterizator()
         calinski, davies, d = c.measure_quality()
+
         print("[QUALITY OF CLUSTERIZATION IN {}]".format(x))
         print("Calinski-Harabaz score [higher is better]: {}".format(calinski))
         print("Davies-Bouldin score [0 is best]: {}".format(davies))
         print("Custom Davies-Bouldin score [0 is best]: {}".format(d))
         print()
 
+        chrono = Chrono("Exporting clusters...")
+        c2u = c.clusters2users()
+        io_utils.save_json(c2u, ClustersPath.get_clusters_2_users_path())
+
+        u2c = c.users2clusters()
+        io_utils.save_json(u2c, ClustersPath.get_users_2_users_path())
+        chrono.millis()
 
 # np.set_printoptions(precision=100)
 # r = c.decompositor.pipe_reducer.transform(m)

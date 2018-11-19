@@ -47,8 +47,9 @@ class DatasetPath:
 
 
 class ClustersPath:
-    _CLUSTERS_PATH = "results/clusters_of_{}_{}_{}"
-    _CLUSTERER_PATH = "results/clusterer_of_{}_{}_{}"
+    _USERS_2_CLUSTERS_PATH = "results/clusters/users2clusters_{}_{}_{}"
+    _CLUSTERS_2_USERS_PATH = "results/clusters/clusters2users_{}_{}_{}"
+    _CLUSTERER_PATH = "results/clusters/clusterer/clusterer_of_{}_{}_{}"
 
     @staticmethod
     def get_clusterer_path():
@@ -56,6 +57,20 @@ class ClustersPath:
         clust = config[CLUSTERER]
         params = "_".join(str(config[x]) for x in CLUSTERER_PARAMETERS[clust])
         return ClustersPath._CLUSTERER_PATH.format(os.path.basename(matrix_red_with_svd), params, clust)
+
+    @staticmethod
+    def get_clusters_2_users_path():
+        _, matrix_red_with_svd = MatrixPath.get_matrix_svd_path()
+        clust = config[CLUSTERER]
+        params = "_".join(str(config[x]) for x in CLUSTERER_PARAMETERS[clust])
+        return ClustersPath._CLUSTERS_2_USERS_PATH.format(os.path.basename(matrix_red_with_svd), params, clust)
+
+    @staticmethod
+    def get_users_2_users_path():
+        _, matrix_red_with_svd = MatrixPath.get_matrix_svd_path()
+        clust = config[CLUSTERER]
+        params = "_".join(str(config[x]) for x in CLUSTERER_PARAMETERS[clust])
+        return ClustersPath._USERS_2_CLUSTERS_PATH.format(os.path.basename(matrix_red_with_svd), params, clust)
 
 
 class RecommenderPath:
