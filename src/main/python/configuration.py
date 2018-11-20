@@ -268,6 +268,4 @@ config = Config.get_instance()
 
 if __name__ == "__main__":
     print(config.debug())
-    a = json.dumps(
-        config.properties, sort_keys=True).encode('utf-8')
-    print(a)
+    config.save_config()

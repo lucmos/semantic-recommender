@@ -38,8 +38,26 @@ class Clusterizator:
     def __init__(self):
         self.decompositor = Decompositor.get_instance()
         self.clusterer = self.clusterize(self.decompositor.matrix)
+        self.export()
         # for (row, label) in enumerate(clusterer.labels_):
         #     print("row {} has label {}".format(row, label))
+
+    def export(self):
+        c = Chrono("Saving clusterer...")
+        io_utils.save_joblib(self.clusterer, ClustersPath.get_clusterer_path())
+        c.millis()
+
+        chrono = Chrono("Exporting clusters...")
+        c2u = self.clusters2users()
+        io_utils.save_json(c2u, ClustersPath.get_clusters_2_users_path())
+
+        u2c = self.users2clusters()
+        io_utils.save_json(u2c, ClustersPath.get_users_2_users_path())
+        chrono.millis()
+
+        c = Chrono("Saving config...")
+        config.save_config()
+        c.millis()
 
     def clusterize(self, M):
         try:
@@ -53,22 +71,6 @@ class Clusterizator:
         c = Chrono("Performing clusterizaion...")
         clusterer = self.get_algorithm()
         clusterer.fit(M)
-        c.millis()
-
-        c = Chrono("Saving clusterer...")
-        io_utils.save_joblib(clusterer, ClustersPath.get_clusterer_path())
-        c.millis()
-
-        chrono = Chrono("Exporting clusters...")
-        c2u = self.clusters2users()
-        io_utils.save_json(c2u, ClustersPath.get_clusters_2_users_path())
-
-        u2c = self.users2clusters()
-        io_utils.save_json(u2c, ClustersPath.get_users_2_users_path())
-        chrono.millis()
-
-        c = Chrono("Saving config...")
-        config.save_config()
         c.millis()
         return clusterer
 
@@ -98,19 +100,15 @@ class Clusterizator:
         davies = davies_bouldin_score(
             self.decompositor.matrix, self.clusterer.labels_)
 
-        d2 = self.DaviesBouldin(
-            self.decompositor.matrix, self.clusterer.labels_)
-        return calinski, davies, d2
+        return calinski, davies
 
 
 if __name__ == "__main__":
 
     for x in [50, 100, 150, 300, 450, 500]:
         config[N_CLUSTERS] = x
-        print("\n\n")
-        print(config)
         c = Clusterizator()
-        calinski, davies, d = c.measure_quality()
+        calinski, davies = c.measure_quality()
 
         print("[QUALITY OF CLUSTERIZATION IN {}]".format(x))
         print("Calinski-Harabaz score [higher is better]: {}".format(calinski))
