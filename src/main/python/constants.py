@@ -59,29 +59,34 @@ class DatasetPath:
 
 
 class ClustersPath:
+    BASELINE_CATDOM_U2C = "results/clusterization/{}/baselines/{}_baseline_users2clusters"
+    BASELINE_CATDOM_C2U = "results/clusterization/{}/baselines/{}_baseline_clusters2users"
+
     _USERS_2_CLUSTERS_PATH = "results/clusterization/{}/clusters/{}_users2clusters"
     _CLUSTERS_2_USERS_PATH = "results/clusterization/{}/clusters/{}_clusters2users"
     _CLUSTERER_PATH = "results/clusterization/{}/clusterizator/{}_clusterer"
 
+    _QUALITY = "results/clusterization/quality/{}_quality"
+
+    @staticmethod
+    def get_quality_path():
+        return ClustersPath._QUALITY.format(config.get_id())
+
+    @staticmethod
+    def get_baselines_path():
+        return (ClustersPath.BASELINE_CATDOM_U2C.format(config.get_id(), config.get_id()),
+                ClustersPath.BASELINE_CATDOM_C2U.format(config.get_id(), config.get_id()))
+
     @staticmethod
     def get_clusterer_path():
-        # _, matrix_red_with_svd = MatrixPath.get_reduced_matrix_path()
-        # clust = config[CLUSTERER]
-        # params = "_".join(str(config[x]) for x in PARAMETERS[clust])
         return ClustersPath._CLUSTERER_PATH.format(config.get_id(), config.get_id())
 
     @staticmethod
     def get_clusters_2_users_path():
-        # _, matrix_red_with_svd = MatrixPath.get_reduced_matrix_path()
-        # clust = config[CLUSTERER]
-        # params = "_".join(str(config[x]) for x in PARAMETERS[clust])
         return ClustersPath._CLUSTERS_2_USERS_PATH.format(config.get_id(), config.get_id())
 
     @staticmethod
     def get_users_2_users_path():
-        # _, matrix_red_with_svd = MatrixPath.get_reduced_matrix_path()
-        # clust = config[CLUSTERER]
-        # params = "_".join(str(config[x]) for x in PARAMETERS[clust])
         return ClustersPath._USERS_2_CLUSTERS_PATH.format(config.get_id(), config.get_id())
 
 

@@ -243,6 +243,9 @@ class Config():
     def __getitem__(self, key):
         return self.properties[key]
 
+    def __contains__(self, item):
+        return item in self.properties
+
     def get_id(self):
         return hashlib.sha1(json.dumps(
             self.properties, sort_keys=True).encode('utf-8')).hexdigest()

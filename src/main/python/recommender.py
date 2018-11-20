@@ -107,6 +107,10 @@ class Recommender:
         rec_ub = self.reccomend_user_based
         rec_ib = self.recommend_item_based
 
+        c3 = Chrono("Saving config...")
+        config.save_config()
+        c3.millis()
+
         for type, path_fun, reduce_fun, recommend_fun in zip(
             (red_min,   red_mean,   red_max,    None),
             (ib_path,   ib_path,    ib_path,    ub_path),
@@ -129,10 +133,6 @@ class Recommender:
             io_utils.save_json(users2ranking, ranking_path)
             c2.millis()
 
-        c3 = Chrono("Saving config...")
-        config.save_config()
-        c3.millis()
-
 
 if __name__ == "__main__":
 
@@ -146,6 +146,8 @@ if __name__ == "__main__":
              "WIKI:EN:Conan_O'Brien",
              "WIKI:EN:The_All_American"]
 
+    print()
+    print("USER: {}".format(u))
     print("Liked pages: \n{}\n\n".format(c.users2liked_pages[u]))
 
     print("Possible pages: \n{}\n\n".format(c.users2to_recommend[u]))
