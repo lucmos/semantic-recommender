@@ -66,11 +66,11 @@ class ClustersPath:
     _CLUSTERS_2_USERS_PATH = "results/clusterization/{}/clusters/{}_clusters2users"
     _CLUSTERER_PATH = "results/clusterization/{}/clusterizator/{}_clusterer"
 
-    _QUALITY = "results/clusterization/quality/{}_quality"
+    _QUALITY = "results/clusterization/{}/quality/{}_quality"
 
     @staticmethod
     def get_quality_path():
-        return ClustersPath._QUALITY.format(config.get_id())
+        return ClustersPath._QUALITY.format(config.get_id(), config.get_id())
 
     @staticmethod
     def get_baselines_path():
