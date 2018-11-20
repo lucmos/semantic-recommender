@@ -178,7 +178,7 @@ class Decompositor:
         return M
 
     def _compute_decomposition(self, M):
-        red_matrix, red_svd = MatrixPath.get_matrix_svd_path()
+        red_matrix, red_svd = MatrixPath.get_reduced_matrix_path()
 
         c = Chrono("Computing decomposition...")
 
@@ -202,7 +202,7 @@ class Decompositor:
     def _load_matrix(self):
         full_matrix = MatrixPath.get_full_matrix_path()
 
-        red_matrix, red_svd = MatrixPath.get_matrix_svd_path()
+        red_matrix, red_svd = MatrixPath.get_reduced_matrix_path()
 
         try:
             c = Chrono("Loading reduced matrix: {}".format(red_matrix))

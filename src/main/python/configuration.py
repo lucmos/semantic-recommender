@@ -1,4 +1,9 @@
+import hashlib
+import json
+
 import javaproperties
+import io_utils
+
 
 # KEYS
 # data
@@ -40,10 +45,31 @@ S22 = "S22"
 S23 = "S23"
 UNION = "UNION"
 
+MATRIX_BUILDING = "matrix_building"
+MATRIX_REDUCTION = "matrix_reduction"
+TRUNCATED_SVD = "truncated_svd"
 MINIBATCH_KMEANS = "minibatch_kmeans"
 
-#  Group clusterer parameters togheter
-CLUSTERER_PARAMETERS = {
+
+# Group parameters togheter
+PARAMETERS = {
+    MATRIX_BUILDING: [
+        DATASET,
+        CLUSTER_OVER,
+        DIMENSION,
+        MAX_USER_DISTANCE,
+        TWEET_IMPORTANCE,
+        PERSONAL_PAGE_IMPORTANCE,
+        LIKED_ITEMS_IMPORTANCE,
+        RATE_OF_DECAY,
+        FOLLOW_OUT_TWEET_IMPORTANCE,
+        FOLLOW_OUT_PERSONAL_PAGE_IMPORTANCE,
+        FOLLOW_OUT_LIKED_ITEMS_IMPORTANCE,
+    ],
+    MATRIX_REDUCTION: [
+        REDUCER,
+        MATRIX_DIMENSIONALITY,
+    ],
     MINIBATCH_KMEANS: [
         N_CLUSTERS,
         MAX_ITER,
@@ -59,6 +85,7 @@ CLUSTERER_PARAMETERS = {
 
 class Config():
     CONFIG_FILE = "./config/wsie.properties"
+    AVAILABLE_CONFIG_RUNS = "./results/configurations/{}"
 
     KEYS = [
         DATASET,
@@ -93,7 +120,7 @@ class Config():
         DATASET: {WIKIMID, S21, S22, S23, UNION},
         DIMENSION: {"small", "complete"},
         CLUSTER_OVER: {"categories", "domains"},
-        REDUCER: {"truncated_svd"},
+        REDUCER: {TRUNCATED_SVD},
         CLUSTERER: {MINIBATCH_KMEANS}
     }
 
@@ -135,6 +162,9 @@ class Config():
     def __init__(self, config_file=CONFIG_FILE):
         assert Config.instance is None, "Use config gloabl variable instead"
         self.load(config_file)
+
+    def load_cache(self, hash_name):
+        self.load(self.get_available_config(hash_name))
 
     def load(self, config_file, verbose=True):
         with open(config_file, 'r') as fp:
@@ -196,10 +226,13 @@ class Config():
                 raise Exception("Invalid property: {} = {}, the value must be a {}".format(
                     prop, self.properties[prop], value_name))
 
-    def __str__(self):
+    def get_report(self):
         p = map(lambda x: "\t{}: {}\n".format(
             x.upper(), self.properties[x]), self.KEYS)
         return "[CONFIGURATION]\n" + "".join(p)
+
+    def __str__(self):
+        return self.get_report()
 
     def __setitem__(self, key, value):
         self.properties[key] = value
@@ -208,10 +241,24 @@ class Config():
     def __getitem__(self, key):
         return self.properties[key]
 
+    def save_config(self):
+        prop = {x: str(y) for x, y in self.properties.items()}
+
+        digest = hashlib.sha1(json.dumps(
+            prop, sort_keys=True).encode('utf-8')).hexdigest()
+
+        path = Config.AVAILABLE_CONFIG_RUNS.format(digest)
+
+        with open(path, 'w') as fp:
+            javaproperties.dump(prop, fp)
+
     def debug(self):
         p = map(lambda x: "\t{}: {} {}\n".format(
             x.upper(), self.properties[x], type(self.properties[x])), self.KEYS)
         return "[DEBUG]\n" + "".join(p)
+
+    def get_available_config(self, name):
+        return Config.AVAILABLE_CONFIG_RUNS.format(name)
 
 
 # global configuration variable!

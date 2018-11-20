@@ -51,7 +51,7 @@ class Recommender:
 
         c = Chrono("Saving reccomendations...")
         io_utils.save_json(
-            users2best_page, RecommenderPath._BEST_RECCOMENDATION)
+            users2best_page, RecommenderPath._BEST_RECOMMENDATION)
         io_utils.save_json(
             users2ranking, RecommenderPath._RANKING_RECCOMENDATION)
         c.millis()
