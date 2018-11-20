@@ -1,27 +1,4 @@
-[CONFIGURATION]
-        DATASET: UNION
-        DIMENSION: complete
-        CLUSTER_OVER: categories
-        MAX_USER_DISTANCE: 2
-        TWEET_IMPORTANCE: 0.3
-        PERSONAL_PAGE_IMPORTANCE: 0.15
-        LIKED_ITEMS_IMPORTANCE: 0.55
-        RATE_OF_DECAY: 0.5
-        FOLLOW_OUT_TWEET_IMPORTANCE: 0.15
-        FOLLOW_OUT_PERSONAL_PAGE_IMPORTANCE: 0.55
-        FOLLOW_OUT_LIKED_ITEMS_IMPORTANCE: 0.3
-        REDUCER: truncated_svd
-        MATRIX_DIMENSIONALITY: 300
-        CLUSTERER: minibatch_kmeans
-        N_CLUSTERS: 1000
-        MAX_ITER: 10000
-        BATCH_SIZE: 5000
-        VERBOSE: True
-        MAX_NO_IMPROVEMENT: 1000
-        INIT_SIZE: 50000
-        N_INIT: 100
-        REASSIGNMENT_RATIO: 0.0
-
+decay 0.5
 Initializing decompositor...
         Loading indexes...      from cache (in 2544 millis)
         Loading reduced matrix: cache/reduced/reduced_full_UNION_categories_complete_dist_2_dim_300     not present (in 0 millis)
@@ -51,4 +28,26 @@ Initializing decompositor...
                 Computing decomposition...      done (in 2720600 millis)
                 Saving decomposition... done (in 723 millis)
 done (in 3041862 millis)
-(504132, 300)
+
+decay 0.15
+Computing full matrix...
+    Reading results/java_export/export_UNION_categories_complete... from pickle (in 7054 millis)
+    Computing M....
+            Computing user2tweet matrix...  done (in 41108 millis)
+            Computing user2personal matrix...       done (in 3518 millis)
+            Computing user2likedcat matrix...       done (in 6511 millis)
+            Computing followOut matrix...   done (in 96371 millis)
+            Performing M = T + P + L        done (in 71 millis)
+            Computing iteration 1 (number of ones in F: 33245823)...
+                    Computing F^1 @ T (coeff:  0.0225)      done (in 790 millis)
+                    Computing F^1 @ P (coeff:  0.0825)      done (in 11778 millis)
+                    Computing F^1 @ L (coeff:  0.045)       done (in 3697 millis)
+                    Computing F^1 @ F...    done (in 4060 millis)
+                    Setting diagonal to zero...     done (in 28193 millis)
+            done (in 48518 millis)
+            Computing iteration 2 (number of ones in F: 220917672)...
+                    Computing F^2 @ T (coeff:  0.003375)    done (in 9013 millis)
+                    Computing F^2 @ P (coeff:  0.012375)    done (in 63829 millis)
+                    Computing F^2 @ L (coeff:  0.00675)     done (in 20341 millis)
+    done (in 297968 millis)
+done (in 305052 millis)
