@@ -36,7 +36,8 @@ class MatrixPath:
 
     @staticmethod
     def get_reduced_matrix_name():
-        return os.path.basename(MatrixPath.get_reduced_matrix_path())
+        a, b = MatrixPath.get_reduced_matrix_path()
+        return os.path.basename(a)
 
 
 class JavaExportPath:
@@ -58,44 +59,44 @@ class DatasetPath:
 
 
 class ClustersPath:
-    _USERS_2_CLUSTERS_PATH = "results/clusters/users2clusters_{}_{}_{}"
-    _CLUSTERS_2_USERS_PATH = "results/clusters/clusters2users_{}_{}_{}"
-    _CLUSTERER_PATH = "results/clusters/clusterer/clusterer_of_{}_{}_{}"
+    _USERS_2_CLUSTERS_PATH = "results/clusterization/clusters/users2clusters_{}"
+    _CLUSTERS_2_USERS_PATH = "results/clusterization/clusters/clusters2users_{}"
+    _CLUSTERER_PATH = "results/clusterization/clusterizator/clusterer_of_{}"
 
     @staticmethod
     def get_clusterer_path():
-        _, matrix_red_with_svd = MatrixPath.get_reduced_matrix_path()
-        clust = config[CLUSTERER]
-        params = "_".join(str(config[x]) for x in PARAMETERS[clust])
-        return ClustersPath._CLUSTERER_PATH.format(os.path.basename(matrix_red_with_svd), params, clust)
+        # _, matrix_red_with_svd = MatrixPath.get_reduced_matrix_path()
+        # clust = config[CLUSTERER]
+        # params = "_".join(str(config[x]) for x in PARAMETERS[clust])
+        return ClustersPath._CLUSTERER_PATH.format(config.get_id())
 
     @staticmethod
     def get_clusters_2_users_path():
-        _, matrix_red_with_svd = MatrixPath.get_reduced_matrix_path()
-        clust = config[CLUSTERER]
-        params = "_".join(str(config[x]) for x in PARAMETERS[clust])
-        return ClustersPath._CLUSTERS_2_USERS_PATH.format(os.path.basename(matrix_red_with_svd), params, clust)
+        # _, matrix_red_with_svd = MatrixPath.get_reduced_matrix_path()
+        # clust = config[CLUSTERER]
+        # params = "_".join(str(config[x]) for x in PARAMETERS[clust])
+        return ClustersPath._CLUSTERS_2_USERS_PATH.format(config.get_id())
 
     @staticmethod
     def get_users_2_users_path():
-        _, matrix_red_with_svd = MatrixPath.get_reduced_matrix_path()
-        clust = config[CLUSTERER]
-        params = "_".join(str(config[x]) for x in PARAMETERS[clust])
-        return ClustersPath._USERS_2_CLUSTERS_PATH.format(os.path.basename(matrix_red_with_svd), params, clust)
+        # _, matrix_red_with_svd = MatrixPath.get_reduced_matrix_path()
+        # clust = config[CLUSTERER]
+        # params = "_".join(str(config[x]) for x in PARAMETERS[clust])
+        return ClustersPath._USERS_2_CLUSTERS_PATH.format(config.get_id())
 
 
 class RecommenderPath:
-    _BEST_RECOMMENDATION = "results/recommendations/best3_{}"
-    _RANKING_RECCOMENDATION = "results/recommendations/ranking_{}"
+    _BEST_RECOMMENDATION = "results/recommendations/best/best3_{}"
+    _RANKING_RECCOMENDATION = "results/recommendations/ranking/ranking_{}"
 
     @staticmethod
     def get_best_recommendation_path():
-        m = MatrixPath.get_reduced_matrix_name()
+        m = config.get_id()
         return RecommenderPath._BEST_RECOMMENDATION.format(m)
 
     @staticmethod
     def get_ranking_recommendation_path():
-        m = MatrixPath.get_reduced_matrix_name()
+        m = config.get_id()
         return RecommenderPath._RANKING_RECCOMENDATION.format(m)
 
 
@@ -112,3 +113,6 @@ if __name__ == "__main__":
     f = ClustersPath.get_clusterer_path()
 
     print(o)
+
+    a = ClustersPath.get_clusterer_path()
+    print(a)

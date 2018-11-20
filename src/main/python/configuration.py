@@ -241,13 +241,14 @@ class Config():
     def __getitem__(self, key):
         return self.properties[key]
 
+    def get_id(self):
+        return hashlib.sha1(json.dumps(
+            self.properties, sort_keys=True).encode('utf-8')).hexdigest()
+
     def save_config(self):
         prop = {x: str(y) for x, y in self.properties.items()}
 
-        digest = hashlib.sha1(json.dumps(
-            prop, sort_keys=True).encode('utf-8')).hexdigest()
-
-        path = Config.AVAILABLE_CONFIG_RUNS.format(digest)
+        path = Config.AVAILABLE_CONFIG_RUNS.format(self.get_id())
 
         with open(path, 'w') as fp:
             javaproperties.dump(prop, fp)
@@ -266,3 +267,6 @@ config = Config.get_instance()
 
 if __name__ == "__main__":
     print(config.debug())
+    a = json.dumps(
+        config.properties, sort_keys=True).encode('utf-8')
+    print(a)

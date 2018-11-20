@@ -59,6 +59,17 @@ class Clusterizator:
         io_utils.save_joblib(clusterer, ClustersPath.get_clusterer_path())
         c.millis()
 
+        chrono = Chrono("Exporting clusters...")
+        c2u = c.clusters2users()
+        io_utils.save_json(c2u, ClustersPath.get_clusters_2_users_path())
+
+        u2c = c.users2clusters()
+        io_utils.save_json(u2c, ClustersPath.get_users_2_users_path())
+        chrono.millis()
+
+        c = Chrono("Saving config...")
+        config.save_config()
+        c.millis()
         return clusterer
 
     def clusters2users(self):
@@ -110,7 +121,7 @@ class Clusterizator:
 
 if __name__ == "__main__":
 
-    for x in [50, 100, 300, 500]:
+    for x in [50, 100, 150, 300, 450, 500]:
         config[N_CLUSTERS] = x
         print("\n\n")
         print(config)
@@ -120,16 +131,8 @@ if __name__ == "__main__":
         print("[QUALITY OF CLUSTERIZATION IN {}]".format(x))
         print("Calinski-Harabaz score [higher is better]: {}".format(calinski))
         print("Davies-Bouldin score [0 is best]: {}".format(davies))
-        print("Custom Davies-Bouldin score [0 is best]: {}".format(d))
         print()
 
-        chrono = Chrono("Exporting clusters...")
-        c2u = c.clusters2users()
-        io_utils.save_json(c2u, ClustersPath.get_clusters_2_users_path())
-
-        u2c = c.users2clusters()
-        io_utils.save_json(u2c, ClustersPath.get_users_2_users_path())
-        chrono.millis()
 
 # np.set_printoptions(precision=100)
 # r = c.decompositor.pipe_reducer.transform(m)

@@ -51,9 +51,13 @@ class Recommender:
 
         c = Chrono("Saving reccomendations...")
         io_utils.save_json(
-            users2best_page, RecommenderPath._BEST_RECOMMENDATION)
+            users2best_page, RecommenderPath.get_best_recommendation_path())
         io_utils.save_json(
-            users2ranking, RecommenderPath._RANKING_RECCOMENDATION)
+            users2ranking, RecommenderPath.get_ranking_recommendation_path())
+        c.millis()
+
+        c = Chrono("Saving config...")
+        config.save_config()
         c.millis()
         return users2best_page
 
