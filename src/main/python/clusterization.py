@@ -111,16 +111,6 @@ if __name__ == "__main__":
         print()
 
 
-# np.set_printoptions(precision=100)
-# r = c.decompositor.pipe_reducer.transform(m)
-# print(r.shape)
-# co = 0
-# for x in np.linalg.norm(m, ord=2, axis=1):
-#     if not x:
-#         co += 1
-#     print(x)
-# print(co)
-
 # print("Perc", co, r.shape[0])
 # import sklearn.preprocessing as preprocessing
 # from sklearn.preprocessing import Normalizer

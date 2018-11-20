@@ -59,45 +59,54 @@ class DatasetPath:
 
 
 class ClustersPath:
-    _USERS_2_CLUSTERS_PATH = "results/clusterization/clusters/users2clusters/{}_users2clusters"
-    _CLUSTERS_2_USERS_PATH = "results/clusterization/clusters/clusters2users/{}_clusters2users"
-    _CLUSTERER_PATH = "results/clusterization/clusterizator/{}_clusterer"
+    _USERS_2_CLUSTERS_PATH = "results/clusterization/{}/clusters/{}_users2clusters"
+    _CLUSTERS_2_USERS_PATH = "results/clusterization/{}/clusters/{}_clusters2users"
+    _CLUSTERER_PATH = "results/clusterization/{}/clusterizator/{}_clusterer"
 
     @staticmethod
     def get_clusterer_path():
         # _, matrix_red_with_svd = MatrixPath.get_reduced_matrix_path()
         # clust = config[CLUSTERER]
         # params = "_".join(str(config[x]) for x in PARAMETERS[clust])
-        return ClustersPath._CLUSTERER_PATH.format(config.get_id())
+        return ClustersPath._CLUSTERER_PATH.format(config.get_id(), config.get_id())
 
     @staticmethod
     def get_clusters_2_users_path():
         # _, matrix_red_with_svd = MatrixPath.get_reduced_matrix_path()
         # clust = config[CLUSTERER]
         # params = "_".join(str(config[x]) for x in PARAMETERS[clust])
-        return ClustersPath._CLUSTERS_2_USERS_PATH.format(config.get_id())
+        return ClustersPath._CLUSTERS_2_USERS_PATH.format(config.get_id(), config.get_id())
 
     @staticmethod
     def get_users_2_users_path():
         # _, matrix_red_with_svd = MatrixPath.get_reduced_matrix_path()
         # clust = config[CLUSTERER]
         # params = "_".join(str(config[x]) for x in PARAMETERS[clust])
-        return ClustersPath._USERS_2_CLUSTERS_PATH.format(config.get_id())
+        return ClustersPath._USERS_2_CLUSTERS_PATH.format(config.get_id(), config.get_id())
 
 
 class RecommenderPath:
-    _BEST_RECOMMENDATION = "results/recommendations/best/{}_best3"
-    _RANKING_RECCOMENDATION = "results/recommendations/ranking/{}_ranking"
+    _BEST_USERBASED_RECOMMENDATION = "results/recommendations/{}/user_based/{}_best3"
+    _RANKING_USERBASED_RECCOMENDATION = "results/recommendations/{}/user_based/{}_ranking"
+
+    _BEST_ITEMBASED_RECOMMENDATION = "results/recommendations/{}/item_based/{}/{}_best3"
+    _RANKING_ITEMBASED_RECCOMENDATION = "results/recommendations/{}/item_based/{}/{}_ranking"
 
     @staticmethod
-    def get_best_recommendation_path():
+    def get_userbased_recommendation_paths():
         m = config.get_id()
-        return RecommenderPath._BEST_RECOMMENDATION.format(m)
+        return (RecommenderPath._BEST_USERBASED_RECOMMENDATION.format(m, m),
+                RecommenderPath._RANKING_USERBASED_RECCOMENDATION.format(m, m))
+
+    REDUCTION_MEAN = "min_of_mean_distances"
+    REDUCTION_MAX = "min_of_max_distances"
+    REDUCTION_MIN = "min_of_min_distances"
 
     @staticmethod
-    def get_ranking_recommendation_path():
+    def get_itembased_recommendation_paths(type):
         m = config.get_id()
-        return RecommenderPath._RANKING_RECCOMENDATION.format(m)
+        return (RecommenderPath._BEST_ITEMBASED_RECOMMENDATION.format(m, type, m),
+                RecommenderPath._RANKING_ITEMBASED_RECCOMENDATION.format(m, type, m))
 
 
 if __name__ == "__main__":
