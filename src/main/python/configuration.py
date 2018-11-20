@@ -1,3 +1,4 @@
+import os
 import hashlib
 import json
 
@@ -85,7 +86,7 @@ PARAMETERS = {
 
 class Config():
     CONFIG_FILE = "./config/wsie.properties"
-    AVAILABLE_CONFIG_RUNS = "./results/configurations/{}"
+    AVAILABLE_CONFIG_RUNS = "./results/configurations/{}.properties"
 
     KEYS = [
         DATASET,
@@ -251,6 +252,7 @@ class Config():
 
         path = Config.AVAILABLE_CONFIG_RUNS.format(self.get_id())
 
+        os.makedirs(os.path.dirname(path), exist_ok=True)
         with open(path, 'w') as fp:
             javaproperties.dump(prop, fp)
 

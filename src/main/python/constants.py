@@ -59,9 +59,9 @@ class DatasetPath:
 
 
 class ClustersPath:
-    _USERS_2_CLUSTERS_PATH = "results/clusterization/clusters/users2clusters_{}"
-    _CLUSTERS_2_USERS_PATH = "results/clusterization/clusters/clusters2users_{}"
-    _CLUSTERER_PATH = "results/clusterization/clusterizator/clusterer_of_{}"
+    _USERS_2_CLUSTERS_PATH = "results/clusterization/clusters/users2clusters/{}_users2clusters"
+    _CLUSTERS_2_USERS_PATH = "results/clusterization/clusters/clusters2users/{}_clusters2users"
+    _CLUSTERER_PATH = "results/clusterization/clusterizator/{}_clusterer"
 
     @staticmethod
     def get_clusterer_path():
@@ -86,8 +86,8 @@ class ClustersPath:
 
 
 class RecommenderPath:
-    _BEST_RECOMMENDATION = "results/recommendations/best/best3_{}"
-    _RANKING_RECCOMENDATION = "results/recommendations/ranking/ranking_{}"
+    _BEST_RECOMMENDATION = "results/recommendations/best/{}_best3"
+    _RANKING_RECCOMENDATION = "results/recommendations/ranking/{}_ranking"
 
     @staticmethod
     def get_best_recommendation_path():

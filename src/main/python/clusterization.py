@@ -20,20 +20,14 @@ from collections import Counter
 class Clusterizator:
 
     CLUSTERIZATORS = {
-        MINIBATCH_KMEANS: MiniBatchKMeans(
-            n_clusters=config[N_CLUSTERS],
-            max_iter=config[MAX_ITER],
-            batch_size=config[BATCH_SIZE],
-            verbose=config[VERBOSE],
-            max_no_improvement=config[MAX_NO_IMPROVEMENT],
-            init_size=config[INIT_SIZE],
-            n_init=config[N_INIT],
-            reassignment_ratio=config[REASSIGNMENT_RATIO]
-        )
+        MINIBATCH_KMEANS: MiniBatchKMeans
     }
 
     def get_algorithm(self):
-        return Clusterizator.CLUSTERIZATORS[config[CLUSTERER]]
+        cluster = config[CLUSTERER]
+        clusterer_class = Clusterizator.CLUSTERIZATORS[cluster]
+        params = {x: config[x] for x in PARAMETERS[cluster]}
+        return clusterer_class(**params)
 
     def __init__(self):
         self.decompositor = Decompositor.get_instance()
@@ -83,7 +77,8 @@ class Clusterizator:
             c2u[clu].add(self.decompositor.index2users[user])
 
         c2u = {x: list(y) for x, y in c2u.items()}
-        assert len(c2u) == config[N_CLUSTERS]
+        assert len(c2u) == config[N_CLUSTERS], "Expected: {}, Generated: {}".format(
+            config[N_CLUSTERS], len(c2u))
         assert sum(len(c2u[x]) for x in c2u) == len(self.clusterer.labels_)
         return c2u
 
