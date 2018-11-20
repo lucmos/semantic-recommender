@@ -60,10 +60,10 @@ class Clusterizator:
         c.millis()
 
         chrono = Chrono("Exporting clusters...")
-        c2u = c.clusters2users()
+        c2u = self.clusters2users()
         io_utils.save_json(c2u, ClustersPath.get_clusters_2_users_path())
 
-        u2c = c.users2clusters()
+        u2c = self.users2clusters()
         io_utils.save_json(u2c, ClustersPath.get_users_2_users_path())
         chrono.millis()
 

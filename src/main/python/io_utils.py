@@ -33,7 +33,7 @@ def load_joblib(filename, folder="."):
     raise IOError("File not found: {}".format(filename))
 
 
-def save_joblib(obj, filename, folder=".", override=False):
+def save_joblib(obj, filename, folder=".", override=True):
     filename = os.path.join(folder, filename + JOBLIB)
     if os.path.isfile(filename) and not override:
         filename = "avoid_overwriting_" + filename  # to not lose info for distraction
@@ -57,7 +57,7 @@ def load_pickle(filename, folder="."):
     raise IOError("File not found: {}".format(filename))
 
 
-def save_pickle(obj, filename, folder=".", override=False):
+def save_pickle(obj, filename, folder=".", override=True):
     """
     Save a object to a pickle file with the highest protocol available
     :param obj: object to save
