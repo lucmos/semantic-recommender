@@ -121,14 +121,15 @@ class Clusterizator:
         c = Chrono("Measuring quality...")
         D = "davies"
         C = "calinski"
-        q = {
-            config.get_id(): {
+        q = [
+            {config.get_id(): {
                 x: y for x, y in zip((C, D), self.measure_quality(self.clusterer.labels_))
-            },
-            "baseline_on_latent_categories": {
+            }},
+            {"baseline_on_latent_categories": {
                 x: y for x, y in zip((C, D), self.measure_quality(self.baseline))
-            }
-        }
+            }}
+        ]
+
         c.millis()
 
         chrono = Chrono("Exporting quality...")
@@ -137,11 +138,11 @@ class Clusterizator:
 
 
 if __name__ == "__main__":
-    Clusterizator()
+    # Clusterizator()
 
-    # for x in [50, 100, 150, 300, 450, 500]:
-    #     config[N_CLUSTERS] = x
-    #     c = Clusterizator()
+    for x in [50, 100, 150, 300, 350, 400, 450, 500, 550, 600, 750, 800]:
+        config[N_CLUSTERS] = x
+        c = Clusterizator()
     #     calinski, davies = c.measure_quality()
 
     #     print("[QUALITY OF CLUSTERIZATION IN {}]".format(x))
