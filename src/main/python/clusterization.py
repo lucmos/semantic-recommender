@@ -102,22 +102,6 @@ class Clusterizator:
             self.decompositor.matrix, self.clusterer.labels_)
         return calinski, davies, d2
 
-    def DaviesBouldin(self, X, labels):
-        n_cluster = len(np.bincount(labels))
-        cluster_k = [X[labels == k] for k in range(n_cluster)]
-        centroids = [np.mean(k, axis=0) for k in cluster_k]
-        variances = [np.mean([euclidean(p, centroids[i]) for p in k])
-                     for i, k in enumerate(cluster_k)]
-        db = []
-
-        for i in range(n_cluster):
-            for j in range(n_cluster):
-                if j != i:
-                    db.append((variances[i] + variances[j]) /
-                              euclidean(centroids[i], centroids[j]))
-
-        return(np.max(db) / n_cluster)
-
 
 if __name__ == "__main__":
 
