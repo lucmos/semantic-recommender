@@ -237,6 +237,7 @@ class Config():
     def __setitem__(self, key, value):
         self.properties[key] = value
         self.check_and_normalize()
+        print(self)
 
     def __getitem__(self, key):
         return self.properties[key]
