@@ -1,0 +1,14 @@
+[
+    {
+        "cc2ee7e88798ac2d588265adac6c5430987eabed": {
+            "calinski": 11428.498382198788,
+            "davies": 2.067809748944557
+        }
+    },
+    {
+        "baseline_on_latent_categories": {
+            "calinski": 2570.607730361742,
+            "davies": 2.6318976111922523
+        }
+    }
+]

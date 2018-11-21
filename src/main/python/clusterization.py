@@ -127,7 +127,9 @@ class Clusterizator:
             }},
             {"baseline_on_latent_categories": {
                 x: y for x, y in zip((C, D), self.measure_quality(self.baseline))
-            }}
+            }},
+            {"Config reminder": json.dumps(
+                config.get_internal_properties(), sort_keys=True)}
         ]
 
         c.millis()

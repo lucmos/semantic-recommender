@@ -176,6 +176,9 @@ class Config():
         if(verbose):
             print(self)
 
+    def get_internal_properties(self):
+        return self.properties
+
     def _possible_values(self, key):
         if key in self.TO_ENFORCE_VALUES:
             return self.TO_ENFORCE_VALUES[key]
