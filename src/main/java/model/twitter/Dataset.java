@@ -323,6 +323,25 @@ public class Dataset extends ObjectCollection {
 
         s.append("\n");
 
+        stats = users.values().parallelStream().mapToDouble(x ->
+                x.getBabelDomainsInDisambiguatedTweets().size()).toArray();
+        stat = new Statistics(stats);
+        s.append(stat.report(
+                "CATEGORIES STATS PER USER' DISAMBIGUATED TWEETS",
+                "total number of categories in users",
+                "total number of users",
+                "greatest #categories per user",
+                "#greatest #categories per users",
+                "smallest #categories per user",
+                "#smallest #categories per user",
+                "median #categories per user",
+                "#median #categories per users",
+                "mean #categories per user",
+                "#categories per user variance",
+                "#categories per user stddev"));
+
+        s.append("\n");
+
         stats = tweets.values().parallelStream().mapToDouble(x ->
                 x.getWikiPageModel(this).getBabelCategories().size()).toArray();
         stat = new Statistics(stats);
@@ -416,6 +435,25 @@ public class Dataset extends ObjectCollection {
 
         s.append("\n");
 
+        stats = users.values().parallelStream().mapToDouble(x ->
+                x.getBabelDomainsInDisambiguatedTweets().size()).toArray();
+        stat = new Statistics(stats);
+        s.append(stat.report(
+                "DOMAINS STATS PER USER' DISAMBIGUATED TWEETS",
+                "total number of categories in users",
+                "total number of users",
+                "greatest #categories per user",
+                "#greatest #categories per users",
+                "smallest #categories per user",
+                "#smallest #categories per user",
+                "median #categories per user",
+                "#median #categories per users",
+                "mean #categories per user",
+                "#categories per user variance",
+                "#categories per user stddev"));
+
+        s.append("\n");
+
         stats = tweets.values().parallelStream().mapToDouble(x ->
                 x.getWikiPageModel(this).getBabelDomains().size()).toArray();
         stat = new Statistics(stats);
@@ -504,6 +542,13 @@ public class Dataset extends ObjectCollection {
             catCounter.increment(page.getCategoriesModel(this).stream().map(x -> getStringId(x.getId())).collect(Collectors.toSet()));
         }
 
+        users.values().forEach( x -> {
+            x.getBabelCategoriesInDisambiguatedTweets().getMap().forEach((id, num) -> {
+                catCounter.add(getStringId(id), num);
+
+            });
+        });
+
         return String.format("[CATEGORIES DISTRIBUTION]\n%s\n", catCounter.getDistribution(k));
     }
 
@@ -513,6 +558,13 @@ public class Dataset extends ObjectCollection {
         for (WikiPageModel page : wikiPages.values()) {
             catCounter.increment(page.getDomainsModel(this).stream().map(x -> getStringId(x.getId())).collect(Collectors.toSet()));
         }
+
+        users.values().forEach( x -> {
+            x.getBabelDomainsInDisambiguatedTweets().getMap().forEach((id, num) -> {
+                catCounter.add(getStringId(id), num);
+
+            });
+        });
 
         return String.format("[DOMAINS DISTRIBUTION]\n%s\n", catCounter.getDistribution(k));
     }

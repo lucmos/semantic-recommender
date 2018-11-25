@@ -88,6 +88,15 @@ public class UserModel extends ObjectModel {
 //        this.babelDomainsInDisambiguatedTweets = babelDomainsInDisambiguatedTweets;
 //    }
 
+
+    public Counter<Integer> getBabelCategoriesInDisambiguatedTweets() {
+        return babelCategoriesInDisambiguatedTweets;
+    }
+
+    public Counter<Integer> getBabelDomainsInDisambiguatedTweets() {
+        return babelDomainsInDisambiguatedTweets;
+    }
+
     public void addCategoryToDisambiguatedTweets(BabelCategoryModel cat) {
         babelCategoriesInDisambiguatedTweets.increment(cat.getId());
     }

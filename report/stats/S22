@@ -1,0 +1,268 @@
+/usr/lib/jvm/java-8-openjdk/bin/java -ea -javaagent:/home/luca/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/182.4505.22/lib/idea_rt.jar=43833:/home/luca/.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/182.4505.22/bin -Dfile.encoding=UTF-8 -classpath /usr/lib/jvm/java-8-openjdk/jre/lib/charsets.jar:/usr/lib/jvm/java-8-openjdk/jre/lib/ext/cldrdata.jar:/usr/lib/jvm/java-8-openjdk/jre/lib/ext/dnsns.jar:/usr/lib/jvm/java-8-openjdk/jre/lib/ext/jaccess.jar:/usr/lib/jvm/java-8-openjdk/jre/lib/ext/localedata.jar:/usr/lib/jvm/java-8-openjdk/jre/lib/ext/nashorn.jar:/usr/lib/jvm/java-8-openjdk/jre/lib/ext/sunec.jar:/usr/lib/jvm/java-8-openjdk/jre/lib/ext/sunjce_provider.jar:/usr/lib/jvm/java-8-openjdk/jre/lib/ext/sunpkcs11.jar:/usr/lib/jvm/java-8-openjdk/jre/lib/ext/zipfs.jar:/usr/lib/jvm/java-8-openjdk/jre/lib/jce.jar:/usr/lib/jvm/java-8-openjdk/jre/lib/jsse.jar:/usr/lib/jvm/java-8-openjdk/jre/lib/management-agent.jar:/usr/lib/jvm/java-8-openjdk/jre/lib/resources.jar:/usr/lib/jvm/java-8-openjdk/jre/lib/rt.jar:/home/luca/IdeaProjects/WSIEProject/target/classes:/home/luca/.m2/repository/org/jboss/arquillian/junit/arquillian-junit-container/1.4.1.Final/arquillian-junit-container-1.4.1.Final.jar:/home/luca/.m2/repository/org/jboss/arquillian/junit/arquillian-junit-core/1.4.1.Final/arquillian-junit-core-1.4.1.Final.jar:/home/luca/.m2/repository/org/jboss/arquillian/test/arquillian-test-api/1.4.1.Final/arquillian-test-api-1.4.1.Final.jar:/home/luca/.m2/repository/org/jboss/arquillian/core/arquillian-core-api/1.4.1.Final/arquillian-core-api-1.4.1.Final.jar:/home/luca/.m2/repository/org/jboss/arquillian/test/arquillian-test-spi/1.4.1.Final/arquillian-test-spi-1.4.1.Final.jar:/home/luca/.m2/repository/org/jboss/arquillian/core/arquillian-core-spi/1.4.1.Final/arquillian-core-spi-1.4.1.Final.jar:/home/luca/.m2/repository/org/jboss/arquillian/container/arquillian-container-test-api/1.4.1.Final/arquillian-container-test-api-1.4.1.Final.jar:/home/luca/.m2/repository/org/jboss/shrinkwrap/shrinkwrap-api/1.2.6/shrinkwrap-api-1.2.6.jar:/home/luca/.m2/repository/org/jboss/shrinkwrap/descriptors/shrinkwrap-descriptors-api-base/2.0.0/shrinkwrap-descriptors-api-base-2.0.0.jar:/home/luca/.m2/repository/org/jboss/arquillian/container/arquillian-container-test-spi/1.4.1.Final/arquillian-container-test-spi-1.4.1.Final.jar:/home/luca/.m2/repository/org/jboss/arquillian/container/arquillian-container-spi/1.4.1.Final/arquillian-container-spi-1.4.1.Final.jar:/home/luca/.m2/repository/org/jboss/arquillian/core/arquillian-core-impl-base/1.4.1.Final/arquillian-core-impl-base-1.4.1.Final.jar:/home/luca/.m2/repository/org/jboss/arquillian/test/arquillian-test-impl-base/1.4.1.Final/arquillian-test-impl-base-1.4.1.Final.jar:/home/luca/.m2/repository/org/jboss/arquillian/container/arquillian-container-impl-base/1.4.1.Final/arquillian-container-impl-base-1.4.1.Final.jar:/home/luca/.m2/repository/org/jboss/arquillian/config/arquillian-config-api/1.4.1.Final/arquillian-config-api-1.4.1.Final.jar:/home/luca/.m2/repository/org/jboss/arquillian/config/arquillian-config-impl-base/1.4.1.Final/arquillian-config-impl-base-1.4.1.Final.jar:/home/luca/.m2/repository/org/jboss/arquillian/config/arquillian-config-spi/1.4.1.Final/arquillian-config-spi-1.4.1.Final.jar:/home/luca/.m2/repository/org/jboss/shrinkwrap/descriptors/shrinkwrap-descriptors-spi/2.0.0/shrinkwrap-descriptors-spi-2.0.0.jar:/home/luca/.m2/repository/org/jboss/arquillian/container/arquillian-container-test-impl-base/1.4.1.Final/arquillian-container-test-impl-base-1.4.1.Final.jar:/home/luca/.m2/repository/org/jboss/shrinkwrap/shrinkwrap-impl-base/1.2.6/shrinkwrap-impl-base-1.2.6.jar:/home/luca/.m2/repository/org/jboss/shrinkwrap/shrinkwrap-spi/1.2.6/shrinkwrap-spi-1.2.6.jar:/home/luca/IdeaProjects/WSIEProject/lib/babelnet-api-4.0.1.jar:/home/luca/IdeaProjects/WSIEProject/lib/babelscape-data-commons-1.0.jar:/home/luca/IdeaProjects/WSIEProject/lib/commons-beanutils-1.7.0.jar:/home/luca/IdeaProjects/WSIEProject/lib/commons-beanutils-core-1.7.0.jar:/home/luca/IdeaProjects/WSIEProject/lib/commons-codec-1.8.jar:/home/luca/IdeaProjects/WSIEProject/lib/commons-collections-3.2.jar:/home/luca/IdeaProjects/WSIEProject/lib/commons-configuration-1.5.jar:/home/luca/IdeaProjects/WSIEProject/lib/commons-digester-1.8.jar:/home/luca/IdeaProjects/WSIEProject/lib/commons-lang-2.3.jar:/home/luca/IdeaProjects/WSIEProject/lib/commons-logging-1.1.jar:/home/luca/IdeaProjects/WSIEProject/lib/gson-2.8.2.jar:/home/luca/IdeaProjects/WSIEProject/lib/guava-23.0.jar:/home/luca/IdeaProjects/WSIEProject/lib/httpclient-4.3.6.jar:/home/luca/IdeaProjects/WSIEProject/lib/httpcore-4.3.3.jar:/home/luca/IdeaProjects/WSIEProject/lib/icu4j-56.1.jar:/home/luca/IdeaProjects/WSIEProject/lib/jwi-2.2.3.jar:/home/luca/IdeaProjects/WSIEProject/lib/lcl-jlt-2.4.jar:/home/luca/IdeaProjects/WSIEProject/lib/logback-classic-1.2.3.jar:/home/luca/IdeaProjects/WSIEProject/lib/logback-core-1.2.3.jar:/home/luca/IdeaProjects/WSIEProject/lib/lucene-analyzers-common-7.2.0.jar:/home/luca/IdeaProjects/WSIEProject/lib/lucene-core-7.2.0.jar:/home/luca/IdeaProjects/WSIEProject/lib/lucene-queries-7.2.0.jar:/home/luca/IdeaProjects/WSIEProject/lib/lucene-queryparser-7.2.0.jar:/home/luca/IdeaProjects/WSIEProject/lib/lucene-sandbox-7.2.0.jar:/home/luca/IdeaProjects/WSIEProject/lib/slf4j-api-1.7.25.jar:/home/luca/.m2/repository/org/twitter4j/twitter4j-core/4.0.7/twitter4j-core-4.0.7.jar:/home/luca/.m2/repository/org/twitter4j/twitter4j-stream/4.0.7/twitter4j-stream-4.0.7.jar:/home/luca/.m2/repository/org/apache/commons/commons-lang3/3.8.1/commons-lang3-3.8.1.jar:/home/luca/.m2/repository/it/unimi/dsi/fastutil/8.2.2/fastutil-8.2.2.jar:/home/luca/IdeaProjects/WSIEProject/lib/babelfy/gson-2.3.1.jar:/home/luca/IdeaProjects/WSIEProject/lib/babelfy/httpcore-4.3.3.jar:/home/luca/IdeaProjects/WSIEProject/lib/babelfy/httpmime-4.3.6.jar:/home/luca/IdeaProjects/WSIEProject/lib/babelfy/jltutils-2.0.4.jar:/home/luca/IdeaProjects/WSIEProject/lib/babelfy/commons-lang-2.3.jar:/home/luca/IdeaProjects/WSIEProject/lib/babelfy/httpclient-4.3.6.jar:/home/luca/IdeaProjects/WSIEProject/lib/babelfy/babelfy-online-1.0.jar:/home/luca/IdeaProjects/WSIEProject/lib/babelfy/babelfy-commons-1.0.jar:/home/luca/IdeaProjects/WSIEProject/lib/babelfy/commons-logging-1.1.3.jar:/home/luca/IdeaProjects/WSIEProject/lib/babelfy/commons-collections-3.2.jar:/home/luca/IdeaProjects/WSIEProject/lib/babelfy/commons-configuration-1.5.jar executors.TEST
+[CONFIGURATION]
+    DIMENSION:  COMPLETE
+    CLUSTER_OVER:   CATEGORIES
+
+Reading from cache: S22...  done (in 249 millis)
+[STATS DATASET S22]
+    unique number of users: 500
+    unique number of vip users: 0
+    unique number of tweets: 0
+    unique number of interests: 0
+    unique number of wikipages: 14657
+    unique number of categories: 47355
+    unique number of domains: 34
+
+
+[TWEETS STATS]
+    total number of tweets: 0
+    total number of users: 500
+    greatest #tweets per user: 0
+    #greatest #tweets per users: 500
+    smallest #tweets per user: 0
+    #smallest #tweets per user: 500
+    median #tweets per user: 0
+    #median #tweets per users: 500
+    mean #tweets per user: 0
+    #tweets per user variance: 0
+    #tweets per user stddev: 0
+
+
+[FRIEND (IN/OUT) STATS]
+    total number of friends: 0
+    total number of users: 500
+    greatest #friends per user: 0
+    #greatest #friends per users: 500
+    smallest #friends per user: 0
+    #smallest #friends per user: 500
+    median #friends per user: 0
+    #median #friends per users: 500
+    mean #friends per user: 0
+    #friends per user variance: 0
+    #friends per user stddev: 0
+
+
+[FOLLOW-IN STATS]
+    total number of followIn: 0
+    total number of users: 500
+    greatest #followIn per user: 0
+    #greatest #followIn per users: 500
+    smallest #followIn per user: 0
+    #smallest #followIn per user: 500
+    median #followIn per user: 0
+    #median #followIn per users: 500
+    mean #followIn per user: 0
+    #followIn per user variance: 0
+    #followIn per user stddev: 0
+
+
+[FOLLOW-OUT STATS]
+    total number of followOut: 0
+    total number of users: 500
+    greatest #followOut per user: 0
+    #greatest #followOut per users: 500
+    smallest #followOut per user: 0
+    #smallest #followOut per user: 500
+    median #followOut per user: 0
+    #median #followOut per users: 500
+    mean #followOut per user: 0
+    #followOut per user variance: 0
+    #followOut per user stddev: 0
+
+[FOLLOW-OUT TO VIP USERS STATS]
+    total number of followOut to vip: 0
+    total number of users: 500
+    greatest #followOut to vip per user: 0
+    #greatest #followOut to vip per users: 500
+    smallest #followOut to vip per user: 0
+    #smallest #followOut to vip per user: 500
+    median #followOut to vip per user: 0
+    #median #followOut to vip per users: 500
+    mean #followOut to vip per user: 0
+    #followOut to vip per user variance: 0
+    #followOut to vip per user stddev: 0
+
+
+[CATEGORIES STATS PER USER' TWEETS]
+    total number of categories in users: 0
+    total number of users: 500
+    greatest #categories per user: 0
+    #greatest #categories per users: 500
+    smallest #categories per user: 0
+    #smallest #categories per user: 500
+    median #categories per user: 0
+    #median #categories per users: 500
+    mean #categories per user: 0
+    #categories per user variance: 0
+    #categories per user stddev: 0
+
+[CATEGORIES STATS PER USER' DISAMBIGUATED TWEETS]
+    total number of categories in users: 0
+    total number of users: 500
+    greatest #categories per user: 0
+    #greatest #categories per users: 500
+    smallest #categories per user: 0
+    #smallest #categories per user: 500
+    median #categories per user: 0
+    #median #categories per users: 500
+    mean #categories per user: 0
+    #categories per user variance: 0
+    #categories per user stddev: 0
+
+[CATEGORIES STATS PER TWEET]
+    total number of categories in tweets: -1
+    total number of tweets: 0
+    greatest #categories per tweet: -1
+    #greatest #categories per tweets: -1
+    smallest #categories per tweet: -1
+    #smallest #categories per tweet: -1
+    median #categories per tweet: -1
+    #median #categories per tweets: -1
+    mean #categories per tweet: -1
+    #categories per tweet variance: -1
+    #categories per tweet stddev: -1
+
+[CATEGORIES STATS PER VIP USER IN HIS WIKIPAGE]
+    total number of categories in vip wikipages: -1
+    total number of vip users: 0
+    greatest #categories per user: -1
+    #greatest #categories per users: -1
+    smallest #categories per user: -1
+    #smallest #categories per user: -1
+    median #categories per user: -1
+    #median #categories per users: -1
+    mean #categories per user: -1
+    #categories per user variance: -1
+    #categories per user stddev: -1
+
+[CATEGORIES STATS PER USER IN HIS FOLLOW-OUT (TWEETS + VIP WIKIPAGE)]
+    total number of categories in follow-out: 0
+    total number of users: 500
+    greatest #categories per user: 0
+    #greatest #categories per users: 500
+    smallest #categories per user: 0
+    #smallest #categories per user: 500
+    median #categories per user: 0
+    #median #categories per users: 500
+    mean #categories per user: 0
+    #categories per user variance: 0
+    #categories per user stddev: 0
+
+
+[DOMAINS STATS PER USER]
+    total number of domains in users: 0
+    total number of users: 500
+    greatest #domains per tweet: 0
+    #greatest #domains per tweet: 500
+    smallest #domains per tweet: 0
+    #smallest #domains per tweet: 500
+    median #domains per tweet: 0
+    #median #domains per tweet: 500
+    mean #domains per tweet: 0
+    #domains per user variance: 0
+    #domains per user stddev: 0
+
+[DOMAINS STATS PER USER' DISAMBIGUATED TWEETS]
+    total number of categories in users: 0
+    total number of users: 500
+    greatest #categories per user: 0
+    #greatest #categories per users: 500
+    smallest #categories per user: 0
+    #smallest #categories per user: 500
+    median #categories per user: 0
+    #median #categories per users: 500
+    mean #categories per user: 0
+    #categories per user variance: 0
+    #categories per user stddev: 0
+
+[DOMAINS STATS PER TWEET]
+    total number of domains in tweets: -1
+    total number of tweets: 0
+    greatest #domains per tweet: -1
+    #greatest #domains per tweets: -1
+    smallest #domains per tweet: -1
+    #smallest #domains per tweet: -1
+    median #domains per tweet: -1
+    #median #domains per tweets: -1
+    mean #domains per tweet: -1
+    #domains per tweet variance: -1
+    #domains per tweet stddev: -1
+
+[DOMAINS STATS PER VIP USER IN HIS WIKIPAGE]
+    total number of domains in vip wikipages: -1
+    total number of vip users: 0
+    greatest #domains per user: -1
+    #greatest #domains per users: -1
+    smallest #domains per user: -1
+    #smallest #domains per user: -1
+    median #domains per user: -1
+    #median #domains per users: -1
+    mean #domains per user: -1
+    #domains per user variance: -1
+    #domains per user stddev: -1
+
+[DOMAINS STATS PER USER IN HIS FOLLOW-OUT (TWEETS + VIP WIKIPAGE)]
+    total number of domains in follow-out: 0
+    total number of users: 500
+    greatest #domains per user: 0
+    #greatest #domains per users: 500
+    smallest #domains per user: 0
+    #smallest #domains per user: 500
+    median #domains per user: 0
+    #median #domains per users: 500
+    mean #domains per user: 0
+    #domains per user variance: 0
+    #domains per user stddev: 0
+
+
+[CATEGORIES DISTRIBUTION]
+    BNCAT:EN:Living_people      8673
+    BNCAT:EN:American_male_television_actors        690
+    BNCAT:EN:American_male_film_actors      688
+    BNCAT:EN:American_television_actresses      637
+    BNCAT:EN:21st-century_American_actresses        631
+    BNCAT:EN:American_film_actresses        627
+    BNCAT:EN:21st-century_American_male_actors      615
+    BNCAT:EN:20th-century_American_male_actors      401
+    BNCAT:EN:20th-century_American_actresses        384
+    BNCAT:EN:Grammy_Award_winners       370
+    ...
+    BNCAT:EN:The_Fall_(band)_members        1
+    BNCAT:EN:Beer_brewing_companies_based_in_Massachusetts      1
+    BNCAT:EN:World_War_II_spies_for_the_United_Kingdom      1
+    BNCAT:EN:Professional_wrestling_gimmicks        1
+    BNCAT:EN:1952_establishments_in_West_Germany        1
+    BNCAT:EN:Australian_female_rappers      1
+    BNCAT:EN:Summer_holidays,_Southern_Hemisphere       1
+    BNCAT:EN:Racing_drivers_from_Michigan       1
+    BNCAT:EN:FIFA_Women's_World_Cup_stadiums        1
+    BNCAT:EN:Populated_places_in_Dakahlia_Governorate       1
+
+
+
+[DOMAINS DISTRIBUTION]
+    MUSIC       2745
+    MEDIA       2408
+    SPORT_AND_RECREATION        1877
+    LITERATURE_AND_THEATRE      857
+    POLITICS_AND_GOVERNMENT     437
+    BUSINESS_ECONOMICS_AND_FINANCE      320
+    GAMES_AND_VIDEO_GAMES       301
+    COMPUTING       256
+    EDUCATION       148
+    TEXTILE_AND_CLOTHING        132
+    ...
+    MATHEMATICS     19
+    FARMING     14
+    METEOROLOGY     13
+    HERALDRY_HONORS_AND_VEXILLOLOGY     11
+    ENGINEERING_AND_TECHNOLOGY      8
+    CULTURE_AND_SOCIETY     5
+    CHEMISTRY_AND_MINERALOGY        5
+    NUMISMATICS_AND_CURRENCIES      4
+    GEOLOGY_AND_GEOPHYSICS      4
+    HISTORY     3
+
+
+
+Process finished with exit code 0
