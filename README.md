@@ -5,7 +5,7 @@ We have been able to represent each Twitter user and each Wikipedia page in term
 
 The approach used to build the recommender system is very general: it makes possible to recommend, obtaining a score, whichever item that can be expressed in terms of BabelNet categories, without any further training (e.g. any page of Wikipedia or any synset in BabelNet that has categories associated), possibly without directly knowing the user preferences.
 
-The key idea is the method used to represent the objects in term of semantic categories:
+The key idea is the method used to represent the objects in terms of semantic categories:
 ![](./report/pics/formula.png)
 
 A glimpse of the recommender performances:
