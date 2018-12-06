@@ -1,0 +1,40 @@
+[
+    {
+        "51313e4d98f0b884f69e930c62fb7ea27fb1e0a3": {
+            "calinski": 1633.3834859133776,
+            "davies": 2.2032572362567695
+        }
+    },
+    {
+        "baseline_on_latent_categories": {
+            "calinski": 636.8425812925497,
+            "davies": 3.167859306336486
+        }
+    },
+    {
+        "Config reminder": {
+            "batch_size": 5000,
+            "cluster_over": "categories",
+            "clusterer": "minibatch_kmeans",
+            "dataset": "UNION",
+            "dimension": "complete",
+            "follow_out_liked_items_importance": 0.3,
+            "follow_out_personal_page_importance": 0.55,
+            "follow_out_tweet_importance": 0.15,
+            "init_size": 50000,
+            "liked_items_importance": 0.55,
+            "matrix_dimensionality": 300,
+            "max_iter": 1000000,
+            "max_no_improvement": 10000,
+            "max_user_distance": 2,
+            "n_clusters": 600,
+            "n_init": 100,
+            "personal_page_importance": 0.15,
+            "rate_of_decay": 0.5,
+            "reassignment_ratio": 1e-06,
+            "reducer": "truncated_svd",
+            "tweet_importance": 0.3,
+            "verbose": true
+        }
+    }
+]
