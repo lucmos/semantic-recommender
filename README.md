@@ -11,4 +11,6 @@ The key idea is the method used to represent the objects in term of semantic cat
 A glimpse of the recommender performances:
 ![](./report/pics/recomm.png)
 
+![](./report/pics/eff.png)
+
 More information in the [report](https://github.com/LucaMoschella/WSIEProject/blob/master/report/tosend/WSIE_project_report_moschella_spini.pdf).
