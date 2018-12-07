@@ -23,7 +23,7 @@ Probably the operations could be optimized in some way, but we think that the im
 ## Recommender system
 A glimpse of the item-based with mean-distances recommender performances. Lower distance means better match.
 
-| Preferences -              1057516135          | Possible recommendations                 | Distance |
+| Preferences: <kbd>user 1057516135</kbd>        | Possible recommendations                 | Distance |
 | ---------------------------------------------- | ---------------------------------------- | -------- |
 | <kbd>WIKI:EN:Funko</kbd>                       | <kbd>WIKI:EN:Red_Hot_Chili_Peppers</kbd> | 0.62     |
 | <kbd>WIKI:EN:Overwatch</kbd>                   | <kbd>WIKI:EN:The_Beatles</kbd>           | 0.63     |
@@ -53,37 +53,37 @@ A glimpse of the item-based with mean-distances recommender performances. Lower 
 | <kbd>WIKI:EN:The_Rolling_Stoneskbd>            |                                          |          |
 | <kbd>WIKI:EN:Aerosmith</kbd>                   |                                          |          |
 
-| Preferences -              101935414  | Possible recommendations            | Distance |
-| ------------------------------------- | ----------------------------------- | -------- |
-| <kbd>WIKI:EN:Rinko_Kikuchi</kbd>      | <kbd>WIKI:EN:Shinichi_Osawa</kbd>   | 0.55     |
-| <kbd>WIKI:EN:Maria_Sharapova</kbd>    | <kbd>WIKI:EN:Gilles_Peterson</kbd>  | 0.55     |
-| <kbd>WIKI:EN:Yoshitomo_Nara</kbd>     | <kbd>WIKI:EN:Peter_Barakan</kbd>    | 0.56     |
-| <kbd>WIKI:EN:Daoko</kbd>              | <kbd>WIKI:EN:Kyle_Lohse</kbd>       | 0.57     |
-| <kbd>WIKI:EN:Jamie</kbd>              | <kbd>WIKI:EN:Bonnie_Bernstein</kbd> | 0.64     |
-| <kbd>WIKI:EN:Nina_Kraviz</kbd>        | <kbd>WIKI:EN:Kevin_Davies</kbd>     | 0.80     |
-| <kbd>WIKI:EN:Teru</kbd>               |
-| <kbd>WIKI:EN:Richie</kbd>             |
-| <kbd>WIKI:EN:Instagram</kbd>          |
-| <kbd>WIKI:EN:Lady_Gaga</kbd>          |
-| <kbd>WIKI:EN:Koji_Uehara</kbd>        |
-| <kbd>WIKI:EN:SoundCloud</kbd>         |
-| <kbd>WIKI:EN:4hero</kbd>              |
-| <kbd>WIKI:EN:Allyson_Felix</kbd>      |
-| <kbd>WIKI:EN:Mixcloud</kbd>           |
-| <kbd>WIKI:EN:Mixlr</kbd>              |
-| <kbd>WIKI:EN:Gackt</kbd>              |
-| <kbd>WIKI:EN:The_Japan_Times</kbd>    |
-| <kbd>WIKI:EN:YouTube</kbd>            |
-| <kbd>WIKI:EN:Naoko_Yamazaki</kbd>     |
-| <kbd>WIKI:EN:Ji-hae</kbd>             |
-| <kbd>WIKI:EN:Ninja_Tune</kbd>         |
-| <kbd>WIKI:EN:Yukihiro_Takahashi</kbd> |
-| <kbd>WIKI:EN:Mirai_Nagasu</kbd>       |
-| <kbd>WIKI:EN:Zeebra</kbd>             |
-| <kbd>WIKI:EN:David_Lynch</kbd>        |
+| Preferences: <kbd>user 101935414</kbd> | Possible recommendations            | Distance |
+| -------------------------------------- | ----------------------------------- | -------- |
+| <kbd>WIKI:EN:Rinko_Kikuchi</kbd>       | <kbd>WIKI:EN:Shinichi_Osawa</kbd>   | 0.55     |
+| <kbd>WIKI:EN:Maria_Sharapova</kbd>     | <kbd>WIKI:EN:Gilles_Peterson</kbd>  | 0.55     |
+| <kbd>WIKI:EN:Yoshitomo_Nara</kbd>      | <kbd>WIKI:EN:Peter_Barakan</kbd>    | 0.56     |
+| <kbd>WIKI:EN:Daoko</kbd>               | <kbd>WIKI:EN:Kyle_Lohse</kbd>       | 0.57     |
+| <kbd>WIKI:EN:Jamie</kbd>               | <kbd>WIKI:EN:Bonnie_Bernstein</kbd> | 0.64     |
+| <kbd>WIKI:EN:Nina_Kraviz</kbd>         | <kbd>WIKI:EN:Kevin_Davies</kbd>     | 0.80     |
+| <kbd>WIKI:EN:Teru</kbd>                |
+| <kbd>WIKI:EN:Richie</kbd>              |
+| <kbd>WIKI:EN:Instagram</kbd>           |
+| <kbd>WIKI:EN:Lady_Gaga</kbd>           |
+| <kbd>WIKI:EN:Koji_Uehara</kbd>         |
+| <kbd>WIKI:EN:SoundCloud</kbd>          |
+| <kbd>WIKI:EN:4hero</kbd>               |
+| <kbd>WIKI:EN:Allyson_Felix</kbd>       |
+| <kbd>WIKI:EN:Mixcloud</kbd>            |
+| <kbd>WIKI:EN:Mixlr</kbd>               |
+| <kbd>WIKI:EN:Gackt</kbd>               |
+| <kbd>WIKI:EN:The_Japan_Times</kbd>     |
+| <kbd>WIKI:EN:YouTube</kbd>             |
+| <kbd>WIKI:EN:Naoko_Yamazaki</kbd>      |
+| <kbd>WIKI:EN:Ji-hae</kbd>              |
+| <kbd>WIKI:EN:Ninja_Tune</kbd>          |
+| <kbd>WIKI:EN:Yukihiro_Takahashi</kbd>  |
+| <kbd>WIKI:EN:Mirai_Nagasu</kbd>        |
+| <kbd>WIKI:EN:Zeebra</kbd>              |
+| <kbd>WIKI:EN:David_Lynch</kbd>         |
 
 
-| Preferences -              101532373    | Possible recommendations                 | Distance |
+| Preferences: <kbd>user 101532373</kbd>  | Possible recommendations                 | Distance |
 | --------------------------------------- | ---------------------------------------- | -------- |
 | <kbd>WIKI:EN:President_of_Italy</kbd>   | <kbd>WIKI:EN:Francesco_Facchinetti</kbd> | 0.49     |
 | <kbd>WIKI:EN:Mental_Floss</kbd>         | <kbd>WIKI:EN:Vanessa_Mesquita</kbd>      | 0.51     |
@@ -122,7 +122,7 @@ A glimpse of the item-based with mean-distances recommender performances. Lower 
 | ...                                     |
 
 
-| Preferences -              104239528                             | Possible recommendations           | Distance |
+| Preferences: <kbd>user 104239528</kbd>                           | Possible recommendations           | Distance |
 | ---------------------------------------------------------------- | ---------------------------------- | -------- |
 | <kbd>WIKI:EN:Paola_Turci</kbd>                                   | <kbd>WIKI:EN:Luciano_Ligabue</kbd> | 0.47     |
 | <kbd>WIKI:EN:Tiziano_Ferro</kbd>                                 | <kbd>WIKI:EN:Sabina_Guzzanti</kbd> | 0.49     |
