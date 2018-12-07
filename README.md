@@ -53,14 +53,14 @@ A glimpse of the recommender performances, lower distance means better match.
 | <kbd>WIKI:EN:The_Rolling_Stoneskbd>            |                                          |          |
 | <kbd>WIKI:EN:Aerosmith</kbd>                   |                                          |          |
 
-| Preferences -              101935414  | Possible recommendations            | Similarity |
-| ------------------------------------- | ----------------------------------- | ---------- |
-| <kbd>WIKI:EN:Rinko_Kikuchi</kbd>      | <kbd>WIKI:EN:Shinichi_Osawa</kbd>   | 0.55       |
-| <kbd>WIKI:EN:Maria_Sharapova</kbd>    | <kbd>WIKI:EN:Gilles_Peterson</kbd>  | 0.55       |
-| <kbd>WIKI:EN:Yoshitomo_Nara</kbd>     | <kbd>WIKI:EN:Peter_Barakan</kbd>    | 0.56       |
-| <kbd>WIKI:EN:Daoko</kbd>              | <kbd>WIKI:EN:Kyle_Lohse</kbd>       | 0.57       |
-| <kbd>WIKI:EN:Jamie</kbd>              | <kbd>WIKI:EN:Bonnie_Bernstein</kbd> | 0.64       |
-| <kbd>WIKI:EN:Nina_Kraviz</kbd>        | <kbd>WIKI:EN:Kevin_Davies</kbd>     | 0.80       |
+| Preferences -              101935414  | Possible recommendations            | Distance |
+| ------------------------------------- | ----------------------------------- | -------- |
+| <kbd>WIKI:EN:Rinko_Kikuchi</kbd>      | <kbd>WIKI:EN:Shinichi_Osawa</kbd>   | 0.55     |
+| <kbd>WIKI:EN:Maria_Sharapova</kbd>    | <kbd>WIKI:EN:Gilles_Peterson</kbd>  | 0.55     |
+| <kbd>WIKI:EN:Yoshitomo_Nara</kbd>     | <kbd>WIKI:EN:Peter_Barakan</kbd>    | 0.56     |
+| <kbd>WIKI:EN:Daoko</kbd>              | <kbd>WIKI:EN:Kyle_Lohse</kbd>       | 0.57     |
+| <kbd>WIKI:EN:Jamie</kbd>              | <kbd>WIKI:EN:Bonnie_Bernstein</kbd> | 0.64     |
+| <kbd>WIKI:EN:Nina_Kraviz</kbd>        | <kbd>WIKI:EN:Kevin_Davies</kbd>     | 0.80     |
 | <kbd>WIKI:EN:Teru</kbd>               |
 | <kbd>WIKI:EN:Richie</kbd>             |
 | <kbd>WIKI:EN:Instagram</kbd>          |
@@ -83,53 +83,53 @@ A glimpse of the recommender performances, lower distance means better match.
 | <kbd>WIKI:EN:David_Lynch</kbd>        |
 
 
-| Preferences -              101532373    | Possible recommendations                 | Similarity |
-| --------------------------------------- | ---------------------------------------- | ---------- |
-| <kbd>WIKI:EN:President_of_Italy</kbd>   | <kbd>WIKI:EN:Francesco_Facchinetti</kbd> | 0.49       |
-| <kbd>WIKI:EN:Mental_Floss</kbd>         | <kbd>WIKI:EN:Vanessa_Mesquita</kbd>      | 0.51       |
-| <kbd>WIKI:EN:Siae</kbd>                 | <kbd>WIKI:EN:Michael_Franti</kbd>        | 0.61       |
-| <kbd>WIKI:EN:RTL_102.5</kbd>            | <kbd>WIKI:EN:Julie_Gonzalo</kbd>         | 0.71       |
-| <kbd>WIKI:EN:Alessandra_Amoroso</kbd>   | <kbd>WIKI:EN:LCD_Soundsystem</kbd>       | 0.87       |
-| <kbd>WIKI:EN:Francesca_Michielin</kbd>  | <kbd>WIKI:EN:Michelin_Guide</kbd>        | 0.91       |
-| <kbd>WIKI:EN:Brooklyn_Bowl</kbd>        |                                          |            |
-| <kbd>WIKI:EN:Danilo_Petrucci</kbd>      |                                          |            |
-| <kbd>WIKI:EN:Simona_Ventura</kbd>       |                                          |            |
-| <kbd>WIKI:EN:Francesca_Archibugi</kbd>  |                                          |            |
-| <kbd>WIKI:EN:Daniel_Ek</kbd>            |                                          |            |
-| <kbd>WIKI:EN:Adnkronos</kbd>            |                                          |            |
-| <kbd>WIKI:EN:Emma_Marrone</kbd>         |                                          |            |
-| <kbd>WIKI:EN:Luca_Argentero</kbd>       |                                          |            |
-| <kbd>WIKI:EN:Pierfrancesco_Favino</kbd> |                                          |            |
-| <kbd>WIKI:EN:Fabio_De_Luigi</kbd>       |                                          |            |
-| <kbd>WIKI:EN:Federica_Pellegrini</kbd>  |                                          |            |
-| <kbd>WIKI:EN:Fabio_Aru</kbd>            |                                          |            |
-| <kbd>WIKI:EN:Vincenzo_Nibali</kbd>      |                                          |            |
-| <kbd>WIKI:EN:Sky_TG24</kbd>             |                                          |            |
-| <kbd>WIKI:EN:TgCom24</kbd>              |                                          |            |
-| <kbd>WIKI:EN:Andrea_Ranocchia</kbd>     |                                          |            |
-| <kbd>WIKI:EN:Nicola_Formichetti</kbd>   |                                          |            |
-| <kbd>WIKI:EN:Upworthy</kbd>             |                                          |            |
-| <kbd>WIKI:EN:BuzzFeed</kbd>             |                                          |            |
-| <kbd>WIKI:EN:Giulio_Base</kbd>          |                                          |            |
-| <kbd>WIKI:EN:Stephan_Moccio</kbd>       |                                          |            |
-| <kbd>WIKI:EN:Stromae</kbd>              |                                          |            |
-| <kbd>WIKI:EN:Napster</kbd>              |                                          |            |
-| <kbd>WIKI:EN:Marco_Werman</kbd>         |                                          |            |
-| <kbd>WIKI:EN:Luca_Parmitano</kbd>       |                                          |            |
-| <kbd>WIKI:EN:Joe_Bastianich</kbd>       |                                          |            |
-| <kbd>WIKI:EN:John_Lurie</kbd>           |                                          |            |
-| <kbd>WIKI:EN:RAI1</kbd>                 |                                          |            |
+| Preferences -              101532373    | Possible recommendations                 | Distance |
+| --------------------------------------- | ---------------------------------------- | -------- |
+| <kbd>WIKI:EN:President_of_Italy</kbd>   | <kbd>WIKI:EN:Francesco_Facchinetti</kbd> | 0.49     |
+| <kbd>WIKI:EN:Mental_Floss</kbd>         | <kbd>WIKI:EN:Vanessa_Mesquita</kbd>      | 0.51     |
+| <kbd>WIKI:EN:Siae</kbd>                 | <kbd>WIKI:EN:Michael_Franti</kbd>        | 0.61     |
+| <kbd>WIKI:EN:RTL_102.5</kbd>            | <kbd>WIKI:EN:Julie_Gonzalo</kbd>         | 0.71     |
+| <kbd>WIKI:EN:Alessandra_Amoroso</kbd>   | <kbd>WIKI:EN:LCD_Soundsystem</kbd>       | 0.87     |
+| <kbd>WIKI:EN:Francesca_Michielin</kbd>  | <kbd>WIKI:EN:Michelin_Guide</kbd>        | 0.91     |
+| <kbd>WIKI:EN:Brooklyn_Bowl</kbd>        |                                          |          |
+| <kbd>WIKI:EN:Danilo_Petrucci</kbd>      |                                          |          |
+| <kbd>WIKI:EN:Simona_Ventura</kbd>       |                                          |          |
+| <kbd>WIKI:EN:Francesca_Archibugi</kbd>  |                                          |          |
+| <kbd>WIKI:EN:Daniel_Ek</kbd>            |                                          |          |
+| <kbd>WIKI:EN:Adnkronos</kbd>            |                                          |          |
+| <kbd>WIKI:EN:Emma_Marrone</kbd>         |                                          |          |
+| <kbd>WIKI:EN:Luca_Argentero</kbd>       |                                          |          |
+| <kbd>WIKI:EN:Pierfrancesco_Favino</kbd> |                                          |          |
+| <kbd>WIKI:EN:Fabio_De_Luigi</kbd>       |                                          |          |
+| <kbd>WIKI:EN:Federica_Pellegrini</kbd>  |                                          |          |
+| <kbd>WIKI:EN:Fabio_Aru</kbd>            |                                          |          |
+| <kbd>WIKI:EN:Vincenzo_Nibali</kbd>      |                                          |          |
+| <kbd>WIKI:EN:Sky_TG24</kbd>             |                                          |          |
+| <kbd>WIKI:EN:TgCom24</kbd>              |                                          |          |
+| <kbd>WIKI:EN:Andrea_Ranocchia</kbd>     |                                          |          |
+| <kbd>WIKI:EN:Nicola_Formichetti</kbd>   |                                          |          |
+| <kbd>WIKI:EN:Upworthy</kbd>             |                                          |          |
+| <kbd>WIKI:EN:BuzzFeed</kbd>             |                                          |          |
+| <kbd>WIKI:EN:Giulio_Base</kbd>          |                                          |          |
+| <kbd>WIKI:EN:Stephan_Moccio</kbd>       |                                          |          |
+| <kbd>WIKI:EN:Stromae</kbd>              |                                          |          |
+| <kbd>WIKI:EN:Napster</kbd>              |                                          |          |
+| <kbd>WIKI:EN:Marco_Werman</kbd>         |                                          |          |
+| <kbd>WIKI:EN:Luca_Parmitano</kbd>       |                                          |          |
+| <kbd>WIKI:EN:Joe_Bastianich</kbd>       |                                          |          |
+| <kbd>WIKI:EN:John_Lurie</kbd>           |                                          |          |
+| <kbd>WIKI:EN:RAI1</kbd>                 |                                          |          |
 | ...                                     |
 
 
-| Preferences -              104239528                             | Possible recommendations           | Similarity |
-| ---------------------------------------------------------------- | ---------------------------------- | ---------- |
-| <kbd>WIKI:EN:Paola_Turci</kbd>                                   | <kbd>WIKI:EN:Luciano_Ligabue</kbd> | 0.47       |
-| <kbd>WIKI:EN:Tiziano_Ferro</kbd>                                 | <kbd>WIKI:EN:Sabina_Guzzanti</kbd> | 0.49       |
-| <kbd>WIKI:EN:Massive_Attack</kbd>                                | <kbd>WIKI:EN:Ivan_Basso</kbd>      | 0.49       |
-| <kbd>WIKI:EN:Giles_Duley</kbd>                                   | <kbd>WIKI:EN:Peter_Diamandis</kbd> | 0.50       |
-| <kbd>WIKI:EN:Sheryl_Sandberg</kbd>                               | <kbd>WIKI:EN:Jonathan_Meeks</kbd>  | 0.55       |
-| <kbd>WIKI:EN:Mark_Zuckerberg</kbd>                               | <kbd>WIKI:EN:Lovato</kbd>          | 0.99       |
+| Preferences -              104239528                             | Possible recommendations           | Distance |
+| ---------------------------------------------------------------- | ---------------------------------- | -------- |
+| <kbd>WIKI:EN:Paola_Turci</kbd>                                   | <kbd>WIKI:EN:Luciano_Ligabue</kbd> | 0.47     |
+| <kbd>WIKI:EN:Tiziano_Ferro</kbd>                                 | <kbd>WIKI:EN:Sabina_Guzzanti</kbd> | 0.49     |
+| <kbd>WIKI:EN:Massive_Attack</kbd>                                | <kbd>WIKI:EN:Ivan_Basso</kbd>      | 0.49     |
+| <kbd>WIKI:EN:Giles_Duley</kbd>                                   | <kbd>WIKI:EN:Peter_Diamandis</kbd> | 0.50     |
+| <kbd>WIKI:EN:Sheryl_Sandberg</kbd>                               | <kbd>WIKI:EN:Jonathan_Meeks</kbd>  | 0.55     |
+| <kbd>WIKI:EN:Mark_Zuckerberg</kbd>                               | <kbd>WIKI:EN:Lovato</kbd>          | 0.99     |
 | <kbd>WIKI:EN:Benji</kbd>                                         |
 | <kbd>WIKI:EN:Federica_Pellegrini</kbd>                           |
 | <kbd>WIKI:EN:Tania_Cagnotto</kbd>                                |
