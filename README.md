@@ -23,6 +23,7 @@ Probably the operations could be optimized in some way, but we think that the im
 ## Recommender system
 A glimpse of the item-based with mean-distances recommender performances.
 Our goal was to give a ranking to six possible recommendationsh, given for some users. Lower distance means better match.
+Note that the distances computed _do not_ depend only on the user preferences.
 
 | Preferences: <kbd>user 1057516135</kbd>        | Possible recommendations                 | Distance |
 | ---------------------------------------------- | ---------------------------------------- | -------- |
