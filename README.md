@@ -21,7 +21,7 @@ Must be noted, as already explained, that performing the 𝑖-power of the adjac
 Probably the operations could be optimized in some way, but we think that the importance of information decreases exponentially as it travels from friend to friend, and we enforced this behaviour setting an exponential decay in the formula. So, what we computed should give us a good enough approximation of an optimal computation (where higher powers of the adjacency matrix are computed).
 
 ## Recommender system
-A glimpse of the recommender performances, lower distance means better match.
+A glimpse of the item-based with mean-distances recommender performances. Lower distance means better match.
 
 | Preferences -              1057516135          | Possible recommendations                 | Distance |
 | ---------------------------------------------- | ---------------------------------------- | -------- |
